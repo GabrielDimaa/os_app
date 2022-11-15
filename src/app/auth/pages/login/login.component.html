@@ -19,7 +19,7 @@
         <mat-form-field appFullWidth appearance="fill">
           <mat-label>Senha</mat-label>
           <input matInput formControlName="senha" [required]="true" [type]="mostrarSenha ? 'password' : 'text'">
-          <button type="button" mat-icon-button matSuffix (click)="toggleMostrarSenha()">
+          <button type="button" mat-icon-button matSuffix color="accent" (click)="toggleMostrarSenha()">
             <mat-icon>{{mostrarSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
           <mat-error>{{ getError(formGroup.get('senha')) }}</mat-error>

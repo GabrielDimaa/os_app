@@ -1,8 +1,10 @@
 @use "../../../../assets/scss/mixins";
+@use "./src/styles";
 
 .login {
   @include mixins.display-center;
   height: 100%;
+  background-image: linear-gradient(styles.$accent, styles.$primary);
 
   mat-card {
     max-width: 35em;
