@@ -1,0 +1,42 @@
+//region Material UI
+
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$primary-palette: mat.define-palette(mat.$deep-purple-palette, A200, A100, A400);
+$accent-palette: mat.define-palette(mat.$purple-palette, A200, A100, A400);
+$warn-palette: mat.define-palette(mat.$red-palette);
+
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
+  )
+));
+
+@include mat.all-component-themes($light-theme);
+
+// Colors
+$primary: mat.get-color-from-palette($primary-palette);
+$primary-darker: mat.get-color-from-palette($primary-palette, 'darker');
+$primary-lighter: mat.get-color-from-palette($primary-palette, 'lighter');
+$primary-text: mat.get-color-from-palette($primary-palette, 'text');
+
+$accent: mat.get-color-from-palette($accent-palette);
+$accent-darker: mat.get-color-from-palette($accent-palette, 'darker');
+$accent-lighter: mat.get-color-from-palette($accent-palette, 'lighter');
+$accent-text: mat.get-color-from-palette($accent-palette, 'text');
+
+//endregion
+
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

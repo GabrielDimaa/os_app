@@ -1,0 +1,42 @@
+<div class="login">
+  <mat-card appFullWidth>
+    <app-spacer [size]="3"></app-spacer>
+
+    <mat-card-title>Login</mat-card-title>
+
+    <mat-card-content>
+      <app-spacer [size]="3"></app-spacer>
+
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <mat-form-field appFullWidth appearance="fill">
+          <mat-label>Usuário</mat-label>
+          <input matInput formControlName="nomeUsuario" [required]="true">
+          <mat-error>{{ getError(formGroup.get('nomeUsuario')) }}</mat-error>
+        </mat-form-field>
+
+        <app-spacer></app-spacer>
+
+        <mat-form-field appFullWidth appearance="fill">
+          <mat-label>Senha</mat-label>
+          <input matInput formControlName="senha" [required]="true" [type]="mostrarSenha ? 'password' : 'text'">
+          <button type="button" mat-icon-button matSuffix (click)="toggleMostrarSenha()">
+            <mat-icon>{{mostrarSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error>{{ getError(formGroup.get('senha')) }}</mat-error>
+        </mat-form-field>
+
+        <app-spacer [size]="2"></app-spacer>
+
+        <app-button-icon [type]="'submit'" appFullWidth [loading]="loading">
+          {{loading ? "Entrando..." : "Entrar"}}
+        </app-button-icon>
+
+        <app-spacer [size]="3"></app-spacer>
+      </form>
+    </mat-card-content>
+
+    <mat-card-footer>
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+    </mat-card-footer>
+  </mat-card>
+</div>
