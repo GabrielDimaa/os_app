@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { getMessageError } from "../../../shared/validators/validators";
 import LoginModel from "../../models/login.model";
@@ -9,7 +9,7 @@ import { AuthService } from "../../services/auth.service";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService
@@ -22,9 +22,6 @@ export class LoginComponent implements OnInit {
     nomeUsuario: ["", Validators.required],
     senha: ["", Validators.required]
   });
-
-  ngOnInit() {
-  }
 
   toggleMostrarSenha(): void {
     this.mostrarSenha = !this.mostrarSenha;

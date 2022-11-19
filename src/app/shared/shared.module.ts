@@ -6,6 +6,7 @@ import { MaterialModule } from "./material.module";
 import { SpacerComponent } from './components/spacer/spacer.component';
 import { FullWidthDirective } from './directives/full-width.directive';
 import { ButtonIconComponent } from './components/buttons/button-icon/button-icon.component';
+import { NgxMaskModule } from "ngx-mask";
 
 @NgModule({
   declarations: [
@@ -13,17 +14,19 @@ import { ButtonIconComponent } from './components/buttons/button-icon/button-ico
     FullWidthDirective,
     ButtonIconComponent
   ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    NgxMaskModule.forRoot()
+  ],
   exports: [
     FormsModule,
     ReactiveFormsModule,
     SpacerComponent,
     FullWidthDirective,
     ButtonIconComponent,
-    MaterialModule
-  ],
-  imports: [
-    CommonModule,
-    MaterialModule
+    MaterialModule,
+    NgxMaskModule
   ]
 })
 export class SharedModule { }

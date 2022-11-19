@@ -1,15 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-spacer',
   template: `<div [ngStyle]="style()"></div>`,
 })
-export class SpacerComponent implements OnInit {
+export class SpacerComponent {
   @Input()
   size: number = 1;
-
-  ngOnInit(): void {
-  }
 
   style() {
     return {
