@@ -1,0 +1,100 @@
+@use "src/styles";
+
+.listagem-os {
+  padding: 40px;
+
+  form {
+    .row {
+      gap: 20px;
+    }
+
+    mat-form-field {
+      flex: 1;
+    }
+
+    .input-date {
+      min-width: 200px;
+    }
+
+    mat-datepicker-toggle {
+      color: styles.$accent;
+    }
+
+    .clear-icon {
+      color: grey;
+    }
+
+    .flex-consultar {
+      display: flex;
+      justify-content: flex-end;
+
+      @media only screen and (min-width: 992px) {
+        app-button-icon {
+          max-width: 300px;
+        }
+      }
+    }
+  }
+
+  table {
+    @mixin font-table {
+      font-size: 1em;
+      color: black;
+    }
+
+    .mat-sort-header-container {
+      align-items: center;
+    }
+
+    th {
+      display: flex;
+      background-color: rgba(styles.$primary, 0.05);
+
+      @include font-table;
+      font-weight: 600;
+      padding: 0 15px;
+      min-width: 8rem;
+    }
+
+    td {
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      min-width: 8rem;
+    }
+
+    tr {
+      display: flex;
+      @include font-table;
+    }
+
+    .mat-row {
+      height: auto;
+    }
+
+    .mat-column-codigo {
+      flex: 1;
+    }
+
+    .mat-column-cliente {
+      flex: 2;
+    }
+
+    .mat-column-situacao {
+      flex: 2;
+    }
+
+    .mat-column-data {
+      flex: 2;
+    }
+
+    .mat-column-equipamentos {
+      flex: 2;
+    }
+
+    .mat-column-action {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+}

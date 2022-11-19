@@ -1,3 +1,5 @@
+@use "src/assets/scss/mixins";
+
 //region Material UI
 
 @use '@angular/material' as mat;
@@ -39,4 +41,13 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.flex {
+  @include mixins.display-center;
+  flex-flow: row wrap;
+}
+
+h1 {
+  font-size: 2rem;
 }
