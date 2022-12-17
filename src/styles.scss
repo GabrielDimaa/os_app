@@ -31,8 +31,12 @@ $accent-darker: mat.get-color-from-palette($accent-palette, 'darker');
 $accent-lighter: mat.get-color-from-palette($accent-palette, 'lighter');
 $accent-text: mat.get-color-from-palette($accent-palette, 'text');
 
-//endregion
+$warn: mat.get-color-from-palette($warn-palette);
+$warn-darker: mat.get-color-from-palette($warn-palette, 'darker');
+$warn-lighter: mat.get-color-from-palette($warn-palette, 'lighter');
+$warn-text: mat.get-color-from-palette($warn-palette, 'text');
 
+//endregion
 
 html, body {
   height: 100%;
@@ -48,6 +52,61 @@ body {
   flex-flow: row wrap;
 }
 
+.flex-column {
+  @include mixins.display-column-center;
+}
+
 h1 {
   font-size: 2rem;
+}
+
+@mixin snackbar-mixin($color) {
+  background: white;
+
+  border-left-style: solid;
+  border-width: 12px;
+  border-color: $color;
+
+  color: black;
+
+  .snack-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    mat-icon {
+      @include mixins.display-center;
+      padding: 20px;
+      margin-right: 8px;
+      font-size: 3em;
+      color: $color;
+    }
+  }
+
+  .snack-mensagem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    strong {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    span {
+      color: grey;
+    }
+  }
+}
+
+.snackbar-default {
+  @include snackbar-mixin($primary);
+}
+
+.snackbar-success {
+  @include snackbar-mixin(#47d565);
+}
+
+.snackbar-error {
+  @include snackbar-mixin($warn);
 }

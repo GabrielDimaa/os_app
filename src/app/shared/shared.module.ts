@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
@@ -7,12 +7,15 @@ import { SpacerComponent } from './components/spacer/spacer.component';
 import { FullWidthDirective } from './directives/full-width.directive';
 import { ButtonIconComponent } from './components/buttons/button-icon/button-icon.component';
 import { NgxMaskModule } from "ngx-mask";
+import { SnackbarComponent } from './components/snackbar/snackbar.component';
+import { SnackbarService } from "./components/snackbar/snackbar.service";
 
 @NgModule({
   declarations: [
     SpacerComponent,
     FullWidthDirective,
-    ButtonIconComponent
+    ButtonIconComponent,
+    SnackbarComponent
   ],
   imports: [
     CommonModule,
@@ -29,4 +32,14 @@ import { NgxMaskModule } from "ngx-mask";
     NgxMaskModule
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+  static forRoot(): ModuleWithProviders<SharedModule> {
+    return {
+      ngModule: SharedModule,
+      providers: [
+        SnackbarComponent,
+        SnackbarService
+      ]
+    };
+  }
+}
