@@ -15,11 +15,11 @@ import { DetalhesOsComponent } from './pages/detalhes-os/detalhes-os.component';
     ListagemOsComponent,
     DetalhesOsComponent
   ],
-    imports: [
-        CommonModule,
-        OsRoutingModule,
-        SharedModule
-    ]
+  imports: [
+    CommonModule,
+    OsRoutingModule,
+    SharedModule
+  ]
 })
 export class OsModule {
 }
