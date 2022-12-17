@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { getMessageError } from "../../../shared/validators/validators";
-import LoginModel from "../../models/login.model";
+import { LoginModel } from "../../models/login.model";
 import { AuthService } from "../../services/auth.service";
+import { Router } from "@angular/router";
+import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 
 @Component({
   selector: 'app-login',
@@ -11,9 +13,12 @@ import { AuthService } from "../../services/auth.service";
 })
 export class LoginComponent {
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private snackbarService: SnackbarService
+  ) {
+  }
 
   loading: boolean = false;
   mostrarSenha: boolean = true;
@@ -34,12 +39,17 @@ export class LoginComponent {
   async onSubmit(): Promise<void> {
     try {
       this.loading = true;
-      this.formGroup.disable();
 
       if (this.formGroup.invalid) return;
+      this.formGroup.disable();
 
-      const model: LoginModel = this.formGroup.value;
+      const formData = this.formGroup.value;
+      const model: LoginModel = new LoginModel(formData.nomeUsuario, formData.senha);
+
       await this.authService.login(model);
+      await this.router.navigate(['os']);
+    } catch (e) {
+      this.snackbarService.showError(e);
     } finally {
       this.loading = false;
       this.formGroup.enable();

@@ -1,33 +1,34 @@
 import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import LoginModel from "../models/login.model";
 import { KEY_TOKEN } from '../../shared/storage/keys/keys';
+import { LoginModel } from "../models/login.model";
+import { ApiHttpClient } from "../../shared/api/api-http-client";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private jwtHelper: JwtHelperService) {
+  constructor(private api: ApiHttpClient) {
   }
 
   async login(model: LoginModel): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    try {
+      const response = await this.api.post("auth/login", model.toJson());
+      localStorage.setItem(KEY_TOKEN, response.access_token);
+    } catch (e) {
+      if (e instanceof HttpErrorResponse) {
+        if (e.status == 401)
+          throw Error("Nome de usuário ou senha incorretos.");
 
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        throw Error(e.message);
+      }
 
-    localStorage.setItem(KEY_TOKEN, token);
+      throw e;
+    }
   }
 
   async logout(): Promise<void> {
+    await this.api.post("auth/logout");
     localStorage.removeItem(KEY_TOKEN);
-  }
-
-  autenticado(): boolean {
-    try {
-      const token = localStorage.getItem(KEY_TOKEN);
-      return !this.jwtHelper.isTokenExpired(token ?? "");
-    } catch (e) {
-      return false;
-    }
   }
 }
