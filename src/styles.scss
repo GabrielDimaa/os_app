@@ -76,7 +76,7 @@ h1 {
 
     mat-icon {
       @include mixins.display-center;
-      padding: 20px;
+      padding: 20px 10px;
       margin-right: 8px;
       font-size: 3em;
       color: $color;
@@ -87,6 +87,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding-right: 10px;
 
     strong {
       font-size: 16px;
