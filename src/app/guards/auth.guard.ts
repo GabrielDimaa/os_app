@@ -2,15 +2,13 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
 import { AuthService } from "../auth/services/auth.service";
 import { Observable } from "rxjs";
+import { KEY_TOKEN } from "../shared/storage/keys/keys";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.checkAutenticacao();
@@ -25,7 +23,8 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   private checkAutenticacao() {
-    if (!this.authService.autenticado()) {
+    const token = localStorage.getItem(KEY_TOKEN);
+    if (!token) {
       return this.router.navigate(['auth/login']);
     }
 
