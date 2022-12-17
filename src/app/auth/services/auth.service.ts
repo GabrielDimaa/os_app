@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { KEY_TOKEN } from '../../shared/storage/keys/keys';
 import { LoginModel } from "../models/login.model";
 import { ApiHttpClient } from "../../shared/api/api-http-client";
-import { HttpErrorResponse } from "@angular/common/http";
+import HttpErrorException from "../../shared/exceptions/http-error-exception";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class AuthService {
       const response = await this.api.post("auth/login", model.toJson());
       localStorage.setItem(KEY_TOKEN, response.access_token);
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
+      if (e instanceof HttpErrorException) {
         if (e.status == 401)
           throw Error("Nome de usuário ou senha incorretos.");
 

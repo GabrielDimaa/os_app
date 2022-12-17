@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { firstValueFrom, Observable } from "rxjs";
-import { KEY_TOKEN } from "../storage/keys/keys";
+import { firstValueFrom } from "rxjs";
+import HttpErrorException from "../exceptions/http-error-exception";
 
 @Injectable()
 export class ApiHttpClient {
   constructor(private httpClient: HttpClient) {}
 
-  async post(url: string, body?: any, retry: boolean = true): Promise<any> {
+  public async post(url: string, body?: any): Promise<any> {
     try {
       const response = await firstValueFrom<HttpResponse>(this.httpClient.post<HttpResponse>(url, body));
 
@@ -15,37 +15,35 @@ export class ApiHttpClient {
         return response.data;
       }
     } catch (e) {
-      if (e instanceof HttpErrorResponse) {
-        // if (e.status) {
-        //   if (retry) {
-        //     const refresh = await this.refreshToken();
-        //     if (refresh) return this.post(url, body, false);
-        //   }
-        // }
-
-        if (e.status == 0) {
-          throw Error("Não foi possível se comunicar com o servidor.");
-        }
-
-        throw Error(e.message);
-      }
-
-      throw Error("Ocorreu algum erro interno.");
+      this.throwable(e);
     }
   }
 
-  public async refreshToken(): Promise<boolean> {
-    const existeToken = localStorage.getItem(KEY_TOKEN);
-    if (existeToken) {
-      const response = await firstValueFrom<HttpResponse>(this.httpClient.post<HttpResponse>("auth/refresh-token", null));
+  public async get(url: string): Promise<any> {
+    try {
+      const response = await firstValueFrom<HttpResponse>(this.httpClient.get<HttpResponse>(url));
 
       if (response.success) {
-        localStorage.setItem(KEY_TOKEN, response.data.refresh_token);
-        return true;
+        return response.data;
       }
+    } catch (e) {
+      this.throwable(e);
+    }
+  }
+
+  private throwable(e: unknown): void {
+    if (e instanceof HttpErrorResponse) {
+      if (e.status == 0) {
+        throw new HttpErrorException("Não foi possível se comunicar com o servidor.", e.status);
+      }
+
+      if (e.error.message)
+        throw new HttpErrorException(e.error.message, e.status);
+
+      throw new HttpErrorException(e.message, e.status);
     }
 
-    return false;
+    throw new HttpErrorException("Ocorreu algum erro interno.", 500);
   }
 }
 
