@@ -21,7 +21,7 @@ class OsSimpleModel {
   }
 
   get equipamentoDisplay() {
-    const list = this.equipamentos.map(e => `${e.equipamentoItem.equipamento.descricao} > ${e.equipamentoItem.identificador}`);
+    const list = this.equipamentos.map(e => `${e.equipamentoItem.equipamento!.descricao} > ${e.equipamentoItem.descricao}`);
     return list.join("\n");
   }
 

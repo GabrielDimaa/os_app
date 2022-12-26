@@ -2,14 +2,16 @@ import { EquipamentoAPI, EquipamentoModel } from "./equipamento.model";
 
 class EquipamentoItemModel {
   id: number;
-  identificador: string;
+  descricao: string;
   obs: string | null;
-  equipamento: EquipamentoModel;
+  idEquipamento: number;
+  equipamento: EquipamentoModel | null | undefined;
 
-  constructor(id: number, identificador: string, obs: string | null, equipamento: EquipamentoModel) {
+  constructor(id: number, descricao: string, obs: string | null, idEquipamento: number, equipamento: EquipamentoModel | null | undefined) {
     this.id = id;
-    this.identificador = identificador;
+    this.descricao = descricao;
     this.obs = obs;
+    this.idEquipamento = idEquipamento;
     this.equipamento = equipamento;
   }
 
@@ -18,7 +20,8 @@ class EquipamentoItemModel {
       json.id_equipamento_item,
       json.identificador,
       json.obs,
-      EquipamentoModel.fromJson(json.equipamento),
+      json.id_equipamento,
+      json.equipamento ? EquipamentoModel.fromJson(json.equipamento) : null,
     );
   }
 }
@@ -27,7 +30,8 @@ interface EquipamentoItemAPI {
   id_equipamento_item: number;
   identificador: string;
   obs: string | null;
-  equipamento: EquipamentoAPI;
+  id_equipamento: number;
+  equipamento: EquipamentoAPI | null | undefined;
 }
 
 export { EquipamentoItemModel, EquipamentoItemAPI };

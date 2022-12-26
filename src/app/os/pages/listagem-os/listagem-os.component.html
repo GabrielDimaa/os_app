@@ -4,17 +4,17 @@
 
     <app-spacer [size]="2"></app-spacer>
 
-    <form>
+    <div class="filtros">
       <div class="flex row">
         <mat-form-field class="input-date" appearance="fill">
           <mat-label>Período</mat-label>
           <mat-date-range-input [rangePicker]="rangePicker">
-            <input mask="00/00/0000" matStartDate placeholder="Data inicial">
-            <input mask="00/00/0000" matEndDate placeholder="Data final">
+            <input mask="00/00/0000" matStartDate placeholder="Data inicial" #startDate>
+            <input mask="00/00/0000" matEndDate placeholder="Data final" #endDate>
           </mat-date-range-input>
           <mat-hint>dd/mm/aaaa – dd/mm/aaaa</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-          <button type="button" mat-icon-button matSuffix>
+          <button type="button" *ngIf="mostrarLimparDatas" (click)="limparDatas()" mat-icon-button matSuffix>
             <mat-icon class="clear-icon">clear</mat-icon>
           </button>
           <mat-date-range-picker #rangePicker>
@@ -27,22 +27,17 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Situação</mat-label>
-          <mat-select>
-            <mat-option value="one">First option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
+          <mat-select [(value)]="filtros.situacao">
+            <mat-option [value]="null">Qualquer</mat-option>
+            <mat-option *ngFor="let situacao of osSituacoes" [value]="situacao">
+              {{situacao.descricao}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Cliente</mat-label>
-          <input matInput>
+          <input matInput [(ngModel)]="filtros.cliente">
         </mat-form-field>
       </div>
 
@@ -51,29 +46,26 @@
       <div class="flex row">
         <mat-form-field appearance="fill">
           <mat-label>Código</mat-label>
-          <input matInput>
+          <input matInput [(ngModel)]="filtros.codigo">
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Equipamento</mat-label>
-          <mat-select>
-            <mat-option value="one">First option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
-            <mat-option value="two">Second option</mat-option>
+          <mat-select [(value)]="filtros.equipamento">
+            <mat-option [value]="null">Qualquer</mat-option>
+            <mat-option *ngFor="let equipamento of equipamentos" [value]="equipamento">
+              {{equipamento.descricao}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Identificador</mat-label>
-          <mat-select>
-            <mat-option value="one">First option</mat-option>
-            <mat-option value="two">Second option</mat-option>
+          <mat-select [(value)]="filtros.identificador" [disabled]="filtros.equipamento == null">
+            <mat-option [value]="null">Qualquer</mat-option>
+            <mat-option *ngFor="let identificador of identificadores" [value]="identificador">
+              {{identificador.descricao}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -83,7 +75,7 @@
           {{loadingFiltro ? "Buscando..." : "Filtrar"}}
         </app-button-icon>
       </div>
-    </form>
+    </div>
 
     <app-spacer [size]="2"></app-spacer>
 
