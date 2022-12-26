@@ -1,0 +1,71 @@
+@mixin shimmer {
+  animation-duration: 2.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+  background: #ddd;
+  background: linear-gradient(to right, #F6F6F6 8%, #F0F0F0 18%, #F6F6F6 33%);
+  background-size: 1200px 100%;
+}
+
+.shimmer-group {
+  .shimmer {
+    @include shimmer;
+  }
+
+  @-webkit-keyframes shimmer {
+    0% {
+      background-position: -100% 0;
+    }
+
+    100% {
+      background-position: 100% 0;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1200px 0;
+    }
+
+    100% {
+      background-position: 1200px 0;
+    }
+  }
+
+  .title {
+    @include shimmer;
+
+    height: 50px;
+    width: 20%;
+    min-width: 250px;
+    border-radius: 14px;
+  }
+
+  .full {
+    @include shimmer;
+
+    height: 200px;
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  .input {
+    @include shimmer;
+
+    height: 40px;
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 16px;
+  }
+
+  .content {
+    @include shimmer;
+
+    height: 8px;
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 2px;
+  }
+}

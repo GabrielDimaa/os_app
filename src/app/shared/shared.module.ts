@@ -9,13 +9,18 @@ import { ButtonIconComponent } from './components/buttons/button-icon/button-ico
 import { NgxMaskModule } from "ngx-mask";
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { SnackbarService } from "./components/snackbar/snackbar.service";
+import { LoadingComponent } from './components/loading/spinner/loading.component';
+import { LoadingService } from "./components/loading/spinner/loading.service";
+import { ShimmerComponent } from './components/loading/shimmer/shimmer.component';
 
 @NgModule({
   declarations: [
     SpacerComponent,
     FullWidthDirective,
     ButtonIconComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    LoadingComponent,
+    ShimmerComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +34,8 @@ import { SnackbarService } from "./components/snackbar/snackbar.service";
     FullWidthDirective,
     ButtonIconComponent,
     MaterialModule,
-    NgxMaskModule
+    NgxMaskModule,
+    ShimmerComponent
   ]
 })
 export class SharedModule {
@@ -38,7 +44,9 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         SnackbarComponent,
-        SnackbarService
+        SnackbarService,
+        LoadingComponent,
+        LoadingService
       ]
     };
   }

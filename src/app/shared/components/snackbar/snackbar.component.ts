@@ -7,7 +7,11 @@ import SnackbarConfig from "./snackbar-config";
   templateUrl: './snackbar.component.html'
 })
 export class SnackbarComponent {
-  constructor(private snackBar: MatSnackBar, @Inject(MAT_SNACK_BAR_DATA) public data: SnackbarConfig) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    @Inject(MAT_SNACK_BAR_DATA)
+    public data: SnackbarConfig
+  ) {}
 
   public show(config: SnackbarConfig): void {
     this.snackBar.dismiss();

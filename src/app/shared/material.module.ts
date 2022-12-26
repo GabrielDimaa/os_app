@@ -14,7 +14,10 @@ import { MatTableModule } from "@angular/material/table";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatPaginatorIntl, MatPaginatorModule } from "@angular/material/paginator";
 import { MAT_SNACK_BAR_DATA, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from "@angular/material/snack-bar";
+import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
+import { MatPaginatorIntlPtBr } from "./components/paginator/mat-paginator-intl-pt-br";
 
 @NgModule({
   declarations: [],
@@ -33,12 +36,16 @@ import { MAT_SNACK_BAR_DATA, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } 
     MatDatepickerModule,
     MatSelectModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } },
-    { provide: MAT_SNACK_BAR_DATA, useValue: {} }
+    { provide: MAT_SNACK_BAR_DATA, useValue: {} },
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr }
   ]
 })
 export class MaterialModule {

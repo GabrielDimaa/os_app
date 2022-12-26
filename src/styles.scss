@@ -39,11 +39,9 @@ $warn-text: mat.get-color-from-palette($warn-palette, 'text');
 //endregion
 
 html, body {
-  height: 100%;
-}
-
-body {
+  height: 100vh;
   margin: 0;
+
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
