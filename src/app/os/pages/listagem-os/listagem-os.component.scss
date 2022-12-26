@@ -73,18 +73,18 @@
     }
 
     .mat-row:nth-child(even){
-      background-color: #f5f5f5;
+      background-color: rgba(styles.$primary, 0.05);
     }
 
     .mat-column-codigo {
       flex: 1;
     }
 
-    .mat-column-cliente {
+    .mat-column-clienteDisplay {
       flex: 2;
     }
 
-    .mat-column-situacao {
+    .mat-column-situacaoDisplay {
       flex: 2;
     }
 
@@ -92,7 +92,7 @@
       flex: 2;
     }
 
-    .mat-column-equipamentos {
+    .mat-column-equipamentoDisplay {
       flex: 2;
     }
 

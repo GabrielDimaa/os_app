@@ -1,12 +1,13 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatSort } from "@angular/material/sort";
+import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { MatSort, Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { OsService } from "../../services/os.service";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsSimpleModel } from "../../models/os-simple.model";
 import { OsPaginatorModel } from "../../models/os-paginator-model";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { catchError, finalize, map, Observable } from "rxjs";
+import { firstValueFrom } from "rxjs";
+import { LiveAnnouncer } from "@angular/cdk/a11y";
 
 @Component({
   selector: 'app-listagem-os',
@@ -17,7 +18,7 @@ export class ListagemOsComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  tableColumns: string[] = ["codigo", "cliente", "situacao", "data", "equipamentos", "action"];
+  tableColumns: string[] = ["codigo", "clienteDisplay", "situacaoDisplay", "dataHora", "equipamentoDisplay", "action"];
   dataSource = new MatTableDataSource<OsSimpleModel>();
 
   osPaginator: OsPaginatorModel | undefined;
@@ -27,40 +28,45 @@ export class ListagemOsComponent implements AfterViewInit {
 
   constructor(
     private osService: OsService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private cdr: ChangeDetectorRef,
+    private _liveAnnouncer: LiveAnnouncer
   ) {
   }
 
-  ngAfterViewInit() {
-    this.loading = true;
+  public async ngAfterViewInit(): Promise<void> {
+    try {
+      this.loading = true;
+      this.dataSource.sort = this.sort;
+      this.cdr.detectChanges();
 
-    this.dataSource.sort = this.sort;
-
-    this.buscarOs()
-      .pipe(finalize(() => this.loading = false))
-      .subscribe();
+      await this.buscarOs();
+    } catch (e) {
+      this.snackbarService.showError(e);
+    } finally {
+      this.loading = false;
+    }
   }
 
-  public buscarOs(): Observable<OsPaginatorModel | void> {
+  public async buscarOs(): Promise<void> {
     this.dataSource.data = [];
 
-    return this.osService.getAllWithPagination({ perPage: this.paginatorPageSize, page: this.paginator.pageIndex + 1 })
-      .pipe(
-        map(paginatorOs => {
-          this.dataSource.data = paginatorOs.osSimplesList;
-          this.paginator.length = paginatorOs.total;
-          return paginatorOs;
-        }),
-        catchError(async (err) => this.snackbarService.showError(err))
-      );
+    const osPaginator = await firstValueFrom(this.osService.getAllWithPagination({ perPage: this.paginatorPageSize, page: this.paginatorPageCurrent }));
+
+    this.dataSource.data = osPaginator.osSimplesList;
+    this.paginator.length = osPaginator.total;
   }
 
-  public filtrar(): void {
-    this.loadingFiltro = true;
+  public async filtrar(): Promise<void> {
+    try {
+      this.loadingFiltro = true;
 
-    this.buscarOs()
-      .pipe(finalize(() => this.loadingFiltro = false))
-      .subscribe();
+      await this.buscarOs();
+    } catch (e) {
+      this.snackbarService.showError(e);
+    } finally {
+      this.loadingFiltro = false;
+    }
   }
 
   public get paginatorLength(): number {
@@ -75,11 +81,15 @@ export class ListagemOsComponent implements AfterViewInit {
     return this.paginator?.pageSize ?? 0;
   }
 
+  public get paginatorPageCurrent(): number {
+    return (this.paginator?.pageIndex ?? 0) + 1;
+  }
+
   public get paginatorPageSizeOptions(): number[] {
     return [50, 100, 150, 200];
   }
 
-  public handlePageEvent(_: PageEvent): void {
-    this.filtrar();
+  public async handlePageEvent(_: PageEvent): Promise<void> {
+    await this.filtrar();
   }
 }

@@ -10,11 +10,22 @@ class OsSimpleModel {
   cliente: ClienteModel;
   equipamentos: OsEquipamentoItemModel[];
 
-  ///Utilizado na table de OS.
+  //region Getters utilizados na table de listagem de OS.
+
+  get situacaoDisplay() {
+    return this.situacao.descricao;
+  }
+
+  get clienteDisplay() {
+    return this.cliente.nome;
+  }
+
   get equipamentoDisplay() {
     const list = this.equipamentos.map(e => `${e.equipamentoItem.equipamento.descricao} > ${e.equipamentoItem.identificador}`);
     return list.join("\n");
   }
+
+  //endregion
 
   constructor(
     id: number,
