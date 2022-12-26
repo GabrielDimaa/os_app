@@ -1,136 +1,173 @@
 <section class="listagem-os">
-  <h1>Ordens de serviço</h1>
+  <ng-container *ngIf="!loading">
+    <h1>Ordens de serviço</h1>
 
-  <app-spacer [size]="2"></app-spacer>
+    <app-spacer [size]="2"></app-spacer>
 
-  <form>
-    <div class="flex row">
-      <mat-form-field class="input-date" appearance="fill">
-        <mat-label>Período</mat-label>
-        <mat-date-range-input [rangePicker]="rangePicker">
-          <input mask="00/00/0000" matStartDate placeholder="Data inicial">
-          <input mask="00/00/0000" matEndDate placeholder="Data final">
-        </mat-date-range-input>
-        <mat-hint>dd/mm/aaaa – dd/mm/aaaa</mat-hint>
-        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-        <button type="button" mat-icon-button matSuffix>
-          <mat-icon class="clear-icon">clear</mat-icon>
-        </button>
-        <mat-date-range-picker #rangePicker>
-          <mat-date-range-picker-actions>
-            <button mat-button matDateRangePickerCancel>Cancelar</button>
-            <button mat-raised-button color="primary" matDateRangePickerApply>Confirmar</button>
-          </mat-date-range-picker-actions>
-        </mat-date-range-picker>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Situação</mat-label>
-        <mat-select>
-          <mat-option value="one">First option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Cliente</mat-label>
-        <input matInput>
-      </mat-form-field>
-    </div>
-
-    <app-spacer></app-spacer>
-
-    <div class="flex row">
-      <mat-form-field appearance="fill">
-        <mat-label>Código</mat-label>
-        <input matInput>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Equipamento</mat-label>
-        <mat-select>
-          <mat-option value="one">First option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Identificador</mat-label>
-        <mat-select>
-          <mat-option value="one">First option</mat-option>
-          <mat-option value="two">Second option</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div class="flex-consultar">
-      <app-button-icon appFullWidth>Consultar</app-button-icon>
-    </div>
-  </form>
-
-  <app-spacer [size]="2"></app-spacer>
-
-  <div style="overflow-x: auto;">
-    <table
-      appFullWidth
-      mat-table [dataSource]="dataSource"
-      matSort
-      class="mat-elevation-z8">
-
-      <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
-
-      <ng-container matColumnDef="codigo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="codigo">Código</th>
-        <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="cliente">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="cliente">Cliente</th>
-        <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="situacao">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="situacao">Situação</th>
-        <td mat-cell *matCellDef="let element">
-          <span class="situacao" >{{element.situacao}}</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="data">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="data">Data</th>
-        <td mat-cell *matCellDef="let element"> {{element.data}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="equipamentos">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="equipamentos">Equipamentos</th>
-        <td mat-cell *matCellDef="let element"> {{element.equipamentos}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="action">
-          ACTION
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <button [matTooltip]="'Visualizar OS'" mat-icon-button color="accent">
-            <mat-icon color="accent">edit_square</mat-icon>
+    <form>
+      <div class="flex row">
+        <mat-form-field class="input-date" appearance="fill">
+          <mat-label>Período</mat-label>
+          <mat-date-range-input [rangePicker]="rangePicker">
+            <input mask="00/00/0000" matStartDate placeholder="Data inicial">
+            <input mask="00/00/0000" matEndDate placeholder="Data final">
+          </mat-date-range-input>
+          <mat-hint>dd/mm/aaaa – dd/mm/aaaa</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+          <button type="button" mat-icon-button matSuffix>
+            <mat-icon class="clear-icon">clear</mat-icon>
           </button>
-        </td>
-      </ng-container>
-    </table>
+          <mat-date-range-picker #rangePicker>
+            <mat-date-range-picker-actions>
+              <button mat-button matDateRangePickerCancel>Cancelar</button>
+              <button mat-raised-button color="primary" matDateRangePickerApply>Confirmar</button>
+            </mat-date-range-picker-actions>
+          </mat-date-range-picker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Situação</mat-label>
+          <mat-select>
+            <mat-option value="one">First option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Cliente</mat-label>
+          <input matInput>
+        </mat-form-field>
+      </div>
+
+      <app-spacer></app-spacer>
+
+      <div class="flex row">
+        <mat-form-field appearance="fill">
+          <mat-label>Código</mat-label>
+          <input matInput>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Equipamento</mat-label>
+          <mat-select>
+            <mat-option value="one">First option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Identificador</mat-label>
+          <mat-select>
+            <mat-option value="one">First option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="flex-consultar">
+        <app-button-icon (click)="filtrar()" [loading]="loadingFiltro" appFullWidth>
+          {{loadingFiltro ? "Buscando..." : "Filtrar"}}
+        </app-button-icon>
+      </div>
+    </form>
+
+    <app-spacer [size]="2"></app-spacer>
+
+    <div style="overflow-x: auto;">
+      <table
+        appFullWidth
+        mat-table [dataSource]="dataSource"
+        matSort
+        class="mat-elevation-z8">
+
+        <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+
+        <ng-container matColumnDef="codigo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="codigo">Código</th>
+          <td mat-cell *matCellDef="let element"> {{element.codigo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cliente">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="cliente">Cliente</th>
+          <td mat-cell *matCellDef="let element"> {{element.cliente.nome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="situacao">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="situacao">Situação</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="situacao">{{element.situacao.descricao}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="data">Data</th>
+          <td mat-cell *matCellDef="let element"> {{element.dataHora | date:"YYYY/MM/dd"}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="equipamentos">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="equipamentos">Equipamentos</th>
+          <td mat-cell *matCellDef="let element"> {{element.equipamentoDisplay}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button [matTooltip]="'Visualizar OS'" mat-icon-button color="accent">
+              <mat-icon color="accent">edit_square</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+      </table>
+    </div>
+
+    <div *ngIf="loadingFiltro" class="flex-column">
+      <app-spacer [size]="2"></app-spacer>
+      <mat-spinner [diameter]="35"></mat-spinner>
+    </div>
+    <span *ngIf="!loadingFiltro && dataSource.data.length == 0" class="row-table-empty">Nenhuma ordem de serviço encontrada.</span>
+  </ng-container>
+
+  <div [hidden]="loading || dataSource.data.length == 0">
+    <mat-paginator
+      [disabled]="loadingFiltro || dataSource.data.length == 0"
+      [length]="paginatorLength"
+      [pageSize]="paginatorPageSize"
+      [pageSizeOptions]="paginatorPageSizeOptions"
+      (page)="handlePageEvent($event)">
+    </mat-paginator>
   </div>
+
+  <ng-container *ngIf="loading">
+    <app-shimmer>
+      <div class="title"></div>
+      <app-spacer [size]="2"></app-spacer>
+      <div style="display: flex; gap: 12px">
+        <div class="input"></div>
+        <div class="input"></div>
+        <div class="input"></div>
+      </div>
+      <div style="display: flex; gap: 12px">
+        <div class="input"></div>
+        <div class="input"></div>
+        <div class="input"></div>
+      </div>
+      <app-spacer [size]="2"></app-spacer>
+      <div class="full" style="height: 400px"></div>
+    </app-shimmer>
+  </ng-container>
 </section>

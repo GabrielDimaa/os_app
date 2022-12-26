@@ -1,49 +1,38 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { firstValueFrom } from "rxjs";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
+import { catchError, map, Observable, throwError } from "rxjs";
 import HttpErrorException from "../exceptions/http-error-exception";
 
 @Injectable()
 export class ApiHttpClient {
   constructor(private httpClient: HttpClient) {}
 
-  public async post(url: string, body?: any): Promise<any> {
-    try {
-      const response = await firstValueFrom<HttpResponse>(this.httpClient.post<HttpResponse>(url, body));
-
-      if (response.success) {
-        return response.data;
-      }
-    } catch (e) {
-      this.throwable(e);
-    }
+  public post<T>(url: string, body?: any): Observable<T> {
+    return this.httpClient.post<HttpResponse>(url, body)
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError)
+      );
   }
 
-  public async get(url: string): Promise<any> {
-    try {
-      const response = await firstValueFrom<HttpResponse>(this.httpClient.get<HttpResponse>(url));
-
-      if (response.success) {
-        return response.data;
-      }
-    } catch (e) {
-      this.throwable(e);
-    }
+  public get<T>(url: string, params?: HttpParams): Observable<T> {
+    return this.httpClient.get<HttpResponse>(url, { params: params })
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError)
+      );
   }
 
-  private throwable(e: unknown): void {
-    if (e instanceof HttpErrorResponse) {
-      if (e.status == 0) {
-        throw new HttpErrorException("Não foi possível se comunicar com o servidor.", e.status);
-      }
-
-      if (e.error.message)
-        throw new HttpErrorException(e.error.message, e.status);
-
-      throw new HttpErrorException(e.message, e.status);
+  private handleError(e: HttpErrorResponse): Observable<never> {
+    if (e.status == 0) {
+      return throwError(() => new HttpErrorException("Não foi possível se comunicar com o servidor.", e.status));
     }
 
-    throw new HttpErrorException("Ocorreu algum erro interno.", 500);
+    if (e.error.message) {
+      return throwError(() => new HttpErrorException(e.error.message, e.status));
+    }
+
+    return throwError(() => new HttpErrorException("Ocorreu algum erro interno.", e.status));
   }
 }
 
