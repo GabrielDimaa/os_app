@@ -11,8 +11,8 @@ import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { EquipamentoModel } from "../../models/equipamento.model";
 import { EquipamentoItemModel } from "../../models/equipamento-item.model";
 import { OsSituacaoModel } from "../../models/os-situacao.model";
-import { ClienteModel } from "../../models/cliente.model";
 import { MatDateRangePicker } from "@angular/material/datepicker";
+import { OsFilterParams } from "../../params/os.params";
 
 @Component({
   selector: 'app-listagem-os',
@@ -34,7 +34,7 @@ export class ListagemOsComponent implements AfterViewInit {
   equipamentos: EquipamentoModel[] = [];
   osSituacoes: OsSituacaoModel[] = [];
 
-  filtros: Filter = Object.assign({});
+  filtros: OsFilterParams = Object.assign({});
 
   loading: boolean = false;
   loadingFiltro: boolean = false;
@@ -68,7 +68,7 @@ export class ListagemOsComponent implements AfterViewInit {
   public async buscarOs(): Promise<void> {
     this.dataSource.data = [];
 
-    const osPaginator = await firstValueFrom(this.osService.getAllWithPagination({ perPage: this.paginatorPageSize, page: this.paginatorPageCurrent }));
+    const osPaginator = await firstValueFrom(this.osService.getAllWithPagination({ perPage: this.paginatorPageSize, page: this.paginatorPageCurrent }, this.filtros));
 
     this.dataSource.data = osPaginator.osSimplesList;
     this.paginator.length = osPaginator.total;
@@ -124,14 +124,4 @@ export class ListagemOsComponent implements AfterViewInit {
   public get mostrarLimparDatas() {
     return this.startDateRef?.nativeElement.value.length > 0;
   }
-}
-
-type Filter = {
-  dataInicial: Date | null;
-  dataFinal: Date | null;
-  situacao: OsSituacaoModel | null;
-  cliente: ClienteModel | null;
-  codigo: string | null;
-  equipamento: EquipamentoModel | null;
-  identificador: EquipamentoItemModel | null;
 }

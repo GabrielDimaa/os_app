@@ -30,9 +30,4 @@ interface OsPaginatorAPI {
   data: OsSimpleAPI[];
 }
 
-type OsPaginatorParams = {
-  page: number;
-  perPage: number;
-}
-
-export { OsPaginatorModel, OsPaginatorAPI, OsPaginatorParams };
+export { OsPaginatorModel, OsPaginatorAPI };
