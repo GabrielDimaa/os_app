@@ -4,7 +4,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { OsService } from "../../services/os.service";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsSimpleModel } from "../../models/os-simple.model";
-import { OsPaginatorModel } from "../../models/os-paginator-model";
+import { OsPaginatorModel } from "../../models/os-paginator.model";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { firstValueFrom } from "rxjs";
 import { LiveAnnouncer } from "@angular/cdk/a11y";

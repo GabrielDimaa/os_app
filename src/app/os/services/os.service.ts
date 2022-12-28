@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiHttpClient } from "../../shared/api/api-http-client";
-import { OsPaginatorAPI, OsPaginatorModel } from "../models/os-paginator-model";
+import { OsPaginatorAPI, OsPaginatorModel } from "../models/os-paginator.model";
 import { HttpParams } from "@angular/common/http";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { EquipamentoAPI, EquipamentoModel } from "../models/equipamento.model";
