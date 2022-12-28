@@ -23,16 +23,22 @@ export class ApiHttpClient {
       );
   }
 
-  private handleError(e: HttpErrorResponse): Observable<never> {
-    if (e.status == 0) {
-      return throwError(() => new HttpErrorException("Não foi possível se comunicar com o servidor.", e.status));
+  private handleError(e: any): Observable<never> {
+    if (e instanceof HttpErrorResponse) {
+      if (e.status == 0) {
+        return throwError(() => new HttpErrorException("Não foi possível se comunicar com o servidor.", e.status));
+      }
+
+      if (e.error.message) {
+        return throwError(() => new HttpErrorException(e.error.message, e.status));
+      }
     }
 
-    if (e.error.message) {
-      return throwError(() => new HttpErrorException(e.error.message, e.status));
+    if (e instanceof Error) {
+      return throwError(() => e);
     }
 
-    return throwError(() => new HttpErrorException("Ocorreu algum erro interno.", e.status));
+    return throwError(() => new HttpErrorException("Ocorreu algum erro interno.", 0));
   }
 }
 
