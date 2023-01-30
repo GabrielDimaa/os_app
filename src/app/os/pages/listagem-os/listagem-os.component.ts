@@ -4,7 +4,6 @@ import { MatTableDataSource } from "@angular/material/table";
 import { OsService } from "../../services/os.service";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsSimpleModel } from "../../models/os-simple.model";
-import { OsPaginatorModel } from "../../models/os-paginator.model";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { firstValueFrom } from "rxjs";
 import { LiveAnnouncer } from "@angular/cdk/a11y";
@@ -13,6 +12,7 @@ import { EquipamentoItemModel } from "../../models/equipamento-item.model";
 import { OsSituacaoModel } from "../../models/os-situacao.model";
 import { MatDateRangePicker } from "@angular/material/datepicker";
 import { OsFilterParams } from "../../params/os.params";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-listagem-os',
@@ -27,23 +27,22 @@ export class ListagemOsComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  tableColumns: string[] = ["codigo", "clienteDisplay", "situacaoDisplay", "dataHora", "equipamentoDisplay", "action"];
-  dataSource = new MatTableDataSource<OsSimpleModel>();
+  public tableColumns: string[] = ["codigo", "clienteDisplay", "situacaoDisplay", "dataHora", "equipamentoDisplay", "action"];
+  public dataSource = new MatTableDataSource<OsSimpleModel>();
+  public equipamentos: EquipamentoModel[] = [];
+  public osSituacoes: OsSituacaoModel[] = [];
 
-  osPaginator: OsPaginatorModel | undefined;
-  equipamentos: EquipamentoModel[] = [];
-  osSituacoes: OsSituacaoModel[] = [];
+  public filtros: OsFilterParams = Object.assign({});
 
-  filtros: OsFilterParams = Object.assign({});
-
-  loading: boolean = false;
-  loadingFiltro: boolean = false;
+  public loading: boolean = false;
+  public loadingFiltro: boolean = false;
 
   constructor(
     private osService: OsService,
     private snackbarService: SnackbarService,
     private cdr: ChangeDetectorRef,
-    private _liveAnnouncer: LiveAnnouncer
+    private liveAnnouncer: LiveAnnouncer,
+    private router: Router
   ) {
   }
 
@@ -89,12 +88,12 @@ export class ListagemOsComponent implements AfterViewInit {
     }
   }
 
-  public get paginatorLength(): number {
-    return this.paginator?.length ?? 0;
+  public async visualizarOs(codigoOs: number): Promise<void> {
+    await this.router.navigate([`os/${codigoOs}`]);
   }
 
-  public get paginatorHidden(): boolean {
-    return this.paginatorLength > 0;
+  public get paginatorLength(): number {
+    return this.paginator?.length ?? 0;
   }
 
   public get paginatorPageSize(): number {

@@ -12,6 +12,10 @@ class OsEquipamentoItemModel {
   servicos: OsServicoModel[];
   produtos: OsProdutoModel[];
 
+  public get descricaoDisplay() {
+    return `${this.equipamentoItem.equipamento!.descricao} > ${this.equipamentoItem.descricao}`;
+  }
+
   constructor(
     id: number,
     idOs: number,

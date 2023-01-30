@@ -1,7 +1,13 @@
+@use "src/assets/scss/mixins";
 @use "src/styles";
 
 .listagem-os {
-  padding: 40px;
+  @include mixins.display-column-center;
+
+  mat-card {
+    width: 80%;
+    padding: 50px;
+  }
 
   .filtros {
     .row {
@@ -48,7 +54,7 @@
 
     th {
       display: flex;
-      background-color: rgba(styles.$primary, 0.05);
+      background-color: rgba(#cbcde5, 0.08);
 
       @include font-table;
       font-weight: 600;
@@ -73,7 +79,7 @@
     }
 
     .mat-row:nth-child(even){
-      background-color: rgba(styles.$primary, 0.05);
+      background-color: rgba(#cbcde5, 0.05);
     }
 
     .mat-column-codigo {
