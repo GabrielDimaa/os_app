@@ -1,19 +1,29 @@
 import { Injectable } from '@angular/core';
 import { ApiHttpClient } from "../../shared/api/api-http-client";
-import { OsPaginatorAPI, OsPaginatorModel } from "../models/os-paginator.model";
 import { HttpParams } from "@angular/common/http";
 import { catchError, map, Observable, throwError } from "rxjs";
+import { OsPaginatorAPI, OsPaginatorModel } from "../models/os-paginator.model";
 import { EquipamentoAPI, EquipamentoModel } from "../models/equipamento.model";
 import { OsSituacaoAPI, OsSituacaoModel } from "../models/os-situacao.model";
 import { OsFilterParams, OsPaginatorParams } from "../params/os.params";
+import { OsAPI, OsModel } from "../models/os.model";
 import "../../shared/prototypes/string.prototype";
 import "../../shared/prototypes/date.prototype";
+import { OsTipoAtendimentoAPI, OsTipoAtendimentoModel } from "../models/os-tipo-atendimento.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OsService {
   constructor(private api: ApiHttpClient) {}
+
+  public getByCodigo(codigo: number): Observable<OsModel> {
+    return this.api.get<OsAPI>(`os/codigo/${codigo}`)
+      .pipe(
+        map(response => OsModel.fromJson(response)),
+        catchError(err => throwError(() => Error(err.message)))
+      );
+  }
 
   public getAllWithPagination(paginatorParams: OsPaginatorParams, filterParams: OsFilterParams | null = null): Observable<OsPaginatorModel> {
     let httpParams = new HttpParams()
@@ -53,6 +63,14 @@ export class OsService {
     return this.api.get<OsSituacaoAPI[]>("os-situacao")
       .pipe(
         map(response => response.map(e => OsSituacaoModel.fromJson(e))),
+        catchError(err => throwError(() => Error(err.message)))
+      );
+  }
+
+  public getOsTiposAtendimento(): Observable<OsTipoAtendimentoModel[]> {
+    return this.api.get<OsTipoAtendimentoAPI[]>("os-tipo-atendimento")
+      .pipe(
+        map(response => response.map(e => OsTipoAtendimentoModel.fromJson(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }
