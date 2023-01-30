@@ -1,0 +1,83 @@
+@use "src/assets/scss/mixins";
+@use "src/styles";
+
+.detalhes-os {
+  @include mixins.display-column-center;
+
+  mat-card {
+    width: 80%;
+    padding: 50px;
+  }
+
+  .content {
+    display: flex;
+    flex-wrap: wrap;
+
+    .column-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      flex-grow: 2;
+
+      .contato {
+        display: flex;
+        gap: 14px;
+
+        .form-field-contatos {
+          flex-grow: 1;
+          width: 100px !important;
+        }
+      }
+
+      .encerrar-os {
+        padding: 4px 0;
+        border-color: styles.$primary;
+        border-width: 2px;
+
+        font-weight: bold;
+        font-size: 16px;
+
+        max-width: 300px;
+      }
+    }
+
+    .column-right {
+      display: flex;
+      flex-direction: column;
+
+      flex-grow: 8;
+
+      .problemas {
+        display: flex;
+        gap: 14px;
+      }
+
+      .add-servico {
+        background-color: #eee7ff;
+      }
+    }
+
+    .divider-vertical {
+      margin: 0 30px;
+    }
+
+    mat-divider {
+      margin-top: 10px;
+      margin-bottom: 26px;
+      border-top-width: 2px;
+      border-top-color: #E0DFDF;
+    }
+  }
+
+  .mat-tab-label-active {
+    color: styles.$primary;
+    opacity: 1;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    .divider-vertical {
+      display: none !important;
+    }
+  }
+}

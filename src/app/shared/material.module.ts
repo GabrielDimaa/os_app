@@ -18,6 +18,11 @@ import { MatPaginatorIntl, MatPaginatorModule } from "@angular/material/paginato
 import { MAT_SNACK_BAR_DATA, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { MatPaginatorIntlPtBr } from "./components/paginator/mat-paginator-intl-pt-br";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatStepperModule } from "@angular/material/stepper";
+import { MatListModule } from "@angular/material/list";
+import { MatGridListModule } from "@angular/material/grid-list";
 
 @NgModule({
   declarations: [],
@@ -38,7 +43,12 @@ import { MatPaginatorIntlPtBr } from "./components/paginator/mat-paginator-intl-
     MatTooltipModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatExpansionModule,
+    MatTabsModule,
+    MatStepperModule,
+    MatListModule,
+    MatGridListModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },

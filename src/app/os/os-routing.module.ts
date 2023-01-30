@@ -17,7 +17,7 @@ const routes: Routes = [
         component: ListagemOsComponent,
       },
       {
-        path: "detalhes",
+        path: ":codigo",
         component: DetalhesOsComponent
       }
     ]
