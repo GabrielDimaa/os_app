@@ -34,6 +34,15 @@ export class AuthService {
         })
       );
   }
+
+  public async logout(): Promise<void> {
+    try {
+      await firstValueFrom(this.api.post("auth/logout"));
+      localStorage.removeItem(KEY_TOKEN);
+    } catch (err: any) {
+      throw Error(err.message);
+    }
+  }
 }
 
 type LoginResponse = {
