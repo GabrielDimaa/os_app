@@ -3,6 +3,8 @@ import { KEY_TOKEN } from '../../shared/storage/keys/keys';
 import { LoginModel } from "../models/login.model";
 import { ApiHttpClient } from "../../shared/api/api-http-client";
 import { catchError, firstValueFrom, map, Observable, throwError } from "rxjs";
+import jwt_decode from "jwt-decode";
+import { UsuarioAPI, UsuarioModel } from "../../os/models/usuario.model";
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +43,19 @@ export class AuthService {
       localStorage.removeItem(KEY_TOKEN);
     } catch (err: any) {
       throw Error(err.message);
+    }
+  }
+
+  public getUsuarioLogado(): UsuarioModel | null {
+    try {
+      const token: string | null = localStorage.getItem(KEY_TOKEN);
+      const decode = jwt_decode(token ?? "") as UsuarioAPI | undefined | null;
+
+      if (!decode || !decode.id_usuario) return null;
+
+      return new UsuarioModel(decode.id_usuario, decode.login_usuario, decode.perfil, decode.nome, false);
+    } catch (err: any) {
+      return null;
     }
   }
 }
