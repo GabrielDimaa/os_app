@@ -3,24 +3,15 @@ import { ServicoAPI, ServicoModel } from "./servico.model";
 import { dateWithoutTimezone } from "../../shared/prototypes/date.prototype";
 
 class OsServicoModel {
-  id: number;
-  idOsEquipamentoItem: number;
-  qtd: string;
-  valorTotal: number | null;
-  descricaoInformada: string | null;
-  dataHora: Date | null;
-  servico: ServicoModel;
-  usuario: UsuarioModel | null;
-
   constructor(
-    id: number,
-    idOsEquipamentoItem: number,
-    qtd: string,
-    valorTotal: number | null,
-    descricaoInformada: string | null,
-    dataHora: Date | null,
-    servico: ServicoModel,
-    usuario: UsuarioModel | null
+    public id: number | null,
+    public idOsEquipamentoItem: number | null,
+    public qtd: string,
+    public valorTotal: number | null,
+    public descricaoInformada: string | null,
+    public dataHora: Date | null,
+    public servico: ServicoModel,
+    public usuario: UsuarioModel | null
   ) {
     this.id = id;
     this.idOsEquipamentoItem = idOsEquipamentoItem;
@@ -47,8 +38,8 @@ class OsServicoModel {
 }
 
 interface OsServicoAPI {
-  id_os_servico: number;
-  id_os_equipamento_item: number;
+  id_os_servico: number | null;
+  id_os_equipamento_item: number | null;
   qtd: string;
   valor_total: number | null,
   descricao_informada: string | null,

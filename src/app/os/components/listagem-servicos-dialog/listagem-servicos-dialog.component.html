@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>
+  Serviços
+</h1>
+
+<mat-dialog-content>
+  <mat-list>
+    <ng-container *ngFor="let servico of servicos; let last = last">
+      <mat-list-item matRipple (click)="selecionar(servico)">
+        <span matListItemTitle style="flex: 1; padding-right: 30px;">{{servico.descricao}}</span>
+        <mat-icon matListItemIcon style="flex: 0 0 auto;">chevron_right</mat-icon>
+      </mat-list-item>
+      <mat-divider *ngIf="!last"></mat-divider>
+    </ng-container>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Voltar</button>
+</mat-dialog-actions>

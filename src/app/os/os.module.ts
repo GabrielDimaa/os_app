@@ -7,13 +7,15 @@ import { ToolbarComponent } from './templates/toolbar/toolbar.component';
 import { TemplateComponent } from './templates/template.component';
 import { ListagemOsComponent } from './pages/listagem-os/listagem-os.component';
 import { DetalhesOsComponent } from './pages/detalhes-os/detalhes-os.component';
+import { ListagemServicosDialogComponent } from './components/listagem-servicos-dialog/listagem-servicos-dialog.component';
 
 @NgModule({
   declarations: [
     ToolbarComponent,
     TemplateComponent,
     ListagemOsComponent,
-    DetalhesOsComponent
+    DetalhesOsComponent,
+    ListagemServicosDialogComponent
   ],
   imports: [
     CommonModule,

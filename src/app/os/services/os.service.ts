@@ -10,6 +10,8 @@ import { OsAPI, OsModel } from "../models/os.model";
 import "../../shared/prototypes/string.prototype";
 import "../../shared/prototypes/date.prototype";
 import { OsTipoAtendimentoAPI, OsTipoAtendimentoModel } from "../models/os-tipo-atendimento.model";
+import { ServicoAPI, ServicoModel } from "../models/servico.model";
+import { UsuarioAPI, UsuarioModel } from "../models/usuario.model";
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +73,22 @@ export class OsService {
     return this.api.get<OsTipoAtendimentoAPI[]>("os-tipo-atendimento")
       .pipe(
         map(response => response.map(e => OsTipoAtendimentoModel.fromJson(e))),
+        catchError(err => throwError(() => Error(err.message)))
+      );
+  }
+
+  public getServicos(): Observable<ServicoModel[]> {
+    return this.api.get<ServicoAPI[]>("servico")
+      .pipe(
+        map(response => response.map(e => ServicoModel.fromJson(e))),
+        catchError(err => throwError(() => Error(err.message)))
+      );
+  }
+
+  public getUsuarios(): Observable<UsuarioModel[]> {
+    return this.api.get<UsuarioAPI[]>("usuario")
+      .pipe(
+        map(response => response.map(e => UsuarioModel.fromJson(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }
