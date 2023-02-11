@@ -6,53 +6,57 @@
       <app-spacer [size]="2"></app-spacer>
 
       <div class="content">
-        <div class="column-left">
+        <form class="column-left" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
           <div appFullWidth>
             <mat-form-field appFullWidth appearance="fill">
               <mat-label>Data de abertura</mat-label>
-              <input mask="00/00/0000" matInput [matDatepicker]="picker">
+              <input dataMask [formControlName]="'dataAbertura'" matInput [matDatepicker]="picker">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
+              <mat-error>{{ getError(formGroup.get('dataAbertura')) }}</mat-error>
             </mat-form-field>
           </div>
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Tipo de atendimento</mat-label>
-            <mat-select>
+            <mat-select [formControlName]="'tipoAtendimento'">
               <mat-option *ngFor="let tipoAtendimento of osTiposAtendimento" [value]="tipoAtendimento">
                 {{tipoAtendimento.descricao}}
               </mat-option>
             </mat-select>
+            <mat-error>{{ getError(formGroup.get('tipoAtendimento')) }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Situação</mat-label>
-            <mat-select>
+            <mat-select [formControlName]="'situacao'">
               <mat-option *ngFor="let situacao of osSituacoes" [value]="situacao">
                 {{situacao.descricao}}
               </mat-option>
             </mat-select>
+            <mat-error>{{ getError(formGroup.get('situacao')) }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Observação</mat-label>
-            <textarea rows="3" matInput></textarea>
+            <textarea [formControlName]="'observacao'" rows="3" matInput></textarea>
           </mat-form-field>
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Cliente</mat-label>
-            <input matInput>
+            <input [formControlName]="'cliente'" matInput>
+            <mat-error>{{ getError(formGroup.get('cliente')) }}</mat-error>
           </mat-form-field>
 
           <div appFullWidth class="contato">
             <mat-form-field class="form-field-contatos" appearance="fill">
               <mat-label>Nome - contato</mat-label>
-              <input matInput>
+              <input [formControlName]="'nomeContato'" matInput>
             </mat-form-field>
 
             <mat-form-field class="form-field-contatos" appearance="fill">
               <mat-label>Fone - contato</mat-label>
-              <input mask="(00) 00000-0000" matInput>
+              <input phoneMask [formControlName]="'foneContato'" matInput>
             </mat-form-field>
           </div>
 
@@ -60,20 +64,26 @@
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Responsável</mat-label>
-            <input matInput>
+            <input [formControlName]="'responsavel'" [matAutocomplete]="auto" matInput>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUsuario">
+              <mat-option *ngFor="let usuario of usuariosFiltrados | async" [value]="usuario">
+                {{usuario.nome}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error>{{ getError(formGroup.get('responsavel')) }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Usuário</mat-label>
-            <input matInput>
+            <input [value]="osModel?.usuarioAtendente?.nome ?? ''" [disabled]="true" matInput>
           </mat-form-field>
 
           <app-spacer></app-spacer>
 
-          <button class="encerrar-os" appFullWidth mat-stroked-button color="primary">
+          <button class="encerrar-os" (click)="onSubmit()" appFullWidth mat-stroked-button color="primary">
             Encerrar OS
           </button>
-        </div>
+        </form>
 
         <mat-divider class="divider-vertical" [vertical]="true"></mat-divider>
 
@@ -85,29 +95,29 @@
               <div class="problemas">
                 <mat-form-field appFullWidth appearance="fill">
                   <mat-label>Problema reclamado</mat-label>
-                  <textarea rows="7" matInput></textarea>
+                  <textarea [(ngModel)]="equipamento.problemaReclamado" rows="7" matInput></textarea>
                 </mat-form-field>
 
                 <mat-form-field appFullWidth appearance="fill">
                   <mat-label>Problema constatado</mat-label>
-                  <textarea rows="7" matInput></textarea>
+                  <textarea [(ngModel)]="equipamento.problemaConstatado" rows="7" matInput></textarea>
                 </mat-form-field>
               </div>
 
-              <mat-stepper orientation="vertical" [linear]="false">
-                <mat-step *ngFor="let servico of equipamento.servicos">
+              <mat-stepper #stepper orientation="vertical" [linear]="false">
+                <mat-step [editable]="true" [completed]="false" [state]="'number'" *ngFor="let servico of equipamento.servicos">
                   <ng-template matStepLabel>{{ servico.servico.descricao }}</ng-template>
                   <ng-template matStepContent>
                     <mat-form-field appFullWidth class="descricao-servico" appearance="fill">
                       <mat-label>Descrição</mat-label>
-                      <textarea rows="3" matInput [(ngModel)]="servico.descricaoInformada"></textarea>
+                      <textarea [(ngModel)]="servico.descricaoInformada" rows="3" matInput></textarea>
                     </mat-form-field>
                   </ng-template>
                   <ng-template let-index="index">{{ index + 10 }}</ng-template>
                 </mat-step>
               </mat-stepper>
 
-              <button mat-button class="add-servico" color="primary">
+              <button (click)="adicionarServico(equipamento)" mat-button class="add-servico" color="primary">
                 <mat-icon>add</mat-icon>
                 Adicionar serviço
               </button>

@@ -23,6 +23,8 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatListModule } from "@angular/material/list";
 import { MatGridListModule } from "@angular/material/grid-list";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatRippleModule } from "@angular/material/core";
 
 @NgModule({
   declarations: [],
@@ -48,7 +50,9 @@ import { MatGridListModule } from "@angular/material/grid-list";
     MatTabsModule,
     MatStepperModule,
     MatListModule,
-    MatGridListModule
+    MatGridListModule,
+    MatAutocompleteModule,
+    MatRippleModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },

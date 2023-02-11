@@ -1,12 +1,21 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, map, Observable, startWith } from "rxjs";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsService } from "../../services/os.service";
 import { OsModel } from "../../models/os.model";
 import { OsEquipamentoItemModel } from "../../models/os-equipamento-item.model";
 import { OsSituacaoModel } from "../../models/os-situacao.model";
 import { OsTipoAtendimentoModel } from "../../models/os-tipo-atendimento.model";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { getMessageError } from "../../../shared/validators/validators";
+import { UsuarioModel } from "../../models/usuario.model";
+import { ServicoModel } from "../../models/servico.model";
+import { MatDialog } from "@angular/material/dialog";
+import { ListagemServicosDialogComponent } from "../../components/listagem-servicos-dialog/listagem-servicos-dialog.component";
+import { OsServicoModel } from "../../models/os-servico.model";
+import { MatStepper } from "@angular/material/stepper";
+import { AuthService } from "../../../auth/services/auth.service";
 
 @Component({
   selector: 'app-detalhes-os',
@@ -15,21 +24,37 @@ import { OsTipoAtendimentoModel } from "../../models/os-tipo-atendimento.model";
   encapsulation: ViewEncapsulation.None
 })
 export class DetalhesOsComponent implements OnInit {
+  @ViewChild('stepper') stepper!: MatStepper;
+
   private codigoOs: number | null = null;
   public loading: boolean = false;
   public osModel: OsModel | null = null;
+
+  public formGroup!: FormGroup;
 
   public osSituacoes: OsSituacaoModel[] = [];
 
   public osTiposAtendimento: OsTipoAtendimentoModel[] = [];
 
+  public usuarios: UsuarioModel[] = [];
+
+  public usuariosFiltrados!: Observable<UsuarioModel[]>;
+
+  public usuarioLogado!: UsuarioModel;
+
+  public servicos: ServicoModel[] = [];
+
   constructor(
     private osService: OsService,
+    private authService: AuthService,
     private snackbarService: SnackbarService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog
+  ) {
+  }
 
-  async ngOnInit() {
+  public async ngOnInit(): Promise<void> {
     try {
       this.loading = true;
 
@@ -38,14 +63,101 @@ export class DetalhesOsComponent implements OnInit {
         this.osModel = await firstValueFrom(this.osService.getByCodigo(this.codigoOs));
       }
 
-      this.osSituacoes = await firstValueFrom(this.osService.getOsSituacoes());
-      this.osTiposAtendimento = await firstValueFrom(this.osService.getOsTiposAtendimento());
+      const promiseAll = await Promise.all([
+        firstValueFrom(this.osService.getOsSituacoes()),
+        firstValueFrom(this.osService.getOsTiposAtendimento()),
+        firstValueFrom(this.osService.getOsSituacoes()),
+        firstValueFrom(this.osService.getOsTiposAtendimento()),
+        firstValueFrom(this.osService.getServicos()),
+        firstValueFrom(this.osService.getUsuarios())
+      ]);
+
+      this.osSituacoes = promiseAll[0];
+      this.osTiposAtendimento = promiseAll[1];
+      this.osSituacoes = promiseAll[2];
+      this.osTiposAtendimento = promiseAll[3];
+      this.servicos = promiseAll[4];
+      this.usuarios = promiseAll[5];
+
+      this.osModel!.situacao = this.osSituacoes.find(s => s.id === this.osModel?.situacao.id)!;
+      this.osModel!.tipoAtendimento = this.osTiposAtendimento.find(t => t.id === this.osModel?.tipoAtendimento.id)!;
+
+      const usuarioLogado: UsuarioModel | null = this.authService.getUsuarioLogado();
+
+      const usuarioCarregado = this.usuarios.find(u => u.id === usuarioLogado?.id);
+      if (!usuarioCarregado) throw Error("Faça login para acessar os detalhes da OS.");
+
+      this.usuarioLogado = usuarioCarregado!;
+
+      this._createForm();
     } catch (e) {
-      await this.snackbarService.showError(e);
-    }
-    finally {
+      this.snackbarService.showError(e);
+    } finally {
       this.loading = false;
     }
+  }
+
+  public async adicionarServico(equipamento: OsEquipamentoItemModel): Promise<void> {
+    try {
+      const dialog = this.dialog.open(ListagemServicosDialogComponent, ListagemServicosDialogComponent.configDefault([]));
+      const servico = await firstValueFrom(dialog.afterClosed());
+
+      if (servico) {
+        const osServico = new OsServicoModel(
+          null,
+          equipamento.id,
+          "1",
+          null,
+          null,
+          new Date(), servico,
+          this.usuarioLogado,
+        );
+
+        equipamento.servicos.push(osServico);
+        setTimeout(() => this.stepper.selectedIndex = this.stepper.steps.length - 1);
+      }
+    } catch (e) {
+      this.snackbarService.showError(e);
+    }
+  }
+
+  public async onSubmit(): Promise<void> {
+    try {
+      this.loading = true;
+
+      if (this.formGroup.invalid) return;
+      this.formGroup.disable();
+    } catch (e) {
+      this.snackbarService.showError(e);
+    } finally {
+      this.loading = false;
+      this.formGroup.enable();
+    }
+  }
+
+  private _createForm(): void {
+    this.formGroup = this.formBuilder.group({
+      dataAbertura: new FormControl(this.osModel?.dataHora, Validators.required),
+      tipoAtendimento: [this.osModel?.tipoAtendimento, Validators.required],
+      situacao: [this.osModel?.situacao, Validators.required],
+      observacao: [this.osModel?.obs],
+      cliente: ["", Validators.required],
+      nomeContato: [this.osModel?.nomeContato],
+      foneContato: [this.osModel?.foneContato],
+      responsavel: [this.osModel?.responsavel, Validators.required]
+    });
+
+    this.usuariosFiltrados = this.formGroup.controls['responsavel'].valueChanges
+      .pipe(
+        startWith(this.osModel?.responsavel?.nome),
+        map(value => this.usuarios.filter(usuario => usuario.nome.toLowerCase().includes(value?.toLowerCase())))
+      );
+  }
+
+  public displayUsuario = (user: UsuarioModel): string => user && user.nome ? user.nome : '';
+
+  public getError(control: any): string {
+    return getMessageError(control);
   }
 
   public get equipamentos(): OsEquipamentoItemModel[] {

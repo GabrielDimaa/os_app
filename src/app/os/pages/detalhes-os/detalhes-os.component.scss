@@ -32,13 +32,12 @@
 
       .encerrar-os {
         padding: 4px 0;
+        max-width: 300px;
+
         border-color: styles.$primary;
         border-width: 2px;
 
-        font-weight: bold;
         font-size: 16px;
-
-        max-width: 300px;
       }
     }
 
