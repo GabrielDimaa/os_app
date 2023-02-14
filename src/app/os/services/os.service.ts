@@ -12,6 +12,7 @@ import "../../shared/prototypes/date.prototype";
 import { OsTipoAtendimentoAPI, OsTipoAtendimentoModel } from "../models/os-tipo-atendimento.model";
 import { ServicoAPI, ServicoModel } from "../models/servico.model";
 import { UsuarioAPI, UsuarioModel } from "../models/usuario.model";
+import { ClienteAPI, ClienteModel } from "../models/cliente.model";
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +90,14 @@ export class OsService {
     return this.api.get<UsuarioAPI[]>("usuario")
       .pipe(
         map(response => response.map(e => UsuarioModel.fromJson(e))),
+        catchError(err => throwError(() => Error(err.message)))
+      );
+  }
+
+  public getClientesContainsName(name: string): Observable<ClienteModel[]> {
+    return this.api.get<ClienteAPI[]>(`cliente/contains-name?name=${name}`)
+      .pipe(
+        map(response => response.map(e => ClienteModel.fromJson(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }

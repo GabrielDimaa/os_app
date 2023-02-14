@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { firstValueFrom, map, Observable, startWith } from "rxjs";
+import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, startWith, Subject, switchMap } from "rxjs";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsService } from "../../services/os.service";
 import { OsModel } from "../../models/os.model";
@@ -16,6 +16,7 @@ import { ListagemServicosDialogComponent } from "../../components/listagem-servi
 import { OsServicoModel } from "../../models/os-servico.model";
 import { MatStepper } from "@angular/material/stepper";
 import { AuthService } from "../../../auth/services/auth.service";
+import { ClienteModel } from "../../models/cliente.model";
 
 @Component({
   selector: 'app-detalhes-os',
@@ -35,6 +36,8 @@ export class DetalhesOsComponent implements OnInit {
   public osSituacoes: OsSituacaoModel[] = [];
 
   public osTiposAtendimento: OsTipoAtendimentoModel[] = [];
+
+  public clientesFiltrados!: Observable<ClienteModel[]>;
 
   public usuarios: UsuarioModel[] = [];
 
@@ -89,7 +92,7 @@ export class DetalhesOsComponent implements OnInit {
 
       this.usuarioLogado = usuarioCarregado!;
 
-      this._createForm();
+      this.createForm();
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
@@ -99,7 +102,7 @@ export class DetalhesOsComponent implements OnInit {
 
   public async adicionarServico(equipamento: OsEquipamentoItemModel): Promise<void> {
     try {
-      const dialog = this.dialog.open(ListagemServicosDialogComponent, ListagemServicosDialogComponent.configDefault([]));
+      const dialog = this.dialog.open(ListagemServicosDialogComponent, ListagemServicosDialogComponent.configDefault(this.servicos));
       const servico = await firstValueFrom(dialog.afterClosed());
 
       if (servico) {
@@ -135,17 +138,34 @@ export class DetalhesOsComponent implements OnInit {
     }
   }
 
-  private _createForm(): void {
+  private createForm(): void {
     this.formGroup = this.formBuilder.group({
       dataAbertura: new FormControl(this.osModel?.dataHora, Validators.required),
       tipoAtendimento: [this.osModel?.tipoAtendimento, Validators.required],
       situacao: [this.osModel?.situacao, Validators.required],
       observacao: [this.osModel?.obs],
-      cliente: ["", Validators.required],
+      cliente: [this.osModel?.cliente, Validators.required],
       nomeContato: [this.osModel?.nomeContato],
       foneContato: [this.osModel?.foneContato],
-      responsavel: [this.osModel?.responsavel, Validators.required]
+      responsavel: [this.osModel?.responsavel]
     });
+
+    this.clientesFiltrados = this.formGroup.controls['cliente'].valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        filter(value => typeof value !== 'object'),
+        switchMap(value => this.osService.getClientesContainsName(value).pipe(
+          map(clientes => {
+            if (clientes.length === 0) this.formGroup.controls['cliente'].setErrors({notFound: true});
+            return clientes;
+          }),
+          catchError(err => {
+            this.formGroup.controls['cliente'].setErrors({notFound: true})
+            return [];
+          })
+        ))
+      );
 
     this.usuariosFiltrados = this.formGroup.controls['responsavel'].valueChanges
       .pipe(
@@ -154,6 +174,7 @@ export class DetalhesOsComponent implements OnInit {
       );
   }
 
+  public displayCliente = (cliente: ClienteModel): string => cliente && cliente.nome ? cliente.nome : '';
   public displayUsuario = (user: UsuarioModel): string => user && user.nome ? user.nome : '';
 
   public getError(control: any): string {

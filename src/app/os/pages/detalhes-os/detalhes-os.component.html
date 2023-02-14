@@ -44,8 +44,16 @@
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Cliente</mat-label>
-            <input [formControlName]="'cliente'" matInput>
+            <input [formControlName]="'cliente'" [matAutocomplete]="autocompleteCliente" matInput>
+            <mat-autocomplete #autocompleteCliente="matAutocomplete" [displayWith]="displayCliente">
+              <mat-option *ngFor="let cliente of clientesFiltrados | async" [value]="cliente">
+                {{cliente.nome}}
+              </mat-option>
+            </mat-autocomplete>
             <mat-error>{{ getError(formGroup.get('cliente')) }}</mat-error>
+            <mat-error *ngIf="formGroup.get('cliente')?.hasError('notFound') ?? false">
+              Nenhum cliente encontrado.
+            </mat-error>
           </mat-form-field>
 
           <div appFullWidth class="contato">
@@ -64,8 +72,8 @@
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Responsável</mat-label>
-            <input [formControlName]="'responsavel'" [matAutocomplete]="auto" matInput>
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUsuario">
+            <input [formControlName]="'responsavel'" [matAutocomplete]="autocompleteResponsavel" matInput>
+            <mat-autocomplete #autocompleteResponsavel="matAutocomplete" [displayWith]="displayUsuario">
               <mat-option *ngFor="let usuario of usuariosFiltrados | async" [value]="usuario">
                 {{usuario.nome}}
               </mat-option>
