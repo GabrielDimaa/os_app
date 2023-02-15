@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Equipamentos</h1>
+
+<mat-dialog-content>
+  <form class="flex" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Equipamento</mat-label>
+      <input [formControlName]="'equipamento'" matInput>
+      <mat-error>{{ getError(formGroup.get('equipamento')) }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Item</mat-label>
+      <input [formControlName]="'equipamentoItem'" matInput>
+      <mat-error>{{ getError(formGroup.get('equipamentoItem')) }}</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-button [mat-dialog-close]="null">Salvar</button>
+</mat-dialog-actions>

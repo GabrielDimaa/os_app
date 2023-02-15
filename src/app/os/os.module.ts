@@ -7,20 +7,22 @@ import { ToolbarComponent } from './templates/toolbar/toolbar.component';
 import { TemplateComponent } from './templates/template.component';
 import { ListagemOsComponent } from './pages/listagem-os/listagem-os.component';
 import { DetalhesOsComponent } from './pages/detalhes-os/detalhes-os.component';
-import { ListagemServicosDialogComponent } from './components/listagem-servicos-dialog/listagem-servicos-dialog.component';
+import { EquipamentoModule } from "../equipamento/equipamento.module";
+import { ServicoModule } from "../servico/servico.module";
 
 @NgModule({
   declarations: [
     ToolbarComponent,
     TemplateComponent,
     ListagemOsComponent,
-    DetalhesOsComponent,
-    ListagemServicosDialogComponent
+    DetalhesOsComponent
   ],
   imports: [
     CommonModule,
     OsRoutingModule,
-    SharedModule
+    SharedModule,
+    EquipamentoModule,
+    ServicoModule
   ]
 })
 export class OsModule {

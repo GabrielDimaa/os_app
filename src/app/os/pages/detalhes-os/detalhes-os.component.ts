@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, startWith, Subject, switchMap } from "rxjs";
+import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, startWith, switchMap } from "rxjs";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsService } from "../../services/os.service";
 import { OsModel } from "../../models/os.model";
@@ -12,11 +12,15 @@ import { getMessageError } from "../../../shared/validators/validators";
 import { UsuarioModel } from "../../models/usuario.model";
 import { ServicoModel } from "../../models/servico.model";
 import { MatDialog } from "@angular/material/dialog";
-import { ListagemServicosDialogComponent } from "../../components/listagem-servicos-dialog/listagem-servicos-dialog.component";
 import { OsServicoModel } from "../../models/os-servico.model";
 import { MatStepper } from "@angular/material/stepper";
 import { AuthService } from "../../../auth/services/auth.service";
 import { ClienteModel } from "../../models/cliente.model";
+import { EquipamentoModel } from "../../models/equipamento.model";
+import { ListagemServicosDialogComponent } from "../../../servico/components/listagem-servicos-dialog/listagem-servicos-dialog.component";
+import { ListagemEquipamentosDialogComponent } from "../../../equipamento/components/listagem-equipamentos-dialog/listagem-equipamentos-dialog.component";
+import { EquipamentoService } from "../../../equipamento/services/equipamento.service";
+import { ServicoService } from "../../../servico/services/servico.service";
 
 @Component({
   selector: 'app-detalhes-os',
@@ -47,8 +51,12 @@ export class DetalhesOsComponent implements OnInit {
 
   public servicos: ServicoModel[] = [];
 
+  public equipamentos: EquipamentoModel[] = [];
+
   constructor(
     private osService: OsService,
+    private equipamentoService: EquipamentoService,
+    private servicoService: ServicoService,
     private authService: AuthService,
     private snackbarService: SnackbarService,
     private route: ActivatedRoute,
@@ -71,8 +79,9 @@ export class DetalhesOsComponent implements OnInit {
         firstValueFrom(this.osService.getOsTiposAtendimento()),
         firstValueFrom(this.osService.getOsSituacoes()),
         firstValueFrom(this.osService.getOsTiposAtendimento()),
-        firstValueFrom(this.osService.getServicos()),
-        firstValueFrom(this.osService.getUsuarios())
+        firstValueFrom(this.servicoService.getServicos()),
+        firstValueFrom(this.osService.getUsuarios()),
+        firstValueFrom(this.equipamentoService.getEquipamentos())
       ]);
 
       this.osSituacoes = promiseAll[0];
@@ -81,6 +90,7 @@ export class DetalhesOsComponent implements OnInit {
       this.osTiposAtendimento = promiseAll[3];
       this.servicos = promiseAll[4];
       this.usuarios = promiseAll[5];
+      this.equipamentos = promiseAll[6];
 
       this.osModel!.situacao = this.osSituacoes.find(s => s.id === this.osModel?.situacao.id)!;
       this.osModel!.tipoAtendimento = this.osTiposAtendimento.find(t => t.id === this.osModel?.tipoAtendimento.id)!;
@@ -124,6 +134,19 @@ export class DetalhesOsComponent implements OnInit {
     }
   }
 
+  public async adicionarEquipamento(): Promise<void> {
+    try {
+      const dialog = this.dialog.open(ListagemEquipamentosDialogComponent, ListagemEquipamentosDialogComponent.configDefault(this.equipamentos));
+
+      dialog.afterClosed().subscribe(() => {
+        // Aqui você pode acessar a classe do componente que chamou o dialog
+        console.log(this);
+      });
+    } catch (e) {
+      this.snackbarService.showError(e);
+    }
+  }
+
   public async onSubmit(): Promise<void> {
     try {
       this.loading = true;
@@ -160,7 +183,7 @@ export class DetalhesOsComponent implements OnInit {
             if (clientes.length === 0) this.formGroup.controls['cliente'].setErrors({notFound: true});
             return clientes;
           }),
-          catchError(err => {
+          catchError(_ => {
             this.formGroup.controls['cliente'].setErrors({notFound: true})
             return [];
           })
@@ -181,7 +204,7 @@ export class DetalhesOsComponent implements OnInit {
     return getMessageError(control);
   }
 
-  public get equipamentos(): OsEquipamentoItemModel[] {
+  public get osEquipamentos(): OsEquipamentoItemModel[] {
     return this.osModel?.equipamentosItens ?? [];
   }
 }

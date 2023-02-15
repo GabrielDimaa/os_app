@@ -3,16 +3,14 @@ import { ApiHttpClient } from "../../shared/api/api-http-client";
 import { HttpParams } from "@angular/common/http";
 import { catchError, map, Observable, throwError } from "rxjs";
 import { OsPaginatorAPI, OsPaginatorModel } from "../models/os-paginator.model";
-import { EquipamentoAPI, EquipamentoModel } from "../models/equipamento.model";
 import { OsSituacaoAPI, OsSituacaoModel } from "../models/os-situacao.model";
 import { OsFilterParams, OsPaginatorParams } from "../params/os.params";
 import { OsAPI, OsModel } from "../models/os.model";
-import "../../shared/prototypes/string.prototype";
-import "../../shared/prototypes/date.prototype";
 import { OsTipoAtendimentoAPI, OsTipoAtendimentoModel } from "../models/os-tipo-atendimento.model";
-import { ServicoAPI, ServicoModel } from "../models/servico.model";
 import { UsuarioAPI, UsuarioModel } from "../models/usuario.model";
 import { ClienteAPI, ClienteModel } from "../models/cliente.model";
+import "../../shared/prototypes/string.prototype";
+import "../../shared/prototypes/date.prototype";
 
 @Injectable({
   providedIn: 'root'
@@ -54,14 +52,6 @@ export class OsService {
       );
   }
 
-  public getEquipamentos(): Observable<EquipamentoModel[]> {
-    return this.api.get<EquipamentoAPI[]>("equipamento")
-      .pipe(
-        map(response => response.map(e => EquipamentoModel.fromJson(e))),
-        catchError(err => throwError(() => Error(err.message)))
-      );
-  }
-
   public getOsSituacoes(): Observable<OsSituacaoModel[]> {
     return this.api.get<OsSituacaoAPI[]>("os-situacao")
       .pipe(
@@ -74,14 +64,6 @@ export class OsService {
     return this.api.get<OsTipoAtendimentoAPI[]>("os-tipo-atendimento")
       .pipe(
         map(response => response.map(e => OsTipoAtendimentoModel.fromJson(e))),
-        catchError(err => throwError(() => Error(err.message)))
-      );
-  }
-
-  public getServicos(): Observable<ServicoModel[]> {
-    return this.api.get<ServicoAPI[]>("servico")
-      .pipe(
-        map(response => response.map(e => ServicoModel.fromJson(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }

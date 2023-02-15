@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { ServicoModel } from "../../models/servico.model";
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
+import { ServicoModel } from "../../../os/models/servico.model";
 
 @Component({
   selector: 'app-listagem-servicos-dialog',

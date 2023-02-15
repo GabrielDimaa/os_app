@@ -96,8 +96,14 @@
         <mat-divider class="divider-vertical" [vertical]="true"></mat-divider>
 
         <div class="column-right">
-          <mat-tab-group dynamicHeight mat-align-tabs="start">
-            <mat-tab *ngFor="let equipamento of equipamentos" [label]="equipamento.descricaoDisplay">
+          <div class="add-equipamento" *ngIf="osEquipamentos.length != 0">
+            <app-button-icon (click)="adicionarEquipamento()">
+              Adicionar equipamento
+            </app-button-icon>
+          </div>
+
+          <mat-tab-group *ngIf="osEquipamentos.length == 0" dynamicHeight mat-align-tabs="start">
+            <mat-tab *ngFor="let equipamento of osEquipamentos" [label]="equipamento.descricaoDisplay">
               <app-spacer [size]="2"></app-spacer>
 
               <div class="problemas">
@@ -112,6 +118,11 @@
                 </mat-form-field>
               </div>
 
+              <button (click)="adicionarServico(equipamento)" mat-button class="add-servico" color="primary">
+                <mat-icon>add</mat-icon>
+                Adicionar serviço
+              </button>
+
               <mat-stepper #stepper orientation="vertical" [linear]="false">
                 <mat-step [editable]="true" [completed]="false" [state]="'number'" *ngFor="let servico of equipamento.servicos">
                   <ng-template matStepLabel>{{ servico.servico.descricao }}</ng-template>
@@ -124,11 +135,6 @@
                   <ng-template let-index="index">{{ index + 10 }}</ng-template>
                 </mat-step>
               </mat-stepper>
-
-              <button (click)="adicionarServico(equipamento)" mat-button class="add-servico" color="primary">
-                <mat-icon>add</mat-icon>
-                Adicionar serviço
-              </button>
             </mat-tab>
           </mat-tab-group>
         </div>

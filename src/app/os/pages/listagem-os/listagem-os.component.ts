@@ -13,6 +13,7 @@ import { OsSituacaoModel } from "../../models/os-situacao.model";
 import { MatDateRangePicker } from "@angular/material/datepicker";
 import { OsFilterParams } from "../../params/os.params";
 import { Router } from "@angular/router";
+import { EquipamentoService } from "../../../equipamento/services/equipamento.service";
 
 @Component({
   selector: 'app-listagem-os',
@@ -39,6 +40,7 @@ export class ListagemOsComponent implements AfterViewInit {
 
   constructor(
     private osService: OsService,
+    private equipamentoService: EquipamentoService,
     private snackbarService: SnackbarService,
     private cdr: ChangeDetectorRef,
     private liveAnnouncer: LiveAnnouncer,
@@ -55,7 +57,7 @@ export class ListagemOsComponent implements AfterViewInit {
 
       await this.buscarOs();
 
-      this.equipamentos = await firstValueFrom(this.osService.getEquipamentos());
+      this.equipamentos = await firstValueFrom(this.equipamentoService.getEquipamentos());
       this.osSituacoes = await firstValueFrom(this.osService.getOsSituacoes());
     } catch (e) {
       this.snackbarService.showError(e);
