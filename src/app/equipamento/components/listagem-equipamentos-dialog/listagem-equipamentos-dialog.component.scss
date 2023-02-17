@@ -1,3 +1,5 @@
+@use "src/styles";
+
 form {
   display: flex;
   gap: 14px;
@@ -5,4 +7,20 @@ form {
   mat-form-field {
     flex-grow: 1;
   }
+}
+
+.loading span {
+  color: grey;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  color: styles.$warn;
+
+  padding: 12px 0;
+
+  font-weight: 500;
+  font-size: 16px;
+  text-align: center;
 }

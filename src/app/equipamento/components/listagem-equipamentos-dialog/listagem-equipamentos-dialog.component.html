@@ -1,22 +1,38 @@
 <h1 mat-dialog-title>Equipamentos</h1>
 
 <mat-dialog-content>
-  <form class="flex" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <form *ngIf="!hasError && !loading" class="flex" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="fill">
       <mat-label>Equipamento</mat-label>
-      <input [formControlName]="'equipamento'" matInput>
+      <mat-select [formControlName]="'equipamento'" [(value)]="equipamentoSelecionado">
+        <mat-option *ngFor="let equipamento of equipamentos" [value]="equipamento">
+          {{equipamento.descricao}}
+        </mat-option>
+      </mat-select>
       <mat-error>{{ getError(formGroup.get('equipamento')) }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Item</mat-label>
-      <input [formControlName]="'equipamentoItem'" matInput>
+      <mat-label>Identificador</mat-label>
+      <mat-select [formControlName]="'equipamentoItem'" [disabled]="equipamentoSelecionado == null">
+        <mat-option *ngFor="let equipamentoItem of equipamentoSelecionado?.itens ?? []" [value]="equipamentoItem">
+          {{equipamentoItem.descricao}}
+        </mat-option>
+      </mat-select>
       <mat-error>{{ getError(formGroup.get('equipamentoItem')) }}</mat-error>
     </mat-form-field>
   </form>
+
+  <div *ngIf="loading" class="flex-column loading">
+    <mat-spinner [diameter]="35"></mat-spinner>
+    <app-spacer></app-spacer>
+    <span>Buscando equipamentos...</span>
+  </div>
+
+  <span *ngIf="hasError" class="error">{{messageError}}</span>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="null">Cancelar</button>
-  <button mat-button [mat-dialog-close]="null">Salvar</button>
+  <button mat-button [disabled]="loading" [mat-dialog-close]="null">Cancelar</button>
+  <button mat-button [disabled]="loading || hasError" (click)="onSubmit()">Confirmar</button>
 </mat-dialog-actions>

@@ -3,8 +3,8 @@ import { OsServicoAPI, OsServicoModel } from "./os-servico.model";
 import { OsProdutoAPI, OsProdutoModel } from "./os-produto.model";
 
 class OsEquipamentoItemModel {
-  id: number;
-  idOs: number;
+  id: number | null;
+  idOs: number | null;
   problemaReclamado: string | null;
   problemaConstatado: string | null;
   obs: string | null;
@@ -16,9 +16,22 @@ class OsEquipamentoItemModel {
     return `${this.equipamentoItem.equipamento!.descricao} > ${this.equipamentoItem.descricao}`;
   }
 
+  static novo(equipamentoItem: EquipamentoItemModel, idOs: number | null = null): OsEquipamentoItemModel {
+    return new OsEquipamentoItemModel(
+      null,
+      idOs,
+      null,
+      null,
+      null,
+      equipamentoItem,
+      [],
+      []
+    );
+  }
+
   constructor(
-    id: number,
-    idOs: number,
+    id: number | null,
+    idOs: number | null,
     problemaReclamado: string | null,
     problemaConstatado: string | null,
     obs: string | null,
@@ -51,8 +64,8 @@ class OsEquipamentoItemModel {
 }
 
 interface OsEquipamentoItemAPI {
-  id_os_equipamento_item: number;
-  id_os: number;
+  id_os_equipamento_item: number | null;
+  id_os: number | null;
   problema_reclamado: string | null;
   problema_constatado: string | null;
   obs: string | null;
