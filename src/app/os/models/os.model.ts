@@ -7,14 +7,14 @@ import "../../shared/prototypes/date.prototype";
 import { dateWithoutTimezone } from "../../shared/prototypes/date.prototype";
 
 class OsModel {
-  id: number;
-  codigo: number;
+  id: number | null;
+  codigo: number | null;
   obs: string | null;
   inativo: boolean;
 
-  tipoAtendimento: OsTipoAtendimentoModel;
-  situacao: OsSituacaoModel;
-  cliente: ClienteModel;
+  tipoAtendimento: OsTipoAtendimentoModel | null;
+  situacao: OsSituacaoModel | null;
+  cliente: ClienteModel | null;
   equipamentosItens: OsEquipamentoItemModel[];
 
   dataHora: Date;
@@ -35,13 +35,13 @@ class OsModel {
   responsavel: UsuarioModel | null;
 
   constructor(
-    id: number,
-    codigo: number,
+    id: number | null,
+    codigo: number | null,
     obs: string | null,
     inativo: boolean,
-    tipoAtendimento: OsTipoAtendimentoModel,
-    situacao: OsSituacaoModel,
-    cliente: ClienteModel,
+    tipoAtendimento: OsTipoAtendimentoModel | null,
+    situacao: OsSituacaoModel | null,
+    cliente: ClienteModel | null,
     equipamentosItens: OsEquipamentoItemModel[],
     dataHora: Date,
     dataHoraPrevisaoEntrega: Date | null,
@@ -78,6 +78,32 @@ class OsModel {
     this.usuarioAprovacao = usuarioAprovacao;
     this.usuarioEncerramento = usuarioEncerramento;
     this.responsavel = responsavel;
+  }
+
+  public static novo(usuarioAtendente: UsuarioModel): OsModel {
+    return new OsModel(
+      null,
+      null,
+      null,
+      false,
+      null,
+      null,
+      null,
+      [],
+      new Date(),
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      usuarioAtendente,
+      null,
+      null,
+      null
+    );
   }
 
   public static fromJson(json: OsAPI): OsModel {

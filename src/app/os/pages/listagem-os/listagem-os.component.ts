@@ -150,6 +150,10 @@ export class ListagemOsComponent implements AfterViewInit {
     return this.startDateRef?.nativeElement.value.length > 0;
   }
 
+  public async criarOs(): Promise<void> {
+    await this.router.navigate(['os/criar']);
+  }
+
   public getError(control: any): string {
     return getMessageError(control);
   }

@@ -71,6 +71,8 @@ export class DetalhesOsComponent implements OnInit {
       this.codigoOs = +this.route.snapshot.params['codigo'];
       if (!isNaN(this.codigoOs)) {
         this.osModel = await firstValueFrom(this.osService.getByCodigo(this.codigoOs));
+      } else {
+        if (this.route.snapshot.params['codigo'] != "novo") return;
       }
 
       const promiseAll = await Promise.all([
@@ -89,15 +91,16 @@ export class DetalhesOsComponent implements OnInit {
       this.servicos = promiseAll[4];
       this.usuarios = promiseAll[5];
 
-      this.osModel!.situacao = this.osSituacoes.find(s => s.id === this.osModel?.situacao.id)!;
-      this.osModel!.tipoAtendimento = this.osTiposAtendimento.find(t => t.id === this.osModel?.tipoAtendimento.id)!;
-
       const usuarioLogado: UsuarioModel | null = this.authService.getUsuarioLogado();
-
       const usuarioCarregado = this.usuarios.find(u => u.id === usuarioLogado?.id);
       if (!usuarioCarregado) throw Error("Faça login para acessar os detalhes da OS.");
 
       this.usuarioLogado = usuarioCarregado!;
+
+      this.osModel ??= OsModel.novo(this.usuarioLogado);
+
+      this.osModel!.situacao = this.osSituacoes.find(s => s.id === this.osModel?.situacao?.id)!;
+      this.osModel!.tipoAtendimento = this.osTiposAtendimento.find(t => t.id === this.osModel?.tipoAtendimento?.id)!;
 
       this.createForm();
     } catch (e) {

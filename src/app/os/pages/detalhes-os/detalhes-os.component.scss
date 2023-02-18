@@ -94,6 +94,18 @@
     opacity: 1;
   }
 
+  .os-nao-encontrada {
+    h1 {
+      font-size: 2rem;
+      font-weight: 500;
+      color: styles.$primary;
+    }
+
+    mat-icon {
+      transform: scale(3);
+    }
+  }
+
   @media only screen and (max-width: 1000px) {
     .divider-vertical {
       display: none !important;
