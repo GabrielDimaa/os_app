@@ -93,52 +93,99 @@
           </button>
         </form>
 
-        <mat-divider class="divider-vertical" [vertical]="true"></mat-divider>
-
         <div class="column-right">
-          <div class="add-equipamento" *ngIf="osEquipamentos.length != 0">
-            <app-button-icon (click)="adicionarEquipamento()">
-              Adicionar equipamento
-            </app-button-icon>
+          <mat-divider class="divider-vertical" [vertical]="true"></mat-divider>
+
+          <div class="column-content">
+            <div class="add-equipamento" *ngIf="osEquipamentos.length == 0">
+              <app-button-icon (click)="adicionarEquipamento()">
+                Adicionar equipamento
+              </app-button-icon>
+            </div>
+
+            <mat-tab-group *ngIf="osEquipamentos.length != 0" dynamicHeight mat-align-tabs="start">
+              <mat-tab *ngFor="let equipamento of osEquipamentos" [label]="equipamento.descricaoDisplay">
+                <app-spacer [size]="2"></app-spacer>
+
+                <div class="problemas">
+                  <mat-form-field appFullWidth appearance="fill">
+                    <mat-label>Problema reclamado</mat-label>
+                    <textarea [(ngModel)]="equipamento.problemaReclamado" rows="7" matInput></textarea>
+                  </mat-form-field>
+
+                  <mat-form-field appFullWidth appearance="fill">
+                    <mat-label>Problema constatado</mat-label>
+                    <textarea [(ngModel)]="equipamento.problemaConstatado" rows="7" matInput></textarea>
+                  </mat-form-field>
+                </div>
+
+                <button (click)="adicionarServico(equipamento)" mat-button class="add-servico" color="primary">
+                  <mat-icon>add</mat-icon>
+                  Adicionar serviço
+                </button>
+
+                <mat-stepper #stepper orientation="vertical" [linear]="false">
+                  <mat-step [editable]="true" [completed]="false" [state]="'number'" *ngFor="let servico of equipamento.servicos">
+                    <ng-template matStepLabel>{{ servico.servico.descricao }}</ng-template>
+                    <ng-template matStepContent>
+                      <mat-form-field appFullWidth class="descricao-servico" appearance="fill">
+                        <mat-label>Descrição</mat-label>
+                        <textarea [(ngModel)]="servico.descricaoInformada" rows="3" matInput></textarea>
+                      </mat-form-field>
+                    </ng-template>
+                    <ng-template let-index="index">{{ index + 10 }}</ng-template>
+                  </mat-step>
+                </mat-stepper>
+              </mat-tab>
+            </mat-tab-group>
           </div>
-
-          <mat-tab-group *ngIf="osEquipamentos.length == 0" dynamicHeight mat-align-tabs="start">
-            <mat-tab *ngFor="let equipamento of osEquipamentos" [label]="equipamento.descricaoDisplay">
-              <app-spacer [size]="2"></app-spacer>
-
-              <div class="problemas">
-                <mat-form-field appFullWidth appearance="fill">
-                  <mat-label>Problema reclamado</mat-label>
-                  <textarea [(ngModel)]="equipamento.problemaReclamado" rows="7" matInput></textarea>
-                </mat-form-field>
-
-                <mat-form-field appFullWidth appearance="fill">
-                  <mat-label>Problema constatado</mat-label>
-                  <textarea [(ngModel)]="equipamento.problemaConstatado" rows="7" matInput></textarea>
-                </mat-form-field>
-              </div>
-
-              <button (click)="adicionarServico(equipamento)" mat-button class="add-servico" color="primary">
-                <mat-icon>add</mat-icon>
-                Adicionar serviço
-              </button>
-
-              <mat-stepper #stepper orientation="vertical" [linear]="false">
-                <mat-step [editable]="true" [completed]="false" [state]="'number'" *ngFor="let servico of equipamento.servicos">
-                  <ng-template matStepLabel>{{ servico.servico.descricao }}</ng-template>
-                  <ng-template matStepContent>
-                    <mat-form-field appFullWidth class="descricao-servico" appearance="fill">
-                      <mat-label>Descrição</mat-label>
-                      <textarea [(ngModel)]="servico.descricaoInformada" rows="3" matInput></textarea>
-                    </mat-form-field>
-                  </ng-template>
-                  <ng-template let-index="index">{{ index + 10 }}</ng-template>
-                </mat-step>
-              </mat-stepper>
-            </mat-tab>
-          </mat-tab-group>
         </div>
       </div>
+    </mat-card-content>
+
+    <mat-card-content *ngIf="loading">
+      <app-shimmer>
+        <div class="title-shimmer"></div>
+        <app-spacer></app-spacer>
+
+        <div class="content">
+          <div class="column-left">
+            <div class="input-shimmer"></div>
+            <div class="input-shimmer"></div>
+            <div class="input-shimmer"></div>
+            <div class="text-area-shimmer"></div>
+            <div class="input-shimmer"></div>
+            <div appFullWidth class="contato">
+              <div class="input-shimmer"></div>
+              <div class="input-shimmer"></div>
+            </div>
+            <mat-divider appFullWidth></mat-divider>
+            <div class="input-shimmer"></div>
+            <div class="input-shimmer"></div>
+            <app-spacer></app-spacer>
+            <div class="input-shimmer"></div>
+          </div>
+
+          <div class="column-right">
+            <mat-divider class="divider-vertical" [vertical]="true"></mat-divider>
+
+            <div class="column-content">
+              <div class="input-shimmer" style="width: 50%;"></div>
+              <app-spacer></app-spacer>
+              <div class="problemas">
+                <div class="text-area-shimmer" style="height: 150px"></div>
+                <div class="text-area-shimmer" style="height: 150px"></div>
+              </div>
+              <div class="custom-shimmer" style="height: 35px; width: 180px; border-radius: 8px;"></div>
+              <div class="input-shimmer" style="width: 40%;"></div>
+              <div class="text-area-shimmer"></div>
+              <div class="input-shimmer" style="width: 40%;"></div>
+              <div class="input-shimmer" style="width: 40%;"></div>
+              <div class="input-shimmer" style="width: 40%;"></div>
+            </div>
+          </div>
+        </div>
+      </app-shimmer>
     </mat-card-content>
   </mat-card>
 </section>

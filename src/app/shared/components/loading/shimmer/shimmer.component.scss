@@ -34,7 +34,7 @@
     }
   }
 
-  .title {
+  .title-shimmer {
     @include shimmer;
 
     height: 35px;
@@ -43,7 +43,7 @@
     border-radius: 14px;
   }
 
-  .full {
+  .full-shimmer {
     @include shimmer;
 
     height: 200px;
@@ -51,21 +51,39 @@
     border-radius: 16px;
   }
 
-  .input {
+  .input-shimmer {
     @include shimmer;
 
-    height: 50px;
+    height: 54px;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     border-radius: 16px;
   }
 
-  .content {
+  .text-area-shimmer {
+    @include shimmer;
+
+    height: 84px;
+    width: 100%;
+    margin-bottom: 18px;
+    border-radius: 16px;
+  }
+
+  .content-shimmer {
     @include shimmer;
 
     height: 8px;
     width: 100%;
     margin-bottom: 16px;
     border-radius: 2px;
+  }
+
+  .custom-shimmer {
+    @include shimmer;
+
+    height: 20px;
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 16px;
   }
 }
