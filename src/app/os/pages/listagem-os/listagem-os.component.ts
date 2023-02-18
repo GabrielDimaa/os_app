@@ -5,7 +5,7 @@ import { OsService } from "../../services/os.service";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsSimpleModel } from "../../models/os-simple.model";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { firstValueFrom } from "rxjs";
+import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, switchMap } from "rxjs";
 import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { EquipamentoModel } from "../../models/equipamento.model";
 import { EquipamentoItemModel } from "../../models/equipamento-item.model";
@@ -14,6 +14,9 @@ import { MatDateRangePicker } from "@angular/material/datepicker";
 import { OsFilterParams } from "../../params/os.params";
 import { Router } from "@angular/router";
 import { EquipamentoService } from "../../../equipamento/services/equipamento.service";
+import { FormControl } from "@angular/forms";
+import { ClienteModel } from "../../models/cliente.model";
+import { getMessageError } from "../../../shared/validators/validators";
 
 @Component({
   selector: 'app-listagem-os',
@@ -38,6 +41,10 @@ export class ListagemOsComponent implements AfterViewInit {
   public loading: boolean = false;
   public loadingFiltro: boolean = false;
 
+  public clientesFiltrados!: Observable<ClienteModel[]>;
+  public clienteControl: FormControl = new FormControl();
+  public displayCliente = (cliente: ClienteModel): string => cliente && cliente.nome ? cliente.nome : '';
+
   constructor(
     private osService: OsService,
     private equipamentoService: EquipamentoService,
@@ -59,6 +66,23 @@ export class ListagemOsComponent implements AfterViewInit {
 
       this.equipamentos = await firstValueFrom(this.equipamentoService.getEquipamentos());
       this.osSituacoes = await firstValueFrom(this.osService.getOsSituacoes());
+
+      this.clientesFiltrados = this.clienteControl.valueChanges
+        .pipe(
+          debounceTime(500),
+          distinctUntilChanged(),
+          filter(value => typeof value !== 'object'),
+          switchMap(value => this.osService.getClientesContainsName(value).pipe(
+            map(clientes => {
+              if (clientes.length === 0) this.clienteControl.setErrors({notFound: true});
+              return clientes;
+            }),
+            catchError(_ => {
+              this.clienteControl.setErrors({notFound: true})
+              return [];
+            })
+          ))
+        );
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
@@ -124,5 +148,9 @@ export class ListagemOsComponent implements AfterViewInit {
 
   public get mostrarLimparDatas() {
     return this.startDateRef?.nativeElement.value.length > 0;
+  }
+
+  public getError(control: any): string {
+    return getMessageError(control);
   }
 }

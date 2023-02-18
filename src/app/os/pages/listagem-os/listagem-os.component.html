@@ -37,9 +37,18 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appFullWidth appearance="fill">
               <mat-label>Cliente</mat-label>
-              <input matInput [(ngModel)]="filtros.cliente">
+              <input [formControl]="clienteControl" [(ngModel)]="filtros.cliente" [matAutocomplete]="autocompleteCliente" matInput>
+              <mat-autocomplete #autocompleteCliente="matAutocomplete" [displayWith]="displayCliente">
+                <mat-option *ngFor="let cliente of clientesFiltrados | async" [value]="cliente">
+                  {{cliente.nome}}
+                </mat-option>
+                <mat-error>{{ getError(clienteControl) }}</mat-error>
+                <mat-error *ngIf="clienteControl?.hasError('notFound') ?? false">
+                  Nenhum cliente encontrado.
+                </mat-error>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
 
