@@ -19,7 +19,6 @@ import { ClienteModel } from "../../models/cliente.model";
 import { EquipamentoModel } from "../../models/equipamento.model";
 import { ListagemServicosDialogComponent } from "../../../servico/components/listagem-servicos-dialog/listagem-servicos-dialog.component";
 import { ListagemEquipamentosParams, ListagemEquipamentosDialogComponent } from "../../../equipamento/components/listagem-equipamentos-dialog/listagem-equipamentos-dialog.component";
-import { EquipamentoService } from "../../../equipamento/services/equipamento.service";
 import { ServicoService } from "../../../servico/services/servico.service";
 
 @Component({

@@ -18,8 +18,8 @@
             <mat-form-field class="input-date" appearance="fill">
               <mat-label>Período</mat-label>
               <mat-date-range-input [rangePicker]="rangePicker">
-                <input mask="00/00/0000" matStartDate placeholder="Data inicial" #startDate>
-                <input mask="00/00/0000" matEndDate placeholder="Data final" #endDate>
+                <input dataMask matStartDate placeholder="Data inicial" #startDate>
+                <input dataMask matEndDate placeholder="Data final" #endDate>
               </mat-date-range-input>
               <mat-hint>dd/mm/aaaa – dd/mm/aaaa</mat-hint>
               <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>

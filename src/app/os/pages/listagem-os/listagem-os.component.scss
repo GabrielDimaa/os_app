@@ -1,8 +1,15 @@
 @use "src/assets/scss/mixins";
 @use "src/styles";
 
+:host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .listagem-os {
   @include mixins.display-column-center;
+  @include mixins.padding-default;
 
   mat-card {
     width: 80%;

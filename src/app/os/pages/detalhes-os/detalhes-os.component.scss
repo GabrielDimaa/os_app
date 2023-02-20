@@ -1,8 +1,17 @@
 @use "src/assets/scss/mixins";
 @use "src/styles";
 
+app-detalhes-os {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
 .detalhes-os {
   @include mixins.display-column-center;
+  @include mixins.padding-default;
+
+  flex: 1;
 
   mat-card {
     width: 80%;
@@ -95,14 +104,16 @@
   }
 
   .os-nao-encontrada {
+    flex: 1;
+    @include mixins.display-column-center;
+
     h1 {
-      font-size: 2rem;
+      font-size: 1.7rem;
       font-weight: 500;
-      color: styles.$primary;
     }
 
     mat-icon {
-      transform: scale(3);
+      transform: scale(4);
     }
   }
 
