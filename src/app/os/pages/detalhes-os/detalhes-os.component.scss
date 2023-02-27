@@ -66,6 +66,15 @@ app-detalhes-os {
 
         flex-grow: 1;
 
+        .tab-label {
+          color: black;
+        }
+
+        .btn-excluir-equipamento {
+          margin-left: 10px;
+          color: grey;
+        }
+
         .problemas {
           display: flex;
           gap: 14px;

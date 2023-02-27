@@ -70,7 +70,7 @@
             <mat-form-field appearance="fill">
               <mat-label>Equipamento</mat-label>
               <mat-select [(value)]="filtros.equipamento">
-                <mat-option [value]="null">Qualquer</mat-option>
+                <mat-option [value]="null" (onSelectionChange)="onSelectionChangeEquipamento($event)">Qualquer</mat-option>
                 <mat-option *ngFor="let equipamento of equipamentos" [value]="equipamento">
                   {{equipamento.descricao}}
                 </mat-option>

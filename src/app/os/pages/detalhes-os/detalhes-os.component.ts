@@ -20,6 +20,7 @@ import { EquipamentoModel } from "../../models/equipamento.model";
 import { ListagemServicosDialogComponent } from "../../../servico/components/listagem-servicos-dialog/listagem-servicos-dialog.component";
 import { ListagemEquipamentosParams, ListagemEquipamentosDialogComponent } from "../../../equipamento/components/listagem-equipamentos-dialog/listagem-equipamentos-dialog.component";
 import { ServicoService } from "../../../servico/services/servico.service";
+import { ConfirmacaoDialogComponent, ConfirmacaoDialogData } from "../../../shared/components/dialogs/confirmacao-dialog/confirmacao-dialog.component";
 
 @Component({
   selector: 'app-detalhes-os',
@@ -121,7 +122,8 @@ export class DetalhesOsComponent implements OnInit {
           "1",
           null,
           null,
-          new Date(), servico,
+          new Date(),
+          servico,
           this.usuarioLogado,
         );
 
@@ -202,11 +204,23 @@ export class DetalhesOsComponent implements OnInit {
   public displayCliente = (cliente: ClienteModel): string => cliente && cliente.nome ? cliente.nome : '';
   public displayUsuario = (user: UsuarioModel): string => user && user.nome ? user.nome : '';
 
-  public getError(control: any): string {
-    return getMessageError(control);
-  }
+  public getError = (control: any): string => getMessageError(control);
 
   public get osEquipamentos(): OsEquipamentoItemModel[] {
     return this.osModel?.equipamentosItens ?? [];
+  }
+
+  public async excluirEquipamento(equipamento: OsEquipamentoItemModel): Promise<void> {
+    if (this.osModel) {
+      const dialog = this.dialog.open<ConfirmacaoDialogComponent, ConfirmacaoDialogData, boolean | undefined | null>(ConfirmacaoDialogComponent, {
+        data: {titulo: "Excluir equipamento", mensagem: "Deseja realmente excluir este equipamento?"},
+      });
+
+      const confirmacao = await firstValueFrom(dialog.afterClosed());
+
+      if (confirmacao === true) {
+        this.osModel!.equipamentosItens = this.osModel?.equipamentosItens.filter(e => e != equipamento);
+      }
+    }
   }
 }

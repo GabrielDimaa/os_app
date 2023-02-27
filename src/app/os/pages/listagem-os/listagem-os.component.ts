@@ -17,6 +17,7 @@ import { EquipamentoService } from "../../../equipamento/services/equipamento.se
 import { FormControl } from "@angular/forms";
 import { ClienteModel } from "../../models/cliente.model";
 import { getMessageError } from "../../../shared/validators/validators";
+import { MatOptionSelectionChange } from "@angular/material/core";
 
 @Component({
   selector: 'app-listagem-os',
@@ -142,6 +143,10 @@ export class ListagemOsComponent implements AfterViewInit {
     return this.filtros.equipamento?.itens ?? [];
   }
 
+  public onSelectionChangeEquipamento(event: MatOptionSelectionChange): void {
+    if (event.source.selected && event.source.value == null) this.filtros.identificador = null;
+  }
+
   public limparDatas(): void {
     this.rangePicker.select(null);
   }
@@ -151,7 +156,7 @@ export class ListagemOsComponent implements AfterViewInit {
   }
 
   public async criarOs(): Promise<void> {
-    await this.router.navigate(['os/criar']);
+    await this.router.navigate(['os/novo']);
   }
 
   public getError(control: any): string {

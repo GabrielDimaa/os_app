@@ -105,7 +105,14 @@
             </div>
 
             <mat-tab-group *ngIf="osEquipamentos.length != 0" dynamicHeight mat-align-tabs="start">
-              <mat-tab *ngFor="let equipamento of osEquipamentos" [label]="equipamento.descricaoDisplay">
+              <mat-tab *ngFor="let equipamento of osEquipamentos">
+                <ng-template mat-tab-label>
+                  <span class="tab-label">{{equipamento.descricaoDisplay}}</span>
+                  <button (click)="excluirEquipamento(equipamento)" [matTooltip]="'Excluir equipamento'" class="btn-excluir-equipamento" mat-icon-button>
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </ng-template>
+
                 <app-spacer [size]="2"></app-spacer>
 
                 <div class="problemas">
