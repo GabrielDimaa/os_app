@@ -7,77 +7,36 @@ import "../../shared/prototypes/date.prototype";
 import { dateWithoutTimezone } from "../../shared/prototypes/date.prototype";
 
 class OsModel {
-  id: number | null;
-  codigo: number | null;
-  obs: string | null;
-  inativo: boolean;
-
-  tipoAtendimento: OsTipoAtendimentoModel | null;
-  situacao: OsSituacaoModel | null;
-  cliente: ClienteModel | null;
-  equipamentosItens: OsEquipamentoItemModel[];
-
-  dataHora: Date;
-  dataHoraPrevisaoEntrega: Date | null;
-  dataHoraEntrega: Date | null;
-  dataHoraAprovacao: Date | null;
-  dataHoraEncerramento: Date | null;
-
-  nomeContato: string | null;
-  foneContato: string | null;
-
-  valorOutrasDespesas: number | null;
-  valorTotal: number | null;
-
-  usuarioAtendente: UsuarioModel;
-  usuarioAprovacao: UsuarioModel | null;
-  usuarioEncerramento: UsuarioModel | null;
-  responsavel: UsuarioModel | null;
-
   constructor(
-    id: number | null,
-    codigo: number | null,
-    obs: string | null,
-    inativo: boolean,
-    tipoAtendimento: OsTipoAtendimentoModel | null,
-    situacao: OsSituacaoModel | null,
-    cliente: ClienteModel | null,
-    equipamentosItens: OsEquipamentoItemModel[],
-    dataHora: Date,
-    dataHoraPrevisaoEntrega: Date | null,
-    dataHoraEntrega: Date | null,
-    dataHoraAprovacao: Date | null,
-    dataHoraEncerramento: Date | null,
-    nomeContato: string | null,
-    foneContato: string | null,
-    valorOutrasDespesas: number | null,
-    valorTotal: number | null,
-    usuarioAtendente: UsuarioModel,
-    usuarioAprovacao: UsuarioModel | null,
-    usuarioEncerramento: UsuarioModel | null,
-    responsavel: UsuarioModel | null
-  ) {
-    this.id = id;
-    this.codigo = codigo;
-    this.obs = obs;
-    this.inativo = inativo;
-    this.tipoAtendimento = tipoAtendimento;
-    this.situacao = situacao;
-    this.cliente = cliente;
-    this.equipamentosItens = equipamentosItens;
-    this.dataHora = dataHora;
-    this.dataHoraPrevisaoEntrega = dataHoraPrevisaoEntrega;
-    this.dataHoraEntrega = dataHoraEntrega;
-    this.dataHoraAprovacao = dataHoraAprovacao;
-    this.dataHoraEncerramento = dataHoraEncerramento;
-    this.nomeContato = nomeContato;
-    this.foneContato = foneContato;
-    this.valorOutrasDespesas = valorOutrasDespesas;
-    this.valorTotal = valorTotal;
-    this.usuarioAtendente = usuarioAtendente;
-    this.usuarioAprovacao = usuarioAprovacao;
-    this.usuarioEncerramento = usuarioEncerramento;
-    this.responsavel = responsavel;
+  public id: number | null,
+  public codigo: number | null,
+  public obs: string | null,
+  public inativo: boolean,
+  public tipoAtendimento: OsTipoAtendimentoModel | null,
+  public situacao: OsSituacaoModel | null,
+  public cliente: ClienteModel | null,
+  public equipamentosItens: OsEquipamentoItemModel[],
+  public dataHora: Date,
+  public dataHoraPrevisaoEntrega: Date | null,
+  public dataHoraEntrega: Date | null,
+  public dataHoraAprovacao: Date | null,
+  public dataHoraEncerramento: Date | null,
+  public nomeContato: string | null,
+  public foneContato: string | null,
+  public valorOutrasDespesas: number | null,
+  public valorTotal: number | null,
+  public usuarioAtendente: UsuarioModel,
+  public usuarioAprovacao: UsuarioModel | null,
+  public usuarioEncerramento: UsuarioModel | null,
+  public responsavel: UsuarioModel | null,
+  ) {}
+
+  public get temServico(): boolean {
+    return this.equipamentosItens.some(e => e.servicos.length > 0);
+  }
+
+  public get temProduto(): boolean {
+    return this.equipamentosItens.some(e => e.produtos.length > 0);
   }
 
   public static novo(usuarioAtendente: UsuarioModel): OsModel {

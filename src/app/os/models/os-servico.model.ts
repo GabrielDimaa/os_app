@@ -12,16 +12,7 @@ class OsServicoModel {
     public dataHora: Date | null,
     public servico: ServicoModel,
     public usuario: UsuarioModel | null
-  ) {
-    this.id = id;
-    this.idOsEquipamentoItem = idOsEquipamentoItem;
-    this.qtd = qtd;
-    this.valorTotal = valorTotal;
-    this.descricaoInformada = descricaoInformada;
-    this.dataHora = dataHora;
-    this.servico = servico;
-    this.usuario = usuario;
-  }
+  ) {}
 
   public static fromJson(json: OsServicoAPI): OsServicoModel {
     return new OsServicoModel(
