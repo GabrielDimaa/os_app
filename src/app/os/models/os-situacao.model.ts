@@ -6,6 +6,15 @@ class OsSituacaoModel {
     public encerrada: boolean
   ) {}
 
+  public toJson(): OsSituacaoAPI {
+    return {
+      id_os_situacao: this.id,
+      situacao: this.descricao,
+      aprovada: this.aprovada,
+      encerrada: this.encerrada,
+    };
+  }
+
   public static fromJson(json: OsSituacaoAPI): OsSituacaoModel {
     return new OsSituacaoModel(
       json.id_os_situacao,

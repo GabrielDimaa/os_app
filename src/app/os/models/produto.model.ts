@@ -1,10 +1,14 @@
 class ProdutoModel {
-  id: number;
-  descricao: string;
+  constructor(
+    public id: number,
+    public descricao: string
+  ) {}
 
-  constructor(id: number, descricao: string) {
-    this.id = id;
-    this.descricao = descricao;
+  public toJson(): ProdutoAPI {
+    return {
+      id_produto: this.id,
+      descricao: this.descricao
+    };
   }
 
   public static fromJson(json: ProdutoAPI): ProdutoModel {

@@ -1,18 +1,22 @@
 import { EquipamentoAPI, EquipamentoModel } from "./equipamento.model";
 
 class EquipamentoItemModel {
-  id: number;
-  descricao: string;
-  obs: string | null;
-  idEquipamento: number;
-  equipamento: EquipamentoModel | null | undefined;
+  constructor(
+    public id: number,
+    public descricao: string,
+    public obs: string | null,
+    public idEquipamento: number,
+    public equipamento: EquipamentoModel | null | undefined
+  ) {}
 
-  constructor(id: number, descricao: string, obs: string | null, idEquipamento: number, equipamento: EquipamentoModel | null | undefined) {
-    this.id = id;
-    this.descricao = descricao;
-    this.obs = obs;
-    this.idEquipamento = idEquipamento;
-    this.equipamento = equipamento;
+  public toJson(): EquipamentoItemAPI {
+    return {
+      id_equipamento_item: this.id,
+      identificador: this.descricao,
+      obs: this.obs,
+      id_equipamento: this.idEquipamento,
+      equipamento: null,
+    };
   }
 
   public static fromJson(json: EquipamentoItemAPI): EquipamentoItemModel {

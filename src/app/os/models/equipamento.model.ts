@@ -1,17 +1,12 @@
 import { EquipamentoItemAPI, EquipamentoItemModel } from "./equipamento-item.model";
 
 class EquipamentoModel {
-  id: number;
-  codigo: string;
-  descricao: string;
-  itens: EquipamentoItemModel[] | null;
-
-  constructor(id: number, codigo: string, descricao: string, itens: EquipamentoItemModel[]) {
-    this.id = id;
-    this.codigo = codigo;
-    this.descricao = descricao;
-    this.itens = itens;
-  }
+  constructor(
+    public id: number,
+    public codigo: string,
+    public descricao: string,
+    public itens: EquipamentoItemModel[]
+  ) {}
 
   public static fromJson(json: EquipamentoAPI): EquipamentoModel {
     return new EquipamentoModel(

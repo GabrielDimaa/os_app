@@ -1,10 +1,14 @@
 class OsTipoAtendimentoModel {
-  id: number;
-  descricao: string;
+  constructor(
+    public id: number,
+    public descricao: string
+  ) {}
 
-  constructor(id: number, descricao: string) {
-    this.id = id;
-    this.descricao = descricao;
+  public toJson(): OsTipoAtendimentoAPI {
+    return {
+      id_os_tipo_atendimento: this.id,
+      tipo_atendimento: this.descricao,
+    };
   }
 
   public static fromJson(json: OsTipoAtendimentoAPI): OsTipoAtendimentoModel {

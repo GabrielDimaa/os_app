@@ -1,18 +1,22 @@
 class ClienteModel {
-  id: number;
-  nome: string;
-  inativo: boolean;
-  fone: string | null;
-  razaoSocial: string | null;
-  apelido: string | null;
+  constructor(
+    public id: number,
+    public nome: string,
+    public inativo: boolean,
+    public fone: string | null,
+    public razaoSocial: string | null,
+    public apelido: string | null
+  ) {}
 
-  constructor(id: number, nome: string, inativo: boolean, fone: string | null, razaoSocial: string | null, apelido: string | null) {
-    this.id = id;
-    this.nome = nome;
-    this.inativo = inativo;
-    this.fone = fone;
-    this.razaoSocial = razaoSocial;
-    this.apelido = apelido;
+  public toJson(): ClienteAPI {
+    return {
+      id_cliente: this.id,
+      nome: this.nome,
+      inativo: this.inativo,
+      fone: this.fone,
+      razao_social: this.razaoSocial,
+      apelido: this.apelido,
+    };
   }
 
   public static fromJson(json: ClienteAPI): ClienteModel {

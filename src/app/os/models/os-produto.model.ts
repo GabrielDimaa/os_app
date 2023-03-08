@@ -1,18 +1,23 @@
 import { ProdutoAPI, ProdutoModel } from "./produto.model";
 
 class OsProdutoModel {
-  id: number;
-  qtd: string;
-  valorTotal: number;
-  idOsEquipamentoItem: number;
-  produto: ProdutoModel;
+  constructor(
+    public id: number,
+    public qtd: string,
+    public valorTotal: number,
+    public idOsEquipamentoItem: number,
+    public produto: ProdutoModel,
+  ) {}
 
-  constructor(id: number, qtd: string, valorTotal: number, idOsEquipamentoItem: number, produto: ProdutoModel) {
-    this.id = id;
-    this.qtd = qtd;
-    this.valorTotal = valorTotal;
-    this.idOsEquipamentoItem = idOsEquipamentoItem;
-    this.produto = produto;
+  public toJson(): OsProdutoAPI {
+    return {
+      id_os_produto: this.id,
+      qtd: this.qtd,
+      valor_total: this.valorTotal,
+      id_os_equipamento_item: this.idOsEquipamentoItem,
+      id_produto: this.produto.id,
+      produto: this.produto.toJson(),
+    };
   }
 
   public static fromJson(json: OsProdutoAPI): OsProdutoModel {
@@ -31,6 +36,7 @@ interface OsProdutoAPI {
   qtd: string;
   valor_total: number;
   id_os_equipamento_item: number;
+  id_produto: number;
   produto: ProdutoAPI;
 }
 

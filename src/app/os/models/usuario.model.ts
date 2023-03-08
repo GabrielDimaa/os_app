@@ -1,16 +1,20 @@
 class UsuarioModel {
-  id: number;
-  nomeUsuario: string;
-  perfil: string;
-  nome: string;
-  loginHabilitado: boolean;
+  constructor(
+    public id: number,
+    public nomeUsuario: string,
+    public perfil: string,
+    public nome: string,
+    public loginHabilitado: boolean
+  ) {}
 
-  constructor(id: number, nomeUsuario: string, perfil: string, nome: string, loginHabilitado: boolean) {
-    this.id = id;
-    this.nomeUsuario = nomeUsuario;
-    this.perfil = perfil;
-    this.nome = nome;
-    this.loginHabilitado = loginHabilitado;
+  public toJson(): UsuarioAPI {
+    return {
+      id_usuario: this.id,
+      login_usuario: this.nomeUsuario,
+      perfil: this.perfil,
+      nome: this.nome,
+      login_habilitado: this.loginHabilitado,
+    };
   }
 
   public static fromJson(json: UsuarioAPI): UsuarioModel {
