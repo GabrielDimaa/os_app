@@ -15,6 +15,14 @@ export class ApiHttpClient {
       );
   }
 
+  public put<T>(url: string, body?: any): Observable<T> {
+    return this.httpClient.put<HttpResponse>(url, body)
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError)
+      );
+  }
+
   public get<T>(url: string, params?: HttpParams): Observable<T> {
     return this.httpClient.get<HttpResponse>(url, { params: params })
       .pipe(

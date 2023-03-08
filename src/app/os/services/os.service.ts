@@ -83,4 +83,20 @@ export class OsService {
         catchError(err => throwError(() => Error(err.message)))
       );
   }
+
+  public save(model: OsModel): Observable<OsModel> {
+    if (model.id == null) {
+      return this.api.post<OsAPI>("os", model.toJson())
+        .pipe(
+          map(response => OsModel.fromJson(response)),
+          catchError(err => throwError(() => Error(err.message)))
+        );
+    } else {
+      return this.api.put<OsAPI>(`os/${model.id}`, model.toJson())
+        .pipe(
+          map(response => OsModel.fromJson(response)),
+          catchError(err => throwError(() => Error(err.message)))
+        );
+    }
+  }
 }

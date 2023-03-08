@@ -7,7 +7,7 @@
       </ng-container>
 
       <div class="content">
-        <form class="column-left" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <form class="column-left" [formGroup]="formGroup" (ngSubmit)="encerrarOs()">
           <div appFullWidth>
             <mat-form-field appFullWidth appearance="fill">
               <mat-label>Data de abertura</mat-label>
@@ -89,7 +89,7 @@
 
           <app-spacer></app-spacer>
 
-          <button class="encerrar-os" (click)="onSubmit()" appFullWidth mat-stroked-button color="primary">
+          <button class="encerrar-os" (click)="encerrarOs()" appFullWidth mat-stroked-button color="primary">
             Encerrar OS
           </button>
         </form>

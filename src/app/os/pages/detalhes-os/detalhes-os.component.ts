@@ -18,7 +18,7 @@ import { AuthService } from "../../../auth/services/auth.service";
 import { ClienteModel } from "../../models/cliente.model";
 import { EquipamentoModel } from "../../models/equipamento.model";
 import { ListagemServicosDialogComponent } from "../../../servico/components/listagem-servicos-dialog/listagem-servicos-dialog.component";
-import { ListagemEquipamentosParams, ListagemEquipamentosDialogComponent } from "../../../equipamento/components/listagem-equipamentos-dialog/listagem-equipamentos-dialog.component";
+import { ListagemEquipamentosDialogComponent, ListagemEquipamentosParams } from "../../../equipamento/components/listagem-equipamentos-dialog/listagem-equipamentos-dialog.component";
 import { ServicoService } from "../../../servico/services/servico.service";
 import { ConfirmacaoDialogComponent, ConfirmacaoDialogData } from "../../../shared/components/dialogs/confirmacao-dialog/confirmacao-dialog.component";
 
@@ -110,53 +110,31 @@ export class DetalhesOsComponent implements OnInit {
     }
   }
 
-  public async adicionarServico(equipamento: OsEquipamentoItemModel): Promise<void> {
-    try {
-      const dialog = this.dialog.open(ListagemServicosDialogComponent, ListagemServicosDialogComponent.configDefault(this.servicos));
-      const servico = await firstValueFrom(dialog.afterClosed());
-
-      if (servico) {
-        const osServico = new OsServicoModel(
-          null,
-          equipamento.id,
-          "1",
-          null,
-          null,
-          new Date(),
-          servico,
-          this.usuarioLogado,
-        );
-
-        equipamento.servicos.push(osServico);
-        setTimeout(() => this.stepper.selectedIndex = this.stepper.steps.length - 1);
-      }
-    } catch (e) {
-      this.snackbarService.showError(e);
-    }
-  }
-
-  public async adicionarEquipamento(): Promise<void> {
-    try {
-      const dialog = this.dialog.open(ListagemEquipamentosDialogComponent, ListagemEquipamentosDialogComponent.configDefault(this.equipamentos)) as MatDialogRef<ListagemEquipamentosDialogComponent, ListagemEquipamentosParams>;
-      const props = await firstValueFrom(dialog.afterClosed());
-
-      if (props) {
-        const osEquipamentoItemModel = OsEquipamentoItemModel.novo(props.equipamento.itens![0], this.osModel!.id);
-        this.equipamentos = props.equipamentosList;
-
-        this.osModel?.equipamentosItens.push(osEquipamentoItemModel);
-      }
-    } catch (e) {
-      this.snackbarService.showError(e);
-    }
-  }
-
-  public async onSubmit(): Promise<void> {
+  public async salvar(): Promise<void> {
     try {
       this.loading = true;
 
       if (this.formGroup.invalid) return;
       this.formGroup.disable();
+
+      const formData = this.formGroup.value;
+
+      //Validações desta maneira, pois é possível digitar no autocomplete e não selecionar nenhum dos resultados sugeridos.
+      if (typeof formData.cliente !== 'object') throw Error("Cliente não selecionado.");
+      if (formData.responsavel != null && typeof formData.responsavel !== 'object') throw Error("Responsável não selecionado.");
+
+      this.osModel!.dataHora = formData.dataAbertura;
+      this.osModel!.tipoAtendimento = formData.tipoAtendimento;
+      this.osModel!.situacao = formData.situacao;
+      this.osModel!.obs = formData.observacao;
+      this.osModel!.cliente = formData.cliente;
+      this.osModel!.nomeContato = formData.nomeContato;
+      this.osModel!.foneContato = formData.foneContato;
+      this.osModel!.responsavel = formData.responsavel;
+
+      this.osModel!.validate();
+
+      await firstValueFrom(this.osService.save(this.osModel!));
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
@@ -210,6 +188,22 @@ export class DetalhesOsComponent implements OnInit {
     return this.osModel?.equipamentosItens ?? [];
   }
 
+  public async adicionarEquipamento(): Promise<void> {
+    try {
+      const dialog = this.dialog.open(ListagemEquipamentosDialogComponent, ListagemEquipamentosDialogComponent.configDefault(this.equipamentos)) as MatDialogRef<ListagemEquipamentosDialogComponent, ListagemEquipamentosParams>;
+      const props = await firstValueFrom(dialog.afterClosed());
+
+      if (props) {
+        const osEquipamentoItemModel = OsEquipamentoItemModel.novo(props.equipamento.itens![0], this.osModel!.id);
+        this.equipamentos = props.equipamentosList;
+
+        this.osModel?.equipamentosItens.push(osEquipamentoItemModel);
+      }
+    } catch (e) {
+      this.snackbarService.showError(e);
+    }
+  }
+
   public async excluirEquipamento(equipamento: OsEquipamentoItemModel): Promise<void> {
     if (this.osModel) {
       const dialog = this.dialog.open<ConfirmacaoDialogComponent, ConfirmacaoDialogData, boolean | undefined | null>(ConfirmacaoDialogComponent, {
@@ -222,5 +216,48 @@ export class DetalhesOsComponent implements OnInit {
         this.osModel!.equipamentosItens = this.osModel?.equipamentosItens.filter(e => e != equipamento);
       }
     }
+  }
+
+  public async adicionarServico(equipamento: OsEquipamentoItemModel): Promise<void> {
+    try {
+      const dialog = this.dialog.open(ListagemServicosDialogComponent, ListagemServicosDialogComponent.configDefault(this.servicos));
+      const servico = await firstValueFrom(dialog.afterClosed());
+
+      if (servico) {
+        const osServico = new OsServicoModel(
+          null,
+          equipamento.id,
+          "1",
+          null,
+          null,
+          new Date(),
+          servico,
+          this.usuarioLogado,
+        );
+
+        equipamento.servicos.push(osServico);
+        setTimeout(() => this.stepper.selectedIndex = this.stepper.steps.length - 1);
+      }
+    } catch (e) {
+      this.snackbarService.showError(e);
+    }
+  }
+
+  //TODO: Conferir no Link o comportamento do botão "Aprovar".
+  public aprovarOs(): void {
+    this.osModel!.dataHoraAprovacao = new Date();
+    this.osModel!.usuarioAprovacao = this.usuarioLogado;
+    // this.osModel!.situacao = LinkPaf.Administrativo.Parametrizacoes.ConfigOS.ClsConfigOS.GetInstancia().SituacaoAprovada;
+  }
+
+  public async encerrarOs(): Promise<void> {
+    if (this.osModel!.dataHoraAprovacao == null)
+      this.aprovarOs();
+
+    this.osModel!.dataHoraEncerramento = new Date();
+    this.osModel!.usuarioEncerramento = this.usuarioLogado;
+    this.osModel!.situacao = this.osSituacoes.find(s => s.encerrada)!;
+
+    await this.salvar();
   }
 }
