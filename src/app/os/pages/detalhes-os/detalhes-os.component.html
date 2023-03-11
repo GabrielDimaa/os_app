@@ -7,7 +7,7 @@
       </ng-container>
 
       <div class="content">
-        <form class="column-left" [formGroup]="formGroup" (ngSubmit)="encerrarOs()">
+        <form class="column-left" [formGroup]="formGroup">
           <div appFullWidth>
             <mat-form-field appFullWidth appearance="fill">
               <mat-label>Data de abertura</mat-label>
@@ -89,6 +89,12 @@
 
           <app-spacer></app-spacer>
 
+          <button (click)="salvar()" appFullWidth mat-raised-button color="primary">
+            Salvar
+          </button>
+
+          <app-spacer></app-spacer>
+
           <button class="encerrar-os" (click)="encerrarOs()" appFullWidth mat-stroked-button color="primary">
             Encerrar OS
           </button>
@@ -118,16 +124,16 @@
                 <div class="problemas">
                   <mat-form-field appFullWidth appearance="fill">
                     <mat-label>Problema reclamado</mat-label>
-                    <textarea [(ngModel)]="equipamento.problemaReclamado" rows="7" matInput></textarea>
+                    <textarea [(ngModel)]="equipamento.problemaReclamado" [disabled]="saving" rows="7" matInput></textarea>
                   </mat-form-field>
 
                   <mat-form-field appFullWidth appearance="fill">
                     <mat-label>Problema constatado</mat-label>
-                    <textarea [(ngModel)]="equipamento.problemaConstatado" rows="7" matInput></textarea>
+                    <textarea [(ngModel)]="equipamento.problemaConstatado" [disabled]="saving" rows="7" matInput></textarea>
                   </mat-form-field>
                 </div>
 
-                <button (click)="adicionarServico(equipamento)" mat-button class="add-servico" color="primary">
+                <button (click)="adicionarServico(equipamento)" [disabled]="saving" mat-button class="add-servico" color="primary">
                   <mat-icon>add</mat-icon>
                   Adicionar serviço
                 </button>
@@ -138,7 +144,7 @@
                     <ng-template matStepContent>
                       <mat-form-field appFullWidth class="descricao-servico" appearance="fill">
                         <mat-label>Descrição</mat-label>
-                        <textarea [(ngModel)]="servico.descricaoInformada" rows="3" matInput></textarea>
+                        <textarea [(ngModel)]="servico.descricaoInformada" [disabled]="saving" rows="3" matInput></textarea>
                       </mat-form-field>
                     </ng-template>
                     <ng-template let-index="index">{{ index + 10 }}</ng-template>
@@ -197,7 +203,7 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="os-nao-encontrada" *ngIf="osModel == null">
+  <div class="os-nao-encontrada" *ngIf="osModel == null && !loading">
     <app-spacer [size]="4"></app-spacer>
     <mat-icon color="primary">manage_search</mat-icon>
     <app-spacer [size]="3"></app-spacer>

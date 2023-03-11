@@ -52,6 +52,9 @@ class OsModel {
     if (this.usuarioAtendente == null)
       throw Error("Usuário que faz o atendimento não informado.");
 
+    if (this.equipamentosItens.length == 0)
+      throw Error("OS deve possuir no mínimo 1 equipamento.");
+
     if (!this.temServico && !this.temProduto && this.situacao.encerrada)
       throw Error("OS deve possuir no mínimo 1 serviço ou 1 produto.");
   }

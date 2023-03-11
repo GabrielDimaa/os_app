@@ -31,8 +31,10 @@ import { ConfirmacaoDialogComponent, ConfirmacaoDialogData } from "../../../shar
 export class DetalhesOsComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
 
-  private codigoOs: number | null = null;
   public loading: boolean = false;
+  public saving: boolean = false;
+
+  private codigoOs: number | null = null;
   public osModel: OsModel | null = null;
 
   public formGroup!: FormGroup;
@@ -112,10 +114,10 @@ export class DetalhesOsComponent implements OnInit {
 
   public async salvar(): Promise<void> {
     try {
-      this.loading = true;
-
       if (this.formGroup.invalid) return;
       this.formGroup.disable();
+
+      this.saving = true;
 
       const formData = this.formGroup.value;
 
@@ -134,11 +136,13 @@ export class DetalhesOsComponent implements OnInit {
 
       this.osModel!.validate();
 
-      await firstValueFrom(this.osService.save(this.osModel!));
+      this.osModel! = await firstValueFrom(this.osService.save(this.osModel!));
+
+      this.snackbarService.showSuccess(`OS ${this.osModel!.codigo} salva com sucesso!`)
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
-      this.loading = false;
+      this.saving = false;
       this.formGroup.enable();
     }
   }
@@ -243,11 +247,9 @@ export class DetalhesOsComponent implements OnInit {
     }
   }
 
-  //TODO: Conferir no Link o comportamento do botão "Aprovar".
   public aprovarOs(): void {
     this.osModel!.dataHoraAprovacao = new Date();
     this.osModel!.usuarioAprovacao = this.usuarioLogado;
-    // this.osModel!.situacao = LinkPaf.Administrativo.Parametrizacoes.ConfigOS.ClsConfigOS.GetInstancia().SituacaoAprovada;
   }
 
   public async encerrarOs(): Promise<void> {
