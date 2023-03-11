@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { getMessageError } from "../../../shared/validators/validators";
-import { LoginModel } from "../../models/login.model";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
+import LoginEntity from "../../entities/login.entity";
 
 @Component({
   selector: 'app-login',
@@ -44,9 +44,9 @@ export class LoginComponent {
       this.formGroup.disable();
 
       const formData = this.formGroup.value;
-      const model: LoginModel = new LoginModel(formData.nomeUsuario, formData.senha);
+      const entity: LoginEntity = new LoginEntity(formData.nomeUsuario, formData.senha);
 
-      await this.authService.login(model);
+      await this.authService.login(entity);
       await this.router.navigate(['os']);
     } catch (e) {
       this.snackbarService.showError(e);

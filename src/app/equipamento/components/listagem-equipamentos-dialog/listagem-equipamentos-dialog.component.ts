@@ -1,15 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { EquipamentoModel } from "../../../os/models/equipamento.model";
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
 import { getMessageError } from "../../../shared/validators/validators";
 import { EquipamentoService } from "../../services/equipamento.service";
 import { ListagemServicosDialogComponent } from "../../../servico/components/listagem-servicos-dialog/listagem-servicos-dialog.component";
+import EquipamentoEntity from "../../entities/equipamento.entity";
 
 export type ListagemEquipamentosParams = {
-  equipamento: EquipamentoModel;
-  equipamentosList: EquipamentoModel[];
+  equipamento: EquipamentoEntity;
+  equipamentosList: EquipamentoEntity[];
 };
 
 @Component({
@@ -18,7 +18,7 @@ export type ListagemEquipamentosParams = {
   styleUrls: ['./listagem-equipamentos-dialog.component.scss']
 })
 export class ListagemEquipamentosDialogComponent implements OnInit {
-  public static configDefault(equipamentos: EquipamentoModel[]): MatDialogConfig {
+  public static configDefault(equipamentos: EquipamentoEntity[]): MatDialogConfig {
     return {
       data: equipamentos,
       width: '600px',
@@ -27,9 +27,9 @@ export class ListagemEquipamentosDialogComponent implements OnInit {
 
   public formGroup!: FormGroup;
 
-  public equipamentos: EquipamentoModel[] = [];
+  public equipamentos: EquipamentoEntity[] = [];
 
-  public equipamentoSelecionado: EquipamentoModel | null = null;
+  public equipamentoSelecionado: EquipamentoEntity | null = null;
 
   public loading: boolean = false;
 
@@ -44,7 +44,7 @@ export class ListagemEquipamentosDialogComponent implements OnInit {
   }
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: EquipamentoModel[],
+    @Inject(MAT_DIALOG_DATA) public data: EquipamentoEntity[],
     private ref: MatDialogRef<ListagemServicosDialogComponent, ListagemEquipamentosParams>,
     private formBuilder: FormBuilder,
     private service: EquipamentoService

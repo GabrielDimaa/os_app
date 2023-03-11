@@ -1,8 +1,8 @@
 <section class="detalhes-os">
-  <mat-card *ngIf="loading || osModel != null">
-    <mat-card-content *ngIf="!loading && osModel != null">
-      <ng-container *ngIf="osModel.codigo != null">
-        <mat-card-title>OS {{ osModel.codigo }}</mat-card-title>
+  <mat-card *ngIf="loading || osEntity != null">
+    <mat-card-content *ngIf="!loading && osEntity != null">
+      <ng-container *ngIf="osEntity.codigo != null">
+        <mat-card-title>OS {{ osEntity.codigo }}</mat-card-title>
         <app-spacer [size]="2"></app-spacer>
       </ng-container>
 
@@ -84,7 +84,7 @@
 
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Usuário</mat-label>
-            <input [value]="osModel.usuarioAtendente.nome" [disabled]="true" matInput>
+            <input [value]="osEntity.usuarioAtendente.nome" [disabled]="true" matInput>
           </mat-form-field>
 
           <app-spacer></app-spacer>
@@ -203,7 +203,7 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="os-nao-encontrada" *ngIf="osModel == null && !loading">
+  <div class="os-nao-encontrada" *ngIf="osEntity == null && !loading">
     <app-spacer [size]="4"></app-spacer>
     <mat-icon color="primary">manage_search</mat-icon>
     <app-spacer [size]="3"></app-spacer>

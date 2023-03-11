@@ -2,15 +2,21 @@ import { Injectable } from '@angular/core';
 import { ApiHttpClient } from "../../shared/api/api-http-client";
 import { HttpParams } from "@angular/common/http";
 import { catchError, map, Observable, throwError } from "rxjs";
-import { OsPaginatorAPI, OsPaginatorModel } from "../models/os-paginator.model";
-import { OsSituacaoAPI, OsSituacaoModel } from "../models/os-situacao.model";
 import { OsFilterParams, OsPaginatorParams } from "../params/os.params";
-import { OsAPI, OsModel } from "../models/os.model";
-import { OsTipoAtendimentoAPI, OsTipoAtendimentoModel } from "../models/os-tipo-atendimento.model";
-import { UsuarioAPI, UsuarioModel } from "../models/usuario.model";
-import { ClienteAPI, ClienteModel } from "../models/cliente.model";
 import "../../shared/prototypes/string.prototype";
 import "../../shared/prototypes/date.prototype";
+import OsEntity from "../entities/os.entity";
+import OsModel from "../models/os.model";
+import ClienteEntity from "../entities/cliente.entity";
+import ClienteModel from "../models/cliente.model";
+import UsuarioEntity from "../entities/usuario.entity";
+import UsuarioModel from "../models/usuario.model";
+import OsTipoAtendimentoModel from "../models/os-tipo-atendimento.model";
+import OsTipoAtendimentoEntity from "../entities/os-tipo-atendimento.entity";
+import OsSituacaoEntity from "../entities/os-situacao.entity";
+import OsSituacaoModel from "../models/os-situacao.model";
+import OsPaginatorModel from "../models/os-paginator.model";
+import OsPaginatorEntity from "../entities/os-paginator.entity";
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +24,15 @@ import "../../shared/prototypes/date.prototype";
 export class OsService {
   constructor(private api: ApiHttpClient) {}
 
-  public getByCodigo(codigo: number): Observable<OsModel> {
-    return this.api.get<OsAPI>(`os/codigo/${codigo}`)
+  public getByCodigo(codigo: number): Observable<OsEntity> {
+    return this.api.get<OsModel>(`os/codigo/${codigo}`)
       .pipe(
-        map(response => OsModel.fromJson(response)),
+        map(response => OsEntity.fromModel(response)),
         catchError(err => throwError(() => Error(err.message)))
       );
   }
 
-  public getAllWithPagination(paginatorParams: OsPaginatorParams, filterParams: OsFilterParams | null = null): Observable<OsPaginatorModel> {
+  public getAllWithPagination(paginatorParams: OsPaginatorParams, filterParams: OsFilterParams | null = null): Observable<OsPaginatorEntity> {
     let httpParams = new HttpParams()
       .set('page', String(paginatorParams.page))
       .set('per_page', String(paginatorParams.perPage));
@@ -45,56 +51,56 @@ export class OsService {
       if (filterParams.identificador) httpParams = httpParams.set('equipamento_item', filterParams.identificador.id);
     }
 
-    return this.api.get<OsPaginatorAPI>("os", httpParams)
+    return this.api.get<OsPaginatorModel>("os", httpParams)
       .pipe(
-        map(response => OsPaginatorModel.fromJson(response)),
+        map(response => OsPaginatorEntity.fromModel(response)),
         catchError(err => throwError(() => Error(err.message)))
       );
   }
 
-  public getOsSituacoes(): Observable<OsSituacaoModel[]> {
-    return this.api.get<OsSituacaoAPI[]>("os-situacao")
+  public getOsSituacoes(): Observable<OsSituacaoEntity[]> {
+    return this.api.get<OsSituacaoModel[]>("os-situacao")
       .pipe(
-        map(response => response.map(e => OsSituacaoModel.fromJson(e))),
+        map(response => response.map(e => OsSituacaoEntity.fromModel(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }
 
-  public getOsTiposAtendimento(): Observable<OsTipoAtendimentoModel[]> {
-    return this.api.get<OsTipoAtendimentoAPI[]>("os-tipo-atendimento")
+  public getOsTiposAtendimento(): Observable<OsTipoAtendimentoEntity[]> {
+    return this.api.get<OsTipoAtendimentoModel[]>("os-tipo-atendimento")
       .pipe(
-        map(response => response.map(e => OsTipoAtendimentoModel.fromJson(e))),
+        map(response => response.map(e => OsTipoAtendimentoEntity.fromModel(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }
 
-  public getUsuarios(): Observable<UsuarioModel[]> {
-    return this.api.get<UsuarioAPI[]>("usuario")
+  public getUsuarios(): Observable<UsuarioEntity[]> {
+    return this.api.get<UsuarioModel[]>("usuario")
       .pipe(
-        map(response => response.map(e => UsuarioModel.fromJson(e))),
+        map(response => response.map(e => UsuarioEntity.fromModel(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }
 
-  public getClientesContainsName(name: string): Observable<ClienteModel[]> {
-    return this.api.get<ClienteAPI[]>(`cliente/contains-name?name=${name}`)
+  public getClientesContainsName(name: string): Observable<ClienteEntity[]> {
+    return this.api.get<ClienteModel[]>(`cliente/contains-name?name=${name}`)
       .pipe(
-        map(response => response.map(e => ClienteModel.fromJson(e))),
+        map(response => response.map(e => ClienteEntity.fromModel(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }
 
-  public save(model: OsModel): Observable<OsModel> {
-    if (model.id == null) {
-      return this.api.post<OsAPI>("os", model.toJson())
+  public save(entity: OsEntity): Observable<OsEntity> {
+    if (entity.id == null) {
+      return this.api.post<OsModel>("os", entity.toModel())
         .pipe(
-          map(response => OsModel.fromJson(response)),
+          map(response => OsEntity.fromModel(response)),
           catchError(err => throwError(() => Error(err.message)))
         );
     } else {
-      return this.api.put<OsAPI>(`os/${model.id}`, model.toJson())
+      return this.api.put<OsModel>(`os/${entity.id}`, entity.toModel())
         .pipe(
-          map(response => OsModel.fromJson(response)),
+          map(response => OsEntity.fromModel(response)),
           catchError(err => throwError(() => Error(err.message)))
         );
     }

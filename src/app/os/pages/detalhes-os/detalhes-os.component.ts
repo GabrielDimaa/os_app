@@ -3,24 +3,24 @@ import { ActivatedRoute } from "@angular/router";
 import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, startWith, switchMap } from "rxjs";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsService } from "../../services/os.service";
-import { OsModel } from "../../models/os.model";
-import { OsEquipamentoItemModel } from "../../models/os-equipamento-item.model";
-import { OsSituacaoModel } from "../../models/os-situacao.model";
-import { OsTipoAtendimentoModel } from "../../models/os-tipo-atendimento.model";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { getMessageError } from "../../../shared/validators/validators";
-import { UsuarioModel } from "../../models/usuario.model";
-import { ServicoModel } from "../../models/servico.model";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { OsServicoModel } from "../../models/os-servico.model";
 import { MatStepper } from "@angular/material/stepper";
 import { AuthService } from "../../../auth/services/auth.service";
-import { ClienteModel } from "../../models/cliente.model";
-import { EquipamentoModel } from "../../models/equipamento.model";
 import { ListagemServicosDialogComponent } from "../../../servico/components/listagem-servicos-dialog/listagem-servicos-dialog.component";
 import { ListagemEquipamentosDialogComponent, ListagemEquipamentosParams } from "../../../equipamento/components/listagem-equipamentos-dialog/listagem-equipamentos-dialog.component";
 import { ServicoService } from "../../../servico/services/servico.service";
 import { ConfirmacaoDialogComponent, ConfirmacaoDialogData } from "../../../shared/components/dialogs/confirmacao-dialog/confirmacao-dialog.component";
+import OsEntity from "../../entities/os.entity";
+import OsSituacaoEntity from "../../entities/os-situacao.entity";
+import OsTipoAtendimentoEntity from "../../entities/os-tipo-atendimento.entity";
+import UsuarioEntity from "../../entities/usuario.entity";
+import ClienteEntity from "../../entities/cliente.entity";
+import ServicoEntity from "../../../servico/entities/servico.entity";
+import EquipamentoEntity from "../../../equipamento/entities/equipamento.entity";
+import OsEquipamentoItemEntity from "../../entities/os-equipamento-item.entity";
+import OsServicoEntity from "../../entities/os-servico.entity";
 
 @Component({
   selector: 'app-detalhes-os',
@@ -35,26 +35,26 @@ export class DetalhesOsComponent implements OnInit {
   public saving: boolean = false;
 
   private codigoOs: number | null = null;
-  public osModel: OsModel | null = null;
+  public osEntity: OsEntity | null = null;
 
   public formGroup!: FormGroup;
 
-  public osSituacoes: OsSituacaoModel[] = [];
+  public osSituacoes: OsSituacaoEntity[] = [];
 
-  public osTiposAtendimento: OsTipoAtendimentoModel[] = [];
+  public osTiposAtendimento: OsTipoAtendimentoEntity[] = [];
 
-  public clientesFiltrados!: Observable<ClienteModel[]>;
+  public clientesFiltrados!: Observable<ClienteEntity[]>;
 
-  public usuarios: UsuarioModel[] = [];
+  public usuarios: UsuarioEntity[] = [];
 
-  public usuariosFiltrados!: Observable<UsuarioModel[]>;
+  public usuariosFiltrados!: Observable<UsuarioEntity[]>;
 
-  public usuarioLogado!: UsuarioModel;
+  public usuarioLogado!: UsuarioEntity;
 
-  public servicos: ServicoModel[] = [];
+  public servicos: ServicoEntity[] = [];
 
-  public equipamentos: EquipamentoModel[] = [];
-  public equipamentoSelecionado: OsEquipamentoItemModel | null = null;
+  public equipamentos: EquipamentoEntity[] = [];
+  public equipamentoSelecionado: OsEquipamentoItemEntity | null = null;
 
   constructor(
     private osService: OsService,
@@ -73,7 +73,7 @@ export class DetalhesOsComponent implements OnInit {
 
       this.codigoOs = +this.route.snapshot.params['codigo'];
       if (!isNaN(this.codigoOs)) {
-        this.osModel = await firstValueFrom(this.osService.getByCodigo(this.codigoOs));
+        this.osEntity = await firstValueFrom(this.osService.getByCodigo(this.codigoOs));
       } else {
         if (this.route.snapshot.params['codigo'] != "novo") return;
       }
@@ -94,19 +94,19 @@ export class DetalhesOsComponent implements OnInit {
       this.servicos = promiseAll[4];
       this.usuarios = promiseAll[5];
 
-      const usuarioLogado: UsuarioModel | null = this.authService.getUsuarioLogado();
+      const usuarioLogado: UsuarioEntity | null = this.authService.getUsuarioLogado();
       const usuarioCarregado = this.usuarios.find(u => u.id === usuarioLogado?.id);
       if (!usuarioCarregado) throw Error("Faça login para acessar os detalhes da OS.");
 
       this.usuarioLogado = usuarioCarregado!;
 
-      this.osModel ??= OsModel.novo(this.usuarioLogado);
+      this.osEntity ??= OsEntity.novo(this.usuarioLogado);
 
-      this.osModel!.situacao = this.osSituacoes.find(s => s.id === this.osModel?.situacao?.id)!;
-      this.osModel!.tipoAtendimento = this.osTiposAtendimento.find(t => t.id === this.osModel?.tipoAtendimento?.id)!;
+      this.osEntity!.situacao = this.osSituacoes.find(s => s.id === this.osEntity?.situacao?.id)!;
+      this.osEntity!.tipoAtendimento = this.osTiposAtendimento.find(t => t.id === this.osEntity?.tipoAtendimento?.id)!;
 
-      if (this.osModel.equipamentosItens.length > 0)
-        this.equipamentoSelecionado = this.osModel.equipamentosItens[0];
+      if (this.osEntity.equipamentosItens.length > 0)
+        this.equipamentoSelecionado = this.osEntity.equipamentosItens[0];
 
       this.createForm();
     } catch (e) {
@@ -129,20 +129,20 @@ export class DetalhesOsComponent implements OnInit {
       if (typeof formData.cliente !== 'object') throw Error("Cliente não selecionado.");
       if (formData.responsavel != null && typeof formData.responsavel !== 'object') throw Error("Responsável não selecionado.");
 
-      this.osModel!.dataHora = formData.dataAbertura;
-      this.osModel!.tipoAtendimento = formData.tipoAtendimento;
-      this.osModel!.situacao = formData.situacao;
-      this.osModel!.obs = formData.observacao;
-      this.osModel!.cliente = formData.cliente;
-      this.osModel!.nomeContato = formData.nomeContato;
-      this.osModel!.foneContato = formData.foneContato;
-      this.osModel!.responsavel = formData.responsavel;
+      this.osEntity!.dataHora = formData.dataAbertura;
+      this.osEntity!.tipoAtendimento = formData.tipoAtendimento;
+      this.osEntity!.situacao = formData.situacao;
+      this.osEntity!.obs = formData.observacao;
+      this.osEntity!.cliente = formData.cliente;
+      this.osEntity!.nomeContato = formData.nomeContato;
+      this.osEntity!.foneContato = formData.foneContato;
+      this.osEntity!.responsavel = formData.responsavel;
 
-      this.osModel!.validate();
+      this.osEntity!.validate();
 
-      this.osModel! = await firstValueFrom(this.osService.save(this.osModel!));
+      this.osEntity! = await firstValueFrom(this.osService.save(this.osEntity!));
 
-      this.snackbarService.showSuccess(`OS ${this.osModel!.codigo} salva com sucesso!`)
+      this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} salva com sucesso!`)
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
@@ -153,14 +153,14 @@ export class DetalhesOsComponent implements OnInit {
 
   private createForm(): void {
     this.formGroup = this.formBuilder.group({
-      dataAbertura: new FormControl(this.osModel?.dataHora, Validators.required),
-      tipoAtendimento: [this.osModel?.tipoAtendimento, Validators.required],
-      situacao: [this.osModel?.situacao, Validators.required],
-      observacao: [this.osModel?.obs],
-      cliente: [this.osModel?.cliente, Validators.required],
-      nomeContato: [this.osModel?.nomeContato],
-      foneContato: [this.osModel?.foneContato],
-      responsavel: [this.osModel?.responsavel]
+      dataAbertura: new FormControl(this.osEntity?.dataHora, Validators.required),
+      tipoAtendimento: [this.osEntity?.tipoAtendimento, Validators.required],
+      situacao: [this.osEntity?.situacao, Validators.required],
+      observacao: [this.osEntity?.obs],
+      cliente: [this.osEntity?.cliente, Validators.required],
+      nomeContato: [this.osEntity?.nomeContato],
+      foneContato: [this.osEntity?.foneContato],
+      responsavel: [this.osEntity?.responsavel]
     });
 
     this.clientesFiltrados = this.formGroup.controls['cliente'].valueChanges
@@ -182,21 +182,21 @@ export class DetalhesOsComponent implements OnInit {
 
     this.usuariosFiltrados = this.formGroup.controls['responsavel'].valueChanges
       .pipe(
-        startWith(this.osModel?.responsavel?.nome),
+        startWith(this.osEntity?.responsavel?.nome),
         map(value => this.usuarios.filter(usuario => usuario.nome.toLowerCase().includes(value?.toLowerCase())))
       );
   }
 
-  public displayCliente = (cliente: ClienteModel): string => cliente && cliente.nome ? cliente.nome : '';
-  public displayUsuario = (user: UsuarioModel): string => user && user.nome ? user.nome : '';
+  public displayCliente = (cliente: ClienteEntity): string => cliente && cliente.nome ? cliente.nome : '';
+  public displayUsuario = (user: UsuarioEntity): string => user && user.nome ? user.nome : '';
 
   public getError = (control: any): string => getMessageError(control);
 
-  public get osEquipamentos(): OsEquipamentoItemModel[] {
-    return this.osModel?.equipamentosItens ?? [];
+  public get osEquipamentos(): OsEquipamentoItemEntity[] {
+    return this.osEntity?.equipamentosItens ?? [];
   }
 
-  public onChipEquipamento(equipamento: OsEquipamentoItemModel): void {
+  public onChipEquipamento(equipamento: OsEquipamentoItemEntity): void {
     this.equipamentoSelecionado = equipamento;
   }
 
@@ -206,19 +206,19 @@ export class DetalhesOsComponent implements OnInit {
       const props = await firstValueFrom(dialog.afterClosed());
 
       if (props) {
-        const osEquipamentoItemModel = OsEquipamentoItemModel.novo(props.equipamento.itens![0], this.osModel!.id);
+        const osEquipamentoItemEntity = OsEquipamentoItemEntity.novo(props.equipamento.itens![0], this.osEntity!.id);
         this.equipamentos = props.equipamentosList;
 
-        this.osModel?.equipamentosItens.push(osEquipamentoItemModel);
-        this.equipamentoSelecionado = osEquipamentoItemModel;
+        this.osEntity?.equipamentosItens.push(osEquipamentoItemEntity);
+        this.equipamentoSelecionado = osEquipamentoItemEntity;
       }
     } catch (e) {
       this.snackbarService.showError(e);
     }
   }
 
-  public async excluirEquipamento(equipamento: OsEquipamentoItemModel): Promise<void> {
-    if (this.osModel) {
+  public async excluirEquipamento(equipamento: OsEquipamentoItemEntity): Promise<void> {
+    if (this.osEntity) {
       const dialog = this.dialog.open<ConfirmacaoDialogComponent, ConfirmacaoDialogData, boolean | undefined | null>(ConfirmacaoDialogComponent, {
         data: {titulo: "Excluir equipamento", mensagem: "Deseja realmente excluir este equipamento?"},
       });
@@ -226,19 +226,19 @@ export class DetalhesOsComponent implements OnInit {
       const confirmacao = await firstValueFrom(dialog.afterClosed());
 
       if (confirmacao === true) {
-        this.osModel!.equipamentosItens = this.osModel?.equipamentosItens.filter(e => e != equipamento);
-        this.equipamentoSelecionado = this.osModel!.equipamentosItens.length > 0 ? this.osModel!.equipamentosItens[0] : null;
+        this.osEntity!.equipamentosItens = this.osEntity?.equipamentosItens.filter(e => e != equipamento);
+        this.equipamentoSelecionado = this.osEntity!.equipamentosItens.length > 0 ? this.osEntity!.equipamentosItens[0] : null;
       }
     }
   }
 
-  public async adicionarServico(equipamento: OsEquipamentoItemModel): Promise<void> {
+  public async adicionarServico(equipamento: OsEquipamentoItemEntity): Promise<void> {
     try {
       const dialog = this.dialog.open(ListagemServicosDialogComponent, ListagemServicosDialogComponent.configDefault(this.servicos));
       const servico = await firstValueFrom(dialog.afterClosed());
 
       if (servico) {
-        const osServico = new OsServicoModel(
+        const osServico = new OsServicoEntity(
           null,
           equipamento.id,
           "1",
@@ -258,17 +258,17 @@ export class DetalhesOsComponent implements OnInit {
   }
 
   public aprovarOs(): void {
-    this.osModel!.dataHoraAprovacao = new Date();
-    this.osModel!.usuarioAprovacao = this.usuarioLogado;
+    this.osEntity!.dataHoraAprovacao = new Date();
+    this.osEntity!.usuarioAprovacao = this.usuarioLogado;
   }
 
   public async encerrarOs(): Promise<void> {
-    if (this.osModel!.dataHoraAprovacao == null)
+    if (this.osEntity!.dataHoraAprovacao == null)
       this.aprovarOs();
 
-    this.osModel!.dataHoraEncerramento = new Date();
-    this.osModel!.usuarioEncerramento = this.usuarioLogado;
-    this.osModel!.situacao = this.osSituacoes.find(s => s.encerrada)!;
+    this.osEntity!.dataHoraEncerramento = new Date();
+    this.osEntity!.usuarioEncerramento = this.usuarioLogado;
+    this.osEntity!.situacao = this.osSituacoes.find(s => s.encerrada)!;
 
     await this.salvar();
   }

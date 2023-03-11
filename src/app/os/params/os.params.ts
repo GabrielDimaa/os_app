@@ -1,7 +1,7 @@
-import { OsSituacaoModel } from "../models/os-situacao.model";
-import { ClienteModel } from "../models/cliente.model";
-import { EquipamentoModel } from "../models/equipamento.model";
-import { EquipamentoItemModel } from "../models/equipamento-item.model";
+import ClienteEntity from "../entities/cliente.entity";
+import OsSituacaoEntity from "../entities/os-situacao.entity";
+import EquipamentoItemEntity from "../entities/equipamento-item.entity";
+import EquipamentoEntity from "../../equipamento/entities/equipamento.entity";
 
 type OsPaginatorParams = {
   page: number;
@@ -11,11 +11,11 @@ type OsPaginatorParams = {
 type OsFilterParams = {
   dataInicial: string | null;
   dataFinal: string | null;
-  situacao: OsSituacaoModel | null;
-  cliente: ClienteModel | null;
+  situacao: OsSituacaoEntity | null;
+  cliente: ClienteEntity | null;
   codigo: string | null;
-  equipamento: EquipamentoModel | null;
-  identificador: EquipamentoItemModel | null;
+  equipamento: EquipamentoEntity | null;
+  identificador: EquipamentoItemEntity | null;
 }
 
 export { OsPaginatorParams, OsFilterParams };

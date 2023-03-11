@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { KEY_TOKEN } from '../../shared/storage/keys/keys';
-import { LoginModel } from "../models/login.model";
 import { ApiHttpClient } from "../../shared/api/api-http-client";
 import { catchError, firstValueFrom, map, Observable, throwError } from "rxjs";
 import jwt_decode from "jwt-decode";
-import { UsuarioAPI, UsuarioModel } from "../../os/models/usuario.model";
+import LoginEntity from "../entities/login.entity";
+import UsuarioEntity from "../../os/entities/usuario.entity";
+import UsuarioModel from "../../os/models/usuario.model";
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class AuthService {
   constructor(private api: ApiHttpClient) {
   }
 
-  public async login(model: LoginModel): Promise<void> {
+  public async login(entity: LoginEntity): Promise<void> {
     try {
-      const response = await firstValueFrom(this.api.post<LoginResponse>("auth/login", model.toJson()));
+      const response = await firstValueFrom(this.api.post<LoginResponse>("auth/login", entity.toModel()));
 
       localStorage.setItem(KEY_TOKEN, response.access_token);
     } catch (err: any) {
@@ -30,7 +31,7 @@ export class AuthService {
     return this.api.post<RefreshTokenResponse>("auth/refresh-token")
       .pipe(
         map(response => localStorage.setItem(KEY_TOKEN, response.refresh_token)),
-        catchError(err => {
+        catchError(_ => {
           localStorage.removeItem(KEY_TOKEN);
           return throwError(() => Error("Sessão expirada. Faça login novamente."))
         })
@@ -46,14 +47,14 @@ export class AuthService {
     }
   }
 
-  public getUsuarioLogado(): UsuarioModel | null {
+  public getUsuarioLogado(): UsuarioEntity | null {
     try {
       const token: string | null = localStorage.getItem(KEY_TOKEN);
-      const decode = jwt_decode(token ?? "") as UsuarioAPI | undefined | null;
+      const decode = jwt_decode(token ?? "") as UsuarioModel | undefined | null;
 
       if (!decode || !decode.id_usuario) return null;
 
-      return new UsuarioModel(decode.id_usuario, decode.login_usuario, decode.perfil, decode.nome, false);
+      return new UsuarioEntity(decode.id_usuario, decode.login_usuario, decode.perfil, decode.nome, false);
     } catch (err: any) {
       return null;
     }

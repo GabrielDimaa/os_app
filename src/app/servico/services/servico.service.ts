@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiHttpClient } from "../../shared/api/api-http-client";
 import { catchError, map, Observable, throwError } from "rxjs";
-import { ServicoAPI, ServicoModel } from "../../os/models/servico.model";
+import ServicoEntity from "../entities/servico.entity";
+import ServicoModel from "../models/servico.model";
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,10 @@ import { ServicoAPI, ServicoModel } from "../../os/models/servico.model";
 export class ServicoService {
   constructor(private api: ApiHttpClient) {}
 
-  public getServicos(): Observable<ServicoModel[]> {
-    return this.api.get<ServicoAPI[]>("servico")
+  public getServicos(): Observable<ServicoEntity[]> {
+    return this.api.get<ServicoModel[]>("servico")
       .pipe(
-        map(response => response.map(e => ServicoModel.fromJson(e))),
+        map(response => response.map(e => ServicoEntity.fromModel(e))),
         catchError(err => throwError(() => Error(err.message)))
       );
   }

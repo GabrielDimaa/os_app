@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
-import { ServicoModel } from "../../../os/models/servico.model";
+import ServicoEntity from "../../entities/servico.entity";
 
 @Component({
   selector: 'app-listagem-servicos-dialog',
@@ -8,21 +8,21 @@ import { ServicoModel } from "../../../os/models/servico.model";
   styleUrls: ['./listagem-servicos-dialog.component.scss']
 })
 export class ListagemServicosDialogComponent {
-  public static configDefault(servicos: ServicoModel[]): MatDialogConfig {
+  public static configDefault(servicos: ServicoEntity[]): MatDialogConfig {
     return {
       data: servicos,
       width: '600px',
     };
   }
 
-  public servicos: ServicoModel[] = [];
+  public servicos: ServicoEntity[] = [];
 
   constructor(
     private ref: MatDialogRef<ListagemServicosDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ServicoModel[]
+    @Inject(MAT_DIALOG_DATA) public data: ServicoEntity[]
   ) {
     this.servicos = data ?? [];
   }
 
-  public selecionar = (servico: ServicoModel): void => this.ref.close(servico);
+  public selecionar = (servico: ServicoEntity): void => this.ref.close(servico);
 }

@@ -3,21 +3,21 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { OsService } from "../../services/os.service";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
-import { OsSimpleModel } from "../../models/os-simple.model";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, switchMap } from "rxjs";
 import { LiveAnnouncer } from "@angular/cdk/a11y";
-import { EquipamentoModel } from "../../models/equipamento.model";
-import { EquipamentoItemModel } from "../../models/equipamento-item.model";
-import { OsSituacaoModel } from "../../models/os-situacao.model";
 import { MatDateRangePicker } from "@angular/material/datepicker";
 import { OsFilterParams } from "../../params/os.params";
 import { Router } from "@angular/router";
 import { EquipamentoService } from "../../../equipamento/services/equipamento.service";
 import { FormControl } from "@angular/forms";
-import { ClienteModel } from "../../models/cliente.model";
 import { getMessageError } from "../../../shared/validators/validators";
 import { MatOptionSelectionChange } from "@angular/material/core";
+import ClienteEntity from "../../entities/cliente.entity";
+import OsSituacaoEntity from "../../entities/os-situacao.entity";
+import OsSimpleEntity from "../../entities/os-simple.entity";
+import EquipamentoItemEntity from "../../entities/equipamento-item.entity";
+import EquipamentoEntity from "../../../equipamento/entities/equipamento.entity";
 
 @Component({
   selector: 'app-listagem-os',
@@ -33,18 +33,18 @@ export class ListagemOsComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   public tableColumns: string[] = ["codigo", "clienteDisplay", "situacaoDisplay", "dataHora", "equipamentoDisplay", "action"];
-  public dataSource = new MatTableDataSource<OsSimpleModel>();
-  public equipamentos: EquipamentoModel[] = [];
-  public osSituacoes: OsSituacaoModel[] = [];
+  public dataSource = new MatTableDataSource<OsSimpleEntity>();
+  public equipamentos: EquipamentoEntity[] = [];
+  public osSituacoes: OsSituacaoEntity[] = [];
 
   public filtros: OsFilterParams = Object.assign({});
 
   public loading: boolean = false;
   public loadingFiltro: boolean = false;
 
-  public clientesFiltrados!: Observable<ClienteModel[]>;
+  public clientesFiltrados!: Observable<ClienteEntity[]>;
   public clienteControl: FormControl = new FormControl();
-  public displayCliente = (cliente: ClienteModel): string => cliente && cliente.nome ? cliente.nome : '';
+  public displayCliente = (cliente: ClienteEntity): string => cliente && cliente.nome ? cliente.nome : '';
 
   constructor(
     private osService: OsService,
@@ -139,7 +139,7 @@ export class ListagemOsComponent implements AfterViewInit {
     await this.filtrar();
   }
 
-  public get identificadores(): EquipamentoItemModel[] {
+  public get identificadores(): EquipamentoItemEntity[] {
     return this.filtros.equipamento?.itens ?? [];
   }
 
