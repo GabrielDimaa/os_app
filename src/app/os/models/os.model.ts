@@ -87,6 +87,7 @@ class OsModel {
       usuario_aprovacao: this.usuarioAprovacao?.toJson() ?? null,
       id_usuario_encerramento: this.usuarioEncerramento?.id ?? null,
       usuario_encerramento: this.usuarioEncerramento?.toJson() ?? null,
+      id_usuario_responsavel: this.responsavel?.id ?? null,
       responsavel: this.responsavel?.toJson() ?? null,
     };
   }
@@ -171,6 +172,7 @@ interface OsAPI {
   usuario_aprovacao: UsuarioAPI | null;
   id_usuario_encerramento: number | null;
   usuario_encerramento: UsuarioAPI | null;
+  id_usuario_responsavel: number | null;
   responsavel: UsuarioAPI | null;
 }
 
