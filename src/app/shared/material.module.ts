@@ -25,6 +25,8 @@ import { MatListModule } from "@angular/material/list";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatRippleModule } from "@angular/material/core";
+import { MAT_CHIPS_DEFAULT_OPTIONS, MatChipsModule } from "@angular/material/chips";
+import { COMMA, SPACE } from "@angular/cdk/keycodes";
 
 @NgModule({
   declarations: [],
@@ -52,14 +54,16 @@ import { MatRippleModule } from "@angular/material/core";
     MatListModule,
     MatGridListModule,
     MatAutocompleteModule,
-    MatRippleModule
+    MatRippleModule,
+    MatChipsModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } },
     { provide: MAT_SNACK_BAR_DATA, useValue: {} },
     { provide: MAT_DIALOG_DATA, useValue: {} },
-    { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr }
+    { provide: MatPaginatorIntl, useClass: MatPaginatorIntlPtBr },
+    // { provide: MAT_CHIPS_DEFAULT_OPTIONS, useValue: { separatorKeyCodes: [COMMA, SPACE] }}
   ]
 })
 export class MaterialModule {

@@ -110,48 +110,48 @@
               </app-button-icon>
             </div>
 
-            <mat-tab-group *ngIf="osEquipamentos.length != 0" dynamicHeight mat-align-tabs="start">
-              <mat-tab *ngFor="let equipamento of osEquipamentos">
-                <ng-template mat-tab-label>
-                  <span class="tab-label">{{equipamento.descricaoDisplay}}</span>
-                  <button (click)="excluirEquipamento(equipamento)" [matTooltip]="'Excluir equipamento'" class="btn-excluir-equipamento" mat-icon-button>
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </ng-template>
-
-                <app-spacer [size]="2"></app-spacer>
-
-                <div class="problemas">
-                  <mat-form-field appFullWidth appearance="fill">
-                    <mat-label>Problema reclamado</mat-label>
-                    <textarea [(ngModel)]="equipamento.problemaReclamado" [disabled]="saving" rows="7" matInput></textarea>
-                  </mat-form-field>
-
-                  <mat-form-field appFullWidth appearance="fill">
-                    <mat-label>Problema constatado</mat-label>
-                    <textarea [(ngModel)]="equipamento.problemaConstatado" [disabled]="saving" rows="7" matInput></textarea>
-                  </mat-form-field>
-                </div>
-
-                <button (click)="adicionarServico(equipamento)" [disabled]="saving" mat-button class="add-servico" color="primary">
-                  <mat-icon>add</mat-icon>
-                  Adicionar serviço
+            <mat-chip-list>
+              <mat-chip *ngFor="let equipamento of osEquipamentos" (click)="onChipEquipamento(equipamento)" color="accent" [selectable]="true" [selected]="equipamento == equipamentoSelecionado">
+                {{equipamento.descricaoDisplay}}
+                <button (click)="excluirEquipamento(equipamento)" [matTooltip]="'Excluir equipamento'" matChipRemove>
+                  <mat-icon>delete</mat-icon>
                 </button>
+              </mat-chip>
+            </mat-chip-list>
 
-                <mat-stepper #stepper orientation="vertical" [linear]="false">
-                  <mat-step [editable]="true" [completed]="false" [state]="'number'" *ngFor="let servico of equipamento.servicos">
-                    <ng-template matStepLabel>{{ servico.servico.descricao }}</ng-template>
-                    <ng-template matStepContent>
-                      <mat-form-field appFullWidth class="descricao-servico" appearance="fill">
-                        <mat-label>Descrição</mat-label>
-                        <textarea [(ngModel)]="servico.descricaoInformada" [disabled]="saving" rows="3" matInput></textarea>
-                      </mat-form-field>
-                    </ng-template>
-                    <ng-template let-index="index">{{ index + 10 }}</ng-template>
-                  </mat-step>
-                </mat-stepper>
-              </mat-tab>
-            </mat-tab-group>
+            <ng-container *ngIf="equipamentoSelecionado != null">
+              <app-spacer [size]="2"></app-spacer>
+
+              <div class="problemas">
+                <mat-form-field appFullWidth appearance="fill">
+                  <mat-label>Problema reclamado</mat-label>
+                  <textarea [(ngModel)]="equipamentoSelecionado.problemaReclamado" [disabled]="saving" rows="7" matInput></textarea>
+                </mat-form-field>
+
+                <mat-form-field appFullWidth appearance="fill">
+                  <mat-label>Problema constatado</mat-label>
+                  <textarea [(ngModel)]="equipamentoSelecionado.problemaConstatado" [disabled]="saving" rows="7" matInput></textarea>
+                </mat-form-field>
+              </div>
+
+              <button (click)="adicionarServico(equipamentoSelecionado!)" [disabled]="saving" mat-button class="add-servico" color="primary">
+                <mat-icon>add</mat-icon>
+                Adicionar serviço
+              </button>
+
+              <mat-stepper #stepper orientation="vertical" [linear]="false">
+                <mat-step [editable]="true" [completed]="false" [state]="'number'" *ngFor="let servico of equipamentoSelecionado!.servicos ?? []">
+                  <ng-template matStepLabel>{{ servico.servico.descricao }}</ng-template>
+                  <ng-template matStepContent>
+                    <mat-form-field appFullWidth class="descricao-servico" appearance="fill">
+                      <mat-label>Descrição</mat-label>
+                      <textarea [(ngModel)]="servico.descricaoInformada" [disabled]="saving" rows="3" matInput></textarea>
+                    </mat-form-field>
+                  </ng-template>
+                  <ng-template let-index="index">{{ index + 10 }}</ng-template>
+                </mat-step>
+              </mat-stepper>
+            </ng-container>
           </div>
         </div>
       </div>

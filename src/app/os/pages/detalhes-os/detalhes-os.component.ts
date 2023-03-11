@@ -54,6 +54,7 @@ export class DetalhesOsComponent implements OnInit {
   public servicos: ServicoModel[] = [];
 
   public equipamentos: EquipamentoModel[] = [];
+  public equipamentoSelecionado: OsEquipamentoItemModel | null = null;
 
   constructor(
     private osService: OsService,
@@ -103,6 +104,9 @@ export class DetalhesOsComponent implements OnInit {
 
       this.osModel!.situacao = this.osSituacoes.find(s => s.id === this.osModel?.situacao?.id)!;
       this.osModel!.tipoAtendimento = this.osTiposAtendimento.find(t => t.id === this.osModel?.tipoAtendimento?.id)!;
+
+      if (this.osModel.equipamentosItens.length > 0)
+        this.equipamentoSelecionado = this.osModel.equipamentosItens[0];
 
       this.createForm();
     } catch (e) {
@@ -192,6 +196,10 @@ export class DetalhesOsComponent implements OnInit {
     return this.osModel?.equipamentosItens ?? [];
   }
 
+  public onChipEquipamento(equipamento: OsEquipamentoItemModel): void {
+    this.equipamentoSelecionado = equipamento;
+  }
+
   public async adicionarEquipamento(): Promise<void> {
     try {
       const dialog = this.dialog.open(ListagemEquipamentosDialogComponent, ListagemEquipamentosDialogComponent.configDefault(this.equipamentos)) as MatDialogRef<ListagemEquipamentosDialogComponent, ListagemEquipamentosParams>;
@@ -202,6 +210,7 @@ export class DetalhesOsComponent implements OnInit {
         this.equipamentos = props.equipamentosList;
 
         this.osModel?.equipamentosItens.push(osEquipamentoItemModel);
+        this.equipamentoSelecionado = osEquipamentoItemModel;
       }
     } catch (e) {
       this.snackbarService.showError(e);
@@ -218,6 +227,7 @@ export class DetalhesOsComponent implements OnInit {
 
       if (confirmacao === true) {
         this.osModel!.equipamentosItens = this.osModel?.equipamentosItens.filter(e => e != equipamento);
+        this.equipamentoSelecionado = this.osModel!.equipamentosItens.length > 0 ? this.osModel!.equipamentosItens[0] : null;
       }
     }
   }
