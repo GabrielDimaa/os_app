@@ -88,6 +88,17 @@ app-detalhes-os {
           max-width: 180px;
         }
 
+        .detalhes-servico {
+          display: flex;
+          align-items: center;
+
+          span {
+            color: grey;
+            font-weight: 500;
+            padding-left: 12px;
+          }
+        }
+
         .add-equipamento {
           display: flex;
           flex-direction: column;

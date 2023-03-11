@@ -143,10 +143,20 @@
                 <mat-step [editable]="true" [completed]="false" [state]="'number'" *ngFor="let servico of equipamentoSelecionado!.servicos ?? []">
                   <ng-template matStepLabel>{{ servico.servico.descricao }}</ng-template>
                   <ng-template matStepContent>
-                    <mat-form-field appFullWidth class="descricao-servico" appearance="fill">
+                    <mat-form-field appFullWidth appearance="fill">
                       <mat-label>Descrição</mat-label>
                       <textarea [(ngModel)]="servico.descricaoInformada" [disabled]="saving" rows="3" matInput></textarea>
                     </mat-form-field>
+
+                    <div class="detalhes-servico">
+                      <mat-icon [color]="'accent'">person</mat-icon>
+                      <span>{{ servico.usuario.nome }}</span>
+                    </div>
+
+                    <div class="detalhes-servico" style="margin-top: 8px;">
+                      <mat-icon [color]="'accent'">calendar_month</mat-icon>
+                      <span>{{ servico.dataHora | date:"dd/MM/YYYY"}}</span>
+                    </div>
                   </ng-template>
                   <ng-template let-index="index">{{ index + 10 }}</ng-template>
                 </mat-step>
