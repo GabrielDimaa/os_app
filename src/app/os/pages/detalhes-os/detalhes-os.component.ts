@@ -196,6 +196,15 @@ export class DetalhesOsComponent implements OnInit {
     return this.osEntity?.equipamentosItens ?? [];
   }
 
+  public get osSituacoesDisplay(): OsSituacaoEntity[] {
+    const tipoAtendimento = this.formGroup.controls['tipoAtendimento'].value
+
+    if (!tipoAtendimento)
+      return this.osSituacoes;
+
+    return this.osSituacoes.filter(s => s.descricao.substring(0, 1) == tipoAtendimento!.descricao.substring(0, 1));
+  }
+
   public onChipEquipamento(equipamento: OsEquipamentoItemEntity): void {
     this.equipamentoSelecionado = equipamento;
   }

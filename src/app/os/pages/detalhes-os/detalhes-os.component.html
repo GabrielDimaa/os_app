@@ -31,7 +31,7 @@
           <mat-form-field appFullWidth appearance="fill">
             <mat-label>Situação</mat-label>
             <mat-select [formControlName]="'situacao'">
-              <mat-option *ngFor="let situacao of osSituacoes" [value]="situacao">
+              <mat-option *ngFor="let situacao of osSituacoesDisplay" [value]="situacao">
                 {{situacao.descricao}}
               </mat-option>
             </mat-select>
