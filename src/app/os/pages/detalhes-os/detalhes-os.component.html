@@ -149,13 +149,24 @@
                     </mat-form-field>
 
                     <div class="detalhes-servico">
-                      <mat-icon [color]="'accent'">person</mat-icon>
-                      <span>{{ servico.usuario.nome }}</span>
-                    </div>
+                      <div>
+                        <div class="icon-label-servico">
+                          <mat-icon [color]="'accent'">person</mat-icon>
+                          <span>{{ servico.usuario.nome }}</span>
+                        </div>
 
-                    <div class="detalhes-servico" style="margin-top: 8px;">
-                      <mat-icon [color]="'accent'">calendar_month</mat-icon>
-                      <span>{{ servico.dataHora | date:"dd/MM/YYYY"}}</span>
+                        <div class="icon-label-servico" style="margin-top: 8px;">
+                          <mat-icon [color]="'accent'">calendar_month</mat-icon>
+                          <span>{{ servico.dataHora | date:"dd/MM/YYYY"}}</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <button (click)="excluirServico(equipamentoSelecionado, servico)" [disabled]="saving" mat-button color="warn">
+                          <mat-icon>delete</mat-icon>
+                          Excluir serviço
+                        </button>
+                      </div>
                     </div>
                   </ng-template>
                   <ng-template let-index="index">{{ index + 10 }}</ng-template>

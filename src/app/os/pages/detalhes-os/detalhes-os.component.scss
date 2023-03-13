@@ -90,6 +90,11 @@ app-detalhes-os {
 
         .detalhes-servico {
           display: flex;
+          justify-content: space-between;
+        }
+
+        .icon-label-servico {
+          display: flex;
           align-items: center;
 
           span {

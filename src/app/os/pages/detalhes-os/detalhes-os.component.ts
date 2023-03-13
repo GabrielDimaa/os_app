@@ -126,17 +126,25 @@ export class DetalhesOsComponent implements OnInit {
       const formData = this.formGroup.value;
 
       //Validações desta maneira, pois é possível digitar no autocomplete e não selecionar nenhum dos resultados sugeridos.
-      if (typeof formData.cliente !== 'object') throw Error("Cliente não selecionado.");
-      if (formData.responsavel != null && typeof formData.responsavel !== 'object') throw Error("Responsável não selecionado.");
+      if (typeof formData.cliente !== 'object') {
+        throw Error("Cliente não selecionado.");
+      } else {
+        this.osEntity!.cliente = formData.cliente;
+      }
+
+      if (formData.responsavel != null && formData.responsavel != "") {
+        if (typeof formData.responsavel !== 'object')
+          throw Error("Responsável não selecionado.");
+
+        this.osEntity!.responsavel = formData.responsavel;
+      }
 
       this.osEntity!.dataHora = formData.dataAbertura;
       this.osEntity!.tipoAtendimento = formData.tipoAtendimento;
       this.osEntity!.situacao = formData.situacao;
       this.osEntity!.obs = formData.observacao;
-      this.osEntity!.cliente = formData.cliente;
       this.osEntity!.nomeContato = formData.nomeContato;
       this.osEntity!.foneContato = formData.foneContato;
-      this.osEntity!.responsavel = formData.responsavel;
 
       this.osEntity!.validate();
 
@@ -264,6 +272,10 @@ export class DetalhesOsComponent implements OnInit {
     } catch (e) {
       this.snackbarService.showError(e);
     }
+  }
+
+  public excluirServico(equipamento: OsEquipamentoItemEntity, servico: OsServicoEntity): void {
+    equipamento.servicos = equipamento.servicos.filter(s => s !== servico);
   }
 
   public aprovarOs(): void {
