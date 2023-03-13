@@ -210,7 +210,7 @@ export class DetalhesOsComponent implements OnInit {
     if (!tipoAtendimento)
       return this.osSituacoes;
 
-    return this.osSituacoes.filter(s => s.descricao.substring(0, 1) == tipoAtendimento!.descricao.substring(0, 1));
+    return this.osSituacoes.filter(s => s.descricao.substring(0, 1) == tipoAtendimento!.descricao.substring(0, 1) || s.encerrada);
   }
 
   public onChipEquipamento(equipamento: OsEquipamentoItemEntity): void {
@@ -290,6 +290,7 @@ export class DetalhesOsComponent implements OnInit {
     this.osEntity!.dataHoraEncerramento = new Date();
     this.osEntity!.usuarioEncerramento = this.usuarioLogado;
     this.osEntity!.situacao = this.osSituacoes.find(s => s.encerrada)!;
+    this.formGroup.controls['situacao'].setValue(this.osEntity!.situacao);
 
     await this.salvar();
   }
