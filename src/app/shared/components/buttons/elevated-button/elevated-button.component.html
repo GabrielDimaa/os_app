@@ -1,4 +1,4 @@
-<button type="{{type}}" mat-raised-button appFullWidth color="primary" [disabled]="loading">
+<button type="{{type}}" mat-raised-button appFullWidth [color]="color" [ngClass]="color" [disabled]="disable">
   <div class="button-content">
     <mat-spinner *ngIf="loading" [diameter]="22"></mat-spinner>
     <ng-content></ng-content>

@@ -1,0 +1,24 @@
+@use "./src/assets/scss/mixins";
+@use "./src/styles";
+
+button {
+  padding: 4px 8px;
+  font-size: 15px !important;
+
+  .button-content {
+    @include mixins.display-center;
+    gap: 12px;
+  }
+}
+
+.primary {
+  border-color: styles.$primary !important;
+}
+
+.accent {
+  border-color: styles.$accent !important;
+}
+
+.warn {
+  border-color: styles.$warn !important;
+}

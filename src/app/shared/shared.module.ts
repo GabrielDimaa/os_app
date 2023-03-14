@@ -5,7 +5,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "./material.module";
 import { SpacerComponent } from './components/spacer/spacer.component';
 import { FullWidthDirective } from './directives/full-width.directive';
-import { ButtonIconComponent } from './components/buttons/button-icon/button-icon.component';
+import { ElevatedButtonComponent } from './components/buttons/elevated-button/elevated-button.component';
+import { OutlinedButtonComponent } from '../shared/components/buttons/outlined-button/outlined-button.component';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { SnackbarService } from "./components/snackbar/snackbar.service";
 import { LoadingComponent } from './components/loading/spinner/loading.component';
@@ -19,13 +20,14 @@ import { ConfirmacaoDialogComponent } from './components/dialogs/confirmacao-dia
   declarations: [
     SpacerComponent,
     FullWidthDirective,
-    ButtonIconComponent,
+    ElevatedButtonComponent,
     SnackbarComponent,
     LoadingComponent,
     ShimmerComponent,
     DataMaskDirective,
     PhoneMaskDirective,
     ConfirmacaoDialogComponent,
+    OutlinedButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { ConfirmacaoDialogComponent } from './components/dialogs/confirmacao-dia
     ReactiveFormsModule,
     SpacerComponent,
     FullWidthDirective,
-    ButtonIconComponent,
+    ElevatedButtonComponent,
+    OutlinedButtonComponent,
     MaterialModule,
     ShimmerComponent,
     DataMaskDirective,
