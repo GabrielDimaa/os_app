@@ -155,7 +155,9 @@ export class DetalhesOsComponent implements OnInit {
 
       this.osEntity!.validate();
 
-      this.osEntity! = await firstValueFrom(this.osService.save(this.osEntity!));
+      this.osEntity = await firstValueFrom(this.osService.save(this.osEntity!));
+      //Seta o primeiro já que as OS internas só terão um equipamento.
+      this.onChipEquipamento(this.osEntity.equipamentosItens[0]);
 
       this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} salva com sucesso!`);
     } catch (e) {
