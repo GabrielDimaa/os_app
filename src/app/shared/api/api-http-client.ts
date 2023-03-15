@@ -31,6 +31,14 @@ export class ApiHttpClient {
       );
   }
 
+  public delete<T>(url: string): Observable<T> {
+    return this.httpClient.delete<HttpResponse>(url)
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(e: any): Observable<never> {
     if (e instanceof HttpErrorResponse) {
       if (e.status == 0) {

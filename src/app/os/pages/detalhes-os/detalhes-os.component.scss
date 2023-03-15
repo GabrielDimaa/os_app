@@ -111,7 +111,7 @@ app-detalhes-os {
           justify-content: center;
           align-items: center;
 
-          app-button-icon {
+          app-elevated-button {
             width: 100%;
             max-width: 400px;
           }
@@ -124,6 +124,32 @@ app-detalhes-os {
       margin-bottom: 26px;
       border-top-width: 2px;
       border-top-color: #E0DFDF;
+    }
+  }
+
+  .content-actions {
+    display: flex;
+    width: 100%;
+
+    .btn-left {
+      flex-basis: 20%;
+      flex-grow: 1;
+    }
+
+    .btn-right {
+      display: flex;
+      justify-content: flex-end;
+      flex-basis: 80%;
+      flex-grow: 1;
+      gap: 12px;
+
+      app-outlined-button, app-elevated-button {
+        flex-basis: 25%;
+      }
+    }
+
+    button {
+      min-width: 200px;
     }
   }
 

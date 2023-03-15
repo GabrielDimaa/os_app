@@ -82,9 +82,9 @@
           </div>
 
           <div class="flex-consultar">
-            <app-button-icon (click)="filtrar()" [loading]="loadingFiltro" appFullWidth>
+            <app-elevated-button (click)="filtrar()" [loading]="loadingFiltro" [disable]="loadingFiltro" appFullWidth>
               {{loadingFiltro ? "Buscando..." : "Filtrar"}}
-            </app-button-icon>
+            </app-elevated-button>
           </div>
         </div>
 

@@ -86,18 +86,6 @@
             <mat-label>Usuário</mat-label>
             <input [value]="osEntity.usuarioAtendente.nome" [disabled]="true" matInput>
           </mat-form-field>
-
-          <app-spacer></app-spacer>
-
-          <button (click)="salvar()" appFullWidth mat-raised-button color="primary">
-            Salvar
-          </button>
-
-          <app-spacer></app-spacer>
-
-          <button class="encerrar-os" (click)="encerrarOs()" appFullWidth mat-stroked-button color="primary">
-            Encerrar OS
-          </button>
         </form>
 
         <div class="column-right">
@@ -105,9 +93,9 @@
 
           <div class="column-content">
             <div class="add-equipamento" *ngIf="osEquipamentos.length == 0">
-              <app-button-icon (click)="adicionarEquipamento()">
+              <app-elevated-button (click)="adicionarEquipamento()">
                 Adicionar equipamento
-              </app-button-icon>
+              </app-elevated-button>
             </div>
 
             <mat-chip-list>
@@ -125,16 +113,16 @@
               <div class="problemas">
                 <mat-form-field appFullWidth appearance="fill">
                   <mat-label>Problema reclamado</mat-label>
-                  <textarea [(ngModel)]="equipamentoSelecionado.problemaReclamado" [disabled]="saving" rows="7" matInput></textarea>
+                  <textarea [(ngModel)]="equipamentoSelecionado.problemaReclamado" [disabled]="desabilitarAcoes" rows="7" matInput></textarea>
                 </mat-form-field>
 
                 <mat-form-field appFullWidth appearance="fill">
                   <mat-label>Problema constatado</mat-label>
-                  <textarea [(ngModel)]="equipamentoSelecionado.problemaConstatado" [disabled]="saving" rows="7" matInput></textarea>
+                  <textarea [(ngModel)]="equipamentoSelecionado.problemaConstatado" [disabled]="desabilitarAcoes" rows="7" matInput></textarea>
                 </mat-form-field>
               </div>
 
-              <button (click)="adicionarServico(equipamentoSelecionado!)" [disabled]="saving" mat-button class="add-servico" color="primary">
+              <button (click)="adicionarServico(equipamentoSelecionado!)" [disabled]="desabilitarAcoes" mat-button class="add-servico" color="primary">
                 <mat-icon>add</mat-icon>
                 Adicionar serviço
               </button>
@@ -145,7 +133,7 @@
                   <ng-template matStepContent>
                     <mat-form-field appFullWidth appearance="fill">
                       <mat-label>Descrição</mat-label>
-                      <textarea [(ngModel)]="servico.descricaoInformada" [disabled]="saving" rows="3" matInput></textarea>
+                      <textarea [(ngModel)]="servico.descricaoInformada" [disabled]="desabilitarAcoes" rows="3" matInput></textarea>
                     </mat-form-field>
 
                     <div class="detalhes-servico">
@@ -162,7 +150,7 @@
                       </div>
 
                       <div>
-                        <button (click)="excluirServico(equipamentoSelecionado, servico)" [disabled]="saving" mat-button color="warn">
+                        <button (click)="excluirServico(equipamentoSelecionado, servico)" [disabled]="desabilitarAcoes" mat-button color="warn">
                           <mat-icon>delete</mat-icon>
                           Excluir serviço
                         </button>
@@ -173,6 +161,24 @@
                 </mat-step>
               </mat-stepper>
             </ng-container>
+          </div>
+        </div>
+
+        <app-spacer [size]="2"></app-spacer>
+
+        <div class="content-actions">
+          <app-outlined-button (click)="encerrarOs()" [loading]="encerrandoOs" [disable]="desabilitarAcoes" class="btn-left">
+            {{ encerrandoOs ? "Encerrando..." : "Encerrar" }}
+          </app-outlined-button>
+
+          <div class="btn-right">
+            <app-outlined-button (click)="excluir()" [loading]="excluindo" [disable]="desabilitarAcoes" [color]="'warn'">
+              {{ excluindo ? "Excluindo..." : "Excluir" }}
+            </app-outlined-button>
+
+            <app-elevated-button (click)="salvar()" [loading]="salvando" [disable]="desabilitarAcoes">
+              {{ salvando ? "Salvando..." : "Salvar" }}
+            </app-elevated-button>
           </div>
         </div>
       </div>

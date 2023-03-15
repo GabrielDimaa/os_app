@@ -27,9 +27,9 @@
 
         <app-spacer [size]="2"></app-spacer>
 
-        <app-button-icon [type]="'submit'" appFullWidth [loading]="loading">
+        <app-elevated-button [type]="'submit'" appFullWidth [loading]="loading" [disable]="loading">
           {{loading ? "Entrando..." : "Entrar"}}
-        </app-button-icon>
+        </app-elevated-button>
 
         <app-spacer [size]="3"></app-spacer>
       </form>

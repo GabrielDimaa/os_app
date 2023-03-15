@@ -1,6 +1,6 @@
 <button type="{{type}}" mat-stroked-button appFullWidth [color]="color" [ngClass]="color" [disabled]="disable">
   <div class="button-content">
-    <mat-spinner *ngIf="loading" [diameter]="22"></mat-spinner>
+    <mat-spinner *ngIf="loading" [diameter]="22" [color]="color"></mat-spinner>
     <ng-content></ng-content>
   </div>
 </button>

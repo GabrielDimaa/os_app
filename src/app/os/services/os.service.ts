@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiHttpClient } from "../../shared/api/api-http-client";
 import { HttpParams } from "@angular/common/http";
-import { catchError, map, Observable, throwError } from "rxjs";
+import { catchError, map, Observable, pipe, throwError } from "rxjs";
 import { OsFilterParams, OsPaginatorParams } from "../params/os.params";
 import "../../shared/prototypes/string.prototype";
 import "../../shared/prototypes/date.prototype";
@@ -104,5 +104,13 @@ export class OsService {
           catchError(err => throwError(() => Error(err.message)))
         );
     }
+  }
+
+  public excluir(entity: OsEntity): Observable<void> {
+    return this.api.delete(`os/${entity.id}`)
+      .pipe(
+        map(() => void 0),
+        catchError(err => throwError(() => Error(err.message)))
+      );
   }
 }

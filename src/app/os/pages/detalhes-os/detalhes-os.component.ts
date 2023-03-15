@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, startWith, switchMap } from "rxjs";
 import { SnackbarService } from "../../../shared/components/snackbar/snackbar.service";
 import { OsService } from "../../services/os.service";
@@ -32,7 +32,12 @@ export class DetalhesOsComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
 
   public loading: boolean = false;
-  public saving: boolean = false;
+  public encerrandoOs: boolean = false;
+  public excluindo: boolean = false;
+  public salvando: boolean = false;
+  public get desabilitarAcoes(): boolean {
+    return this.loading || this.encerrandoOs || this.excluindo || this.salvando;
+  }
 
   private codigoOs: number | null = null;
   public osEntity: OsEntity | null = null;
@@ -63,7 +68,8 @@ export class DetalhesOsComponent implements OnInit {
     private snackbarService: SnackbarService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {
   }
 
@@ -121,7 +127,8 @@ export class DetalhesOsComponent implements OnInit {
       if (this.formGroup.invalid) return;
       this.formGroup.disable();
 
-      this.saving = true;
+      //Caso [this.encerrandoOs] seja true, não é necessário atribuir o valor para [this.salvando]. Senão ficará loading nos dois botões.
+      if (!this.encerrandoOs) this.salvando = true;
 
       const formData = this.formGroup.value;
 
@@ -150,11 +157,11 @@ export class DetalhesOsComponent implements OnInit {
 
       this.osEntity! = await firstValueFrom(this.osService.save(this.osEntity!));
 
-      this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} salva com sucesso!`)
+      this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} salva com sucesso!`);
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
-      this.saving = false;
+      this.salvando = false;
       this.formGroup.enable();
     }
   }
@@ -284,14 +291,34 @@ export class DetalhesOsComponent implements OnInit {
   }
 
   public async encerrarOs(): Promise<void> {
-    if (this.osEntity!.dataHoraAprovacao == null)
-      this.aprovarOs();
+    try {
+      this.encerrandoOs = true;
 
-    this.osEntity!.dataHoraEncerramento = new Date();
-    this.osEntity!.usuarioEncerramento = this.usuarioLogado;
-    this.osEntity!.situacao = this.osSituacoes.find(s => s.encerrada)!;
-    this.formGroup.controls['situacao'].setValue(this.osEntity!.situacao);
+      if (this.osEntity!.dataHoraAprovacao == null)
+        this.aprovarOs();
 
-    await this.salvar();
+      this.osEntity!.dataHoraEncerramento = new Date();
+      this.osEntity!.usuarioEncerramento = this.usuarioLogado;
+      this.osEntity!.situacao = this.osSituacoes.find(s => s.encerrada)!;
+      this.formGroup.controls['situacao'].setValue(this.osEntity!.situacao);
+
+      await this.salvar();
+    } finally {
+      this.encerrandoOs = false;
+    }
+  }
+
+  public async excluir(): Promise<void> {
+    try {
+      this.excluindo = true;
+
+      await firstValueFrom(this.osService.excluir(this.osEntity!));
+      this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} excluída!`);
+      await this.router.navigate(['os']);
+    } catch (e) {
+      this.snackbarService.showError(e);
+    } finally {
+      this.excluindo = false;
+    }
   }
 }
