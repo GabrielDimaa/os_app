@@ -167,16 +167,16 @@
         <app-spacer [size]="2"></app-spacer>
 
         <div class="content-actions">
-          <app-outlined-button (click)="encerrarOs()" [loading]="encerrandoOs" [disable]="desabilitarAcoes" class="btn-left">
+          <app-outlined-button (onClick)="encerrarOs()" [loading]="encerrandoOs" [disable]="desabilitarAcoes" class="btn-left">
             {{ encerrandoOs ? "Encerrando..." : "Encerrar" }}
           </app-outlined-button>
 
           <div class="btn-right">
-            <app-outlined-button (click)="excluir()" [loading]="excluindo" [disable]="desabilitarAcoes" [color]="'warn'">
+            <app-outlined-button (onClick)="excluir()" [loading]="excluindo" [disable]="desabilitarAcoes" [color]="'warn'">
               {{ excluindo ? "Excluindo..." : "Excluir" }}
             </app-outlined-button>
 
-            <app-elevated-button (click)="salvar()" [loading]="salvando" [disable]="desabilitarAcoes">
+            <app-elevated-button (onClick)="salvar()" [loading]="salvando" [disable]="desabilitarAcoes">
               {{ salvando ? "Salvando..." : "Salvar" }}
             </app-elevated-button>
           </div>
