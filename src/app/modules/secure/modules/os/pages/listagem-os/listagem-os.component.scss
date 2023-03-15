@@ -1,0 +1,125 @@
+@use "../../../../../../../assets/scss/mixins";
+@use "../../../../../../../styles";
+
+:host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.listagem-os {
+  @include mixins.display-column-center;
+  @include mixins.padding-default;
+
+  mat-card {
+    width: 80%;
+    padding: 50px;
+  }
+
+  .filtros {
+    .row {
+      gap: 20px;
+    }
+
+    mat-form-field {
+      flex: 1;
+    }
+
+    .input-date {
+      min-width: 200px;
+    }
+
+    mat-datepicker-toggle {
+      color: styles.$accent;
+    }
+
+    .clear-icon {
+      color: grey;
+    }
+
+    .flex-consultar {
+      display: flex;
+      justify-content: flex-end;
+
+      @media only screen and (min-width: 992px) {
+        app-elevated-button {
+          max-width: 300px;
+        }
+      }
+    }
+  }
+
+  table {
+    @mixin font-table {
+      font-size: 1em;
+      color: black;
+    }
+
+    .mat-sort-header-container {
+      align-items: center;
+    }
+
+    th {
+      display: flex;
+      background-color: rgba(#cbcde5, 0.08);
+
+      @include font-table;
+      font-weight: 600;
+      padding: 0 15px;
+      min-width: 8rem;
+    }
+
+    td {
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      min-width: 8rem;
+    }
+
+    tr {
+      display: flex;
+      @include font-table;
+    }
+
+    .mat-row {
+      height: auto;
+    }
+
+    .mat-row:nth-child(even){
+      background-color: rgba(#cbcde5, 0.05);
+    }
+
+    .mat-column-codigo {
+      flex: 1;
+    }
+
+    .mat-column-clienteDisplay {
+      flex: 2;
+    }
+
+    .mat-column-situacaoDisplay {
+      flex: 2;
+    }
+
+    .mat-column-data {
+      flex: 2;
+    }
+
+    .mat-column-equipamentoDisplay {
+      flex: 2;
+    }
+
+    .mat-column-action {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+
+  .row-table-empty {
+    color: grey;
+
+    margin-top: 4em;
+    display: flex;
+    justify-content: center;
+  }
+}

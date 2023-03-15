@@ -7,17 +7,12 @@ import { NotFoundComponent } from "./not-found/not-found.component";
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "os",
-    pathMatch: 'full'
-  },
-  {
-    path: "os",
-    loadChildren: () => import('./os/os.module').then(m => m.OsModule),
+    loadChildren: () => import('./modules/secure/secure.module').then(m => m.SecureModule),
     canLoad: [AuthGuard]
   },
   {
     path: "auth",
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+    loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
   },
   {
     path: "**",

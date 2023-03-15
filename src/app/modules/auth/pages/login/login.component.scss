@@ -1,0 +1,27 @@
+@use "../../../../../assets/scss/mixins";
+@use "../../../../../styles";
+
+.login {
+  @include mixins.display-center;
+  height: 100%;
+  background-image: linear-gradient(styles.$accent, styles.$primary);
+
+  mat-card {
+    max-width: 35em;
+    margin: 25px;
+  }
+
+  mat-card-title {
+    text-align: center;
+    font-weight: 600;
+  }
+
+  form {
+    @include mixins.display-column-center;
+    padding: 0 60px;
+  }
+
+  app-elevated-button {
+    max-width: 20em;
+  }
+}

@@ -6,7 +6,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from "./shared/shared.module";
-import { AuthModule } from "./auth/auth.module";
+import { AuthModule } from "./modules/auth/auth.module";
 import { AuthGuard } from "./guards/auth.guard";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { ApiHttpClient } from "./shared/api/api-http-client";
