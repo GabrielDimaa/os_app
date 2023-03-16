@@ -18,6 +18,11 @@ app-detalhes-os {
     padding: 50px;
   }
 
+  .flex-space-between {
+    display: flex;
+    justify-content: space-between;
+  }
+
   .content {
     display: flex;
     flex-wrap: wrap;
@@ -86,11 +91,6 @@ app-detalhes-os {
         .add-servico {
           background-color: #eee7ff;
           max-width: 180px;
-        }
-
-        .detalhes-servico {
-          display: flex;
-          justify-content: space-between;
         }
 
         .icon-label-servico {

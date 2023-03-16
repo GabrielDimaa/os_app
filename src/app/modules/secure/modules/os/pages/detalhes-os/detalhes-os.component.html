@@ -2,7 +2,24 @@
   <mat-card *ngIf="loading || osEntity != null">
     <mat-card-content *ngIf="!loading && osEntity != null">
       <ng-container *ngIf="osEntity.codigo != null">
-        <mat-card-title>OS {{ osEntity.codigo }}</mat-card-title>
+        <div class="flex-space-between">
+          <mat-card-title>OS {{ osEntity.codigo }}</mat-card-title>
+
+          <ng-container>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button (click)="excluir()" [disabled]="acoesDesabilitadas" mat-menu-item style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <mat-spinner *ngIf="excluindo" [diameter]="22" [color]="'primary'" style="margin-right: 14px;"></mat-spinner>
+                  <mat-icon *ngIf="!excluindo">delete</mat-icon>
+                </div>
+                <span>Excluir OS</span>
+              </button>
+            </mat-menu>
+          </ng-container>
+        </div>
         <app-spacer [size]="2"></app-spacer>
       </ng-container>
 
@@ -113,16 +130,16 @@
               <div class="problemas">
                 <mat-form-field appFullWidth appearance="fill">
                   <mat-label>Problema reclamado</mat-label>
-                  <textarea [(ngModel)]="equipamentoSelecionado.problemaReclamado" [disabled]="desabilitarAcoes" rows="7" matInput></textarea>
+                  <textarea [(ngModel)]="equipamentoSelecionado.problemaReclamado" [disabled]="acoesDesabilitadas" rows="7" matInput></textarea>
                 </mat-form-field>
 
                 <mat-form-field appFullWidth appearance="fill">
                   <mat-label>Problema constatado</mat-label>
-                  <textarea [(ngModel)]="equipamentoSelecionado.problemaConstatado" [disabled]="desabilitarAcoes" rows="7" matInput></textarea>
+                  <textarea [(ngModel)]="equipamentoSelecionado.problemaConstatado" [disabled]="acoesDesabilitadas" rows="7" matInput></textarea>
                 </mat-form-field>
               </div>
 
-              <button (click)="adicionarServico(equipamentoSelecionado!)" [disabled]="desabilitarAcoes" mat-button class="add-servico" color="primary">
+              <button (click)="adicionarServico(equipamentoSelecionado!)" [disabled]="acoesDesabilitadas" mat-button class="add-servico" color="primary">
                 <mat-icon>add</mat-icon>
                 Adicionar serviço
               </button>
@@ -133,10 +150,10 @@
                   <ng-template matStepContent>
                     <mat-form-field appFullWidth appearance="fill">
                       <mat-label>Descrição</mat-label>
-                      <textarea [(ngModel)]="servico.descricaoInformada" [disabled]="desabilitarAcoes" rows="3" matInput></textarea>
+                      <textarea [(ngModel)]="servico.descricaoInformada" [disabled]="acoesDesabilitadas" rows="3" matInput></textarea>
                     </mat-form-field>
 
-                    <div class="detalhes-servico">
+                    <div class="flex-space-between">
                       <div>
                         <div class="icon-label-servico">
                           <mat-icon [color]="'accent'">person</mat-icon>
@@ -150,7 +167,7 @@
                       </div>
 
                       <div>
-                        <button (click)="excluirServico(equipamentoSelecionado, servico)" [disabled]="desabilitarAcoes" mat-button color="warn">
+                        <button (click)="excluirServico(equipamentoSelecionado, servico)" [disabled]="acoesDesabilitadas" mat-button color="warn">
                           <mat-icon>delete</mat-icon>
                           Excluir serviço
                         </button>
@@ -167,16 +184,12 @@
         <app-spacer [size]="2"></app-spacer>
 
         <div class="content-actions">
-          <app-outlined-button (onClick)="encerrarOs()" [loading]="encerrandoOs" [disable]="desabilitarAcoes" class="btn-left">
+          <app-outlined-button (onClick)="encerrarOs()" [loading]="encerrandoOs" [disable]="acoesDesabilitadas" class="btn-left">
             {{ encerrandoOs ? "Encerrando..." : "Encerrar" }}
           </app-outlined-button>
 
           <div class="btn-right">
-            <app-outlined-button (onClick)="excluir()" [loading]="excluindo" [disable]="desabilitarAcoes" [color]="'warn'">
-              {{ excluindo ? "Excluindo..." : "Excluir" }}
-            </app-outlined-button>
-
-            <app-elevated-button (onClick)="salvar()" [loading]="salvando" [disable]="desabilitarAcoes">
+            <app-elevated-button (onClick)="salvar()" [loading]="salvando" [disable]="acoesDesabilitadas">
               {{ salvando ? "Salvando..." : "Salvar" }}
             </app-elevated-button>
           </div>

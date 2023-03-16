@@ -35,7 +35,7 @@ export class DetalhesOsComponent implements OnInit {
   public encerrandoOs: boolean = false;
   public excluindo: boolean = false;
   public salvando: boolean = false;
-  public get desabilitarAcoes(): boolean {
+  public get acoesDesabilitadas(): boolean {
     return this.loading || this.encerrandoOs || this.excluindo || this.salvando;
   }
 
