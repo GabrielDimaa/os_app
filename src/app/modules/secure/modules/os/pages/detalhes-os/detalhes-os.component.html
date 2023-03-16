@@ -23,8 +23,8 @@
         <app-spacer [size]="2"></app-spacer>
       </ng-container>
 
-      <div class="content">
-        <form class="column-left" [formGroup]="formGroup">
+      <form class="content" [formGroup]="formGroup" (ngSubmit)="salvar()">
+        <div class="column-left">
           <div appFullWidth>
             <mat-form-field appFullWidth appearance="fill">
               <mat-label>Data de abertura</mat-label>
@@ -103,7 +103,7 @@
             <mat-label>Usuário</mat-label>
             <input [value]="osEntity.usuarioAtendente.nome" [disabled]="true" matInput>
           </mat-form-field>
-        </form>
+        </div>
 
         <div class="column-right">
           <mat-divider class="divider-vertical" [vertical]="true"></mat-divider>
@@ -184,17 +184,17 @@
         <app-spacer [size]="2"></app-spacer>
 
         <div class="content-actions">
-          <app-outlined-button (onClick)="encerrarOs()" [loading]="encerrandoOs" [disable]="acoesDesabilitadas" class="btn-left">
+          <app-outlined-button [type]="'submit'" (onClick)="encerrarOs()" [loading]="encerrandoOs" [disable]="acoesDesabilitadas" class="btn-left">
             {{ encerrandoOs ? "Encerrando..." : "Encerrar" }}
           </app-outlined-button>
 
           <div class="btn-right">
-            <app-elevated-button (onClick)="salvar()" [loading]="salvando" [disable]="acoesDesabilitadas">
+            <app-elevated-button [type]="'submit'" (onClick)="salvar()" [loading]="salvando" [disable]="acoesDesabilitadas">
               {{ salvando ? "Salvando..." : "Salvar" }}
             </app-elevated-button>
           </div>
         </div>
-      </div>
+      </form>
     </mat-card-content>
 
     <mat-card-content *ngIf="loading">
