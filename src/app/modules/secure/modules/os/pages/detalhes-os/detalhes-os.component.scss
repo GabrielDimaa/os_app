@@ -111,9 +111,10 @@ app-detalhes-os {
           justify-content: center;
           align-items: center;
 
-          app-elevated-button {
-            width: 100%;
+          button {
+            background-color: #eee7ff;
             max-width: 400px;
+            width: 100%;
           }
         }
       }

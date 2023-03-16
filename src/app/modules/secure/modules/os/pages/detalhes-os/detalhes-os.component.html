@@ -110,9 +110,9 @@
 
           <div class="column-content">
             <div class="add-equipamento" *ngIf="osEquipamentos.length == 0">
-              <app-elevated-button (click)="adicionarEquipamento()">
+              <button (click)="adicionarEquipamento()" mat-button class="add-servico" color="primary">
                 Adicionar equipamento
-              </app-elevated-button>
+              </button>
             </div>
 
             <mat-chip-list>
