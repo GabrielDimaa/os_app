@@ -124,6 +124,8 @@ export class DetalhesOsComponent implements OnInit {
 
   public async salvar(): Promise<void> {
     try {
+      this.formGroup.markAllAsTouched();
+
       if (this.formGroup.invalid) return;
       this.formGroup.disable();
 
