@@ -5,6 +5,8 @@ import { AuthGuard } from "./guards/auth.guard";
 import { NotFoundComponent } from "./not-found/not-found.component";
 
 const routes: Routes = [
+  ///Importante manter as rotas em "ordem".
+  ///Ex: AuthGuard irá redirecionar o AuthModule caso não tenha token, portanto deve ficar antes do SecureModule.
   {
     path: "auth",
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
