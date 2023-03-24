@@ -1,10 +1,10 @@
 .sized-box {
-  height: 70px;
+  height: 60px;
 }
 
 .scrollable {
   overflow-y: auto;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 60px);
 
   display: flex;
   flex-direction: column;

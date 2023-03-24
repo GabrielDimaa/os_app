@@ -2,6 +2,7 @@ import ClienteEntity from "../entities/cliente.entity";
 import OsSituacaoEntity from "../entities/os-situacao.entity";
 import EquipamentoItemEntity from "../entities/equipamento-item.entity";
 import EquipamentoEntity from "../../equipamento/entities/equipamento.entity";
+import UsuarioEntity from "../entities/usuario.entity";
 
 type OsPaginatorParams = {
   page: number;
@@ -14,6 +15,7 @@ type OsFilterParams = {
   situacao: OsSituacaoEntity | null;
   cliente: ClienteEntity | null;
   codigo: string | null;
+  responsavel: UsuarioEntity | null;
   equipamento: EquipamentoEntity | null;
   identificador: EquipamentoItemEntity | null;
 }

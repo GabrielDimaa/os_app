@@ -60,6 +60,17 @@
               <input matInput [(ngModel)]="filtros.codigo">
             </mat-form-field>
 
+            <mat-form-field appFullWidth appearance="fill">
+              <mat-label>Responsável</mat-label>
+              <input [formControl]="responsavelControl" [(ngModel)]="filtros.responsavel" [matAutocomplete]="autocompleteResponsavel" matInput>
+              <mat-autocomplete #autocompleteResponsavel="matAutocomplete" [displayWith]="displayUsuario">
+                <mat-option *ngFor="let usuario of responsaveisFiltrados | async" [value]="usuario">
+                  {{usuario.nome}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error>{{ getError(responsavelControl) }}</mat-error>
+            </mat-form-field>
+
             <mat-form-field appearance="fill">
               <mat-label>Equipamento</mat-label>
               <mat-select [(value)]="filtros.equipamento">

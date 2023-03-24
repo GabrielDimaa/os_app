@@ -12,7 +12,9 @@ const _routes: Routes = [
     children: [
       {
         path: "",
-        loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
+        // loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
+        redirectTo: "os",
+        pathMatch: 'full'
       },
       {
         path: "os",
