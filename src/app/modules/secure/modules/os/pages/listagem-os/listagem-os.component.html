@@ -2,7 +2,14 @@
   <mat-card>
     <mat-card-content>
       <div [hidden]="loading">
-        <mat-card-title>Ordens de serviço</mat-card-title>
+        <div class="flex-space-between">
+          <mat-card-title>Ordens de serviço</mat-card-title>
+
+          <app-outlined-button (onClick)="criarOs()">
+            <mat-icon>add</mat-icon>
+            Nova OS
+          </app-outlined-button>
+        </div>
 
         <app-spacer [size]="2"></app-spacer>
 
