@@ -4,7 +4,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { OsService } from "../../services/os.service";
 import { SnackbarService } from "../../../../../../shared/components/snackbar/snackbar.service";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, switchMap } from "rxjs";
+import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, startWith, switchMap } from "rxjs";
 import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { MatDateRangePicker } from "@angular/material/datepicker";
 import { OsFilterParams } from "../../params/os.params";
@@ -18,6 +18,7 @@ import OsSituacaoEntity from "../../entities/os-situacao.entity";
 import OsSimpleEntity from "../../entities/os-simple.entity";
 import EquipamentoItemEntity from "../../entities/equipamento-item.entity";
 import EquipamentoEntity from "../../../equipamento/entities/equipamento.entity";
+import UsuarioEntity from "../../entities/usuario.entity";
 
 @Component({
   selector: 'app-listagem-os',
@@ -46,6 +47,11 @@ export class ListagemOsComponent implements AfterViewInit {
   public clienteControl: FormControl = new FormControl();
   public displayCliente = (cliente: ClienteEntity): string => cliente && cliente.nome ? cliente.nome : '';
 
+  public usuarios: UsuarioEntity[] = [];
+  public responsaveisFiltrados!: Observable<UsuarioEntity[]>;
+  public responsavelControl: FormControl = new FormControl();
+  public displayUsuario = (usuario: UsuarioEntity): string => usuario && usuario.nome ? usuario.nome : '';
+
   constructor(
     private osService: OsService,
     private equipamentoService: EquipamentoService,
@@ -63,27 +69,18 @@ export class ListagemOsComponent implements AfterViewInit {
       this.dataSource.sort = this.sort;
       this.cdr.detectChanges();
 
-      await this.buscarOs();
+      const promiseAll = await Promise.all([
+        this.buscarOs(),
+        firstValueFrom(this.equipamentoService.getEquipamentos()),
+        firstValueFrom(this.osService.getOsSituacoes()),
+        firstValueFrom(this.osService.getUsuarios())
+      ]);
 
-      this.equipamentos = await firstValueFrom(this.equipamentoService.getEquipamentos());
-      this.osSituacoes = await firstValueFrom(this.osService.getOsSituacoes());
+      this.equipamentos = promiseAll[1];
+      this.osSituacoes = promiseAll[2];
+      this.usuarios = promiseAll[3];
 
-      this.clientesFiltrados = this.clienteControl.valueChanges
-        .pipe(
-          debounceTime(500),
-          distinctUntilChanged(),
-          filter(value => typeof value !== 'object'),
-          switchMap(value => this.osService.getClientesContainsName(value).pipe(
-            map(clientes => {
-              if (clientes.length === 0) this.clienteControl.setErrors({notFound: true});
-              return clientes;
-            }),
-            catchError(_ => {
-              this.clienteControl.setErrors({notFound: true})
-              return [];
-            })
-          ))
-        );
+      this.controlsValueChanges();
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
@@ -161,5 +158,29 @@ export class ListagemOsComponent implements AfterViewInit {
 
   public getError(control: any): string {
     return getMessageError(control);
+  }
+
+  public controlsValueChanges(): void {
+    this.clientesFiltrados = this.clienteControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        filter(value => typeof value !== 'object'),
+        switchMap(value => this.osService.getClientesContainsName(value).pipe(
+          map(clientes => {
+            if (clientes.length === 0) this.clienteControl.setErrors({notFound: true});
+            return clientes;
+          }),
+          catchError(_ => {
+            this.clienteControl.setErrors({notFound: true})
+            return [];
+          })
+        ))
+      );
+
+    this.responsaveisFiltrados = this.responsavelControl.valueChanges
+      .pipe(
+        map(value => this.usuarios.filter(usuario => usuario.nome.toLowerCase().includes(value?.toLowerCase())))
+      );
   }
 }

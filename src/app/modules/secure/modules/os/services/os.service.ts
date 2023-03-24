@@ -47,6 +47,7 @@ export class OsService {
       if (filterParams.codigo) httpParams = httpParams.set('codigo', filterParams.codigo);
       if (filterParams.situacao) httpParams = httpParams.set('situacao', filterParams.situacao.id);
       if (filterParams.cliente) httpParams = httpParams.set('cliente', filterParams.cliente.nome);
+      if (filterParams.responsavel) httpParams = httpParams.set('responsavel', filterParams.responsavel.nome);
       if (filterParams.equipamento) httpParams = httpParams.set('equipamento', filterParams.equipamento.id);
       if (filterParams.identificador) httpParams = httpParams.set('equipamento_item', filterParams.identificador.id);
     }
