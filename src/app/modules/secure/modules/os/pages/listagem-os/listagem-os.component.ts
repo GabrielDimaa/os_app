@@ -19,6 +19,7 @@ import OsSimpleEntity from "../../entities/os-simple.entity";
 import EquipamentoItemEntity from "../../entities/equipamento-item.entity";
 import EquipamentoEntity from "../../../equipamento/entities/equipamento.entity";
 import UsuarioEntity from "../../entities/usuario.entity";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-listagem-os',
@@ -38,7 +39,7 @@ export class ListagemOsComponent implements AfterViewInit {
   public equipamentos: EquipamentoEntity[] = [];
   public osSituacoes: OsSituacaoEntity[] = [];
 
-  public filtros: OsFilterParams = Object.assign({});
+  public filtros: OsFilterParams = Object.assign({emAberto: false});
 
   public loading: boolean = false;
   public loadingFiltro: boolean = false;
@@ -134,6 +135,10 @@ export class ListagemOsComponent implements AfterViewInit {
 
   public async handlePageEvent(_: PageEvent): Promise<void> {
     await this.filtrar();
+  }
+
+  public onChangeEmAberto(event: MatCheckboxChange): void {
+    if (event.checked) this.filtros.situacao = null;
   }
 
   public get identificadores(): EquipamentoItemEntity[] {

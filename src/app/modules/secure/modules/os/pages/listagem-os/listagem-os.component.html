@@ -14,6 +14,10 @@
         <app-spacer [size]="2"></app-spacer>
 
         <div class="filtros">
+          <mat-checkbox [(ngModel)]="filtros.emAberto" (change)="onChangeEmAberto($event)">Ordens de serviço em aberto</mat-checkbox>
+
+          <app-spacer></app-spacer>
+
           <div class="flex row">
             <mat-form-field class="input-date" appearance="fill">
               <mat-label>Período</mat-label>
@@ -36,7 +40,7 @@
 
             <mat-form-field appearance="fill">
               <mat-label>Situação</mat-label>
-              <mat-select [(value)]="filtros.situacao">
+              <mat-select [(value)]="filtros.situacao" [disabled]="filtros.emAberto">
                 <mat-option [value]="null">Qualquer</mat-option>
                 <mat-option *ngFor="let situacao of osSituacoes" [value]="situacao">
                   {{situacao.descricao}}

@@ -27,6 +27,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatRippleModule } from "@angular/material/core";
 import { MatChipsModule } from "@angular/material/chips"
 import { MatMenuModule } from "@angular/material/menu";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [],
@@ -56,7 +57,8 @@ import { MatMenuModule } from "@angular/material/menu";
     MatAutocompleteModule,
     MatRippleModule,
     MatChipsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatCheckboxModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },

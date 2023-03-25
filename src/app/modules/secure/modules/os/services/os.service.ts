@@ -38,6 +38,7 @@ export class OsService {
       .set('per_page', String(paginatorParams.perPage));
 
     if (filterParams) {
+      if (filterParams.emAberto) httpParams = httpParams.set('situacao_em_aberto', filterParams.emAberto);
       if (filterParams.dataInicial) httpParams = httpParams.set('data_inicial', filterParams.dataInicial.convertToDate().toJSONLocal());
       if (filterParams.dataFinal) {
         const dataFinal = filterParams.dataFinal.convertToDate();

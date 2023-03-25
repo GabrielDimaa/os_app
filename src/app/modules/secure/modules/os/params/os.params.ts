@@ -10,6 +10,7 @@ type OsPaginatorParams = {
 }
 
 type OsFilterParams = {
+  emAberto: boolean;
   dataInicial: string | null;
   dataFinal: string | null;
   situacao: OsSituacaoEntity | null;
