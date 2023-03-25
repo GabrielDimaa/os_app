@@ -14,7 +14,7 @@ app-detalhes-os {
   flex: 1;
 
   mat-card {
-    width: 80%;
+    width: 90%;
     padding: 50px;
   }
 
@@ -23,36 +23,28 @@ app-detalhes-os {
     justify-content: space-between;
   }
 
-  .content {
+  .columns {
     display: flex;
-    flex-wrap: wrap;
 
     .column-left {
       display: flex;
       flex-direction: column;
       align-items: center;
 
+      max-width: 350px;
+      min-width: 200px;
       flex-basis: 20%;
       flex-grow: 1;
 
       .contato {
         display: flex;
-        gap: 14px;
+        flex-wrap: wrap;
+        gap: 0 14px;
 
         .form-field-contatos {
           flex-grow: 1;
           width: 100px !important;
         }
-      }
-
-      .encerrar-os {
-        padding: 4px 0;
-        max-width: 300px;
-
-        border-color: styles.$primary;
-        border-width: 2px;
-
-        font-size: 16px;
       }
     }
 
@@ -135,6 +127,7 @@ app-detalhes-os {
     .btn-left {
       flex-basis: 20%;
       flex-grow: 1;
+      max-width: 350px;
     }
 
     .btn-right {
@@ -146,6 +139,7 @@ app-detalhes-os {
 
       app-outlined-button, app-elevated-button {
         flex-basis: 25%;
+        max-width: 350px;
       }
     }
 
@@ -173,9 +167,22 @@ app-detalhes-os {
     }
   }
 
-  @media only screen and (max-width: 1000px) {
-    .divider-vertical {
-      display: none !important;
-    }
-  }
+  //@media only screen and (max-width: 1000px) {
+  //  .divider-vertical {
+  //    display: none !important;
+  //  }
+  //}
+
+  //@media only screen and (max-width: 1400px) {
+  //  .column-left {
+  //    flex-basis: 20% !important;
+  //    max-width: 200px !important;
+  //    flex-grow: 0 !important;
+  //  }
+  //
+  //  .column-right {
+  //    flex-basis: 80% !important;
+  //    flex-grow: 1 !important;
+  //  }
+  //}
 }
