@@ -98,9 +98,11 @@ export class ListagemOsComponent implements AfterViewInit {
     this.paginator.length = osPaginator.total;
   }
 
-  public async filtrar(): Promise<void> {
+  public async filtrar(pagination: boolean = false): Promise<void> {
     try {
       this.loadingFiltro = true;
+
+      if (!pagination) this.paginator.firstPage();
 
       this.filtros.dataInicial = this.startDateRef.nativeElement.value;
       this.filtros.dataFinal = this.endDateRef.nativeElement.value;
@@ -134,7 +136,7 @@ export class ListagemOsComponent implements AfterViewInit {
   }
 
   public async handlePageEvent(_: PageEvent): Promise<void> {
-    await this.filtrar();
+    await this.filtrar(true);
   }
 
   public onChangeEmAberto(event: MatCheckboxChange): void {
