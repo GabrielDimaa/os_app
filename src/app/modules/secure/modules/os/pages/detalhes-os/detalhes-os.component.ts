@@ -314,11 +314,19 @@ export class DetalhesOsComponent implements OnInit {
 
   public async excluir(): Promise<void> {
     try {
-      this.excluindo = true;
+      const dialog = this.dialog.open<ConfirmacaoDialogComponent, ConfirmacaoDialogData, boolean | undefined | null>(ConfirmacaoDialogComponent, {
+        data: {titulo: "Excluir OS", mensagem: "Deseja realmente excluir esta OS?"},
+      });
 
-      await firstValueFrom(this.osService.excluir(this.osEntity!));
-      this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} excluída!`);
-      await this.router.navigate(['os']);
+      const confirmacao = await firstValueFrom(dialog.afterClosed());
+
+      if (confirmacao === true) {
+        this.excluindo = true;
+
+        await firstValueFrom(this.osService.excluir(this.osEntity!));
+        this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} excluída!`);
+        await this.router.navigate(['os']);
+      }
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
