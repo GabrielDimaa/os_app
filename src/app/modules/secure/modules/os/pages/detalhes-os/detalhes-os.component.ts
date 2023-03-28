@@ -333,4 +333,8 @@ export class DetalhesOsComponent implements OnInit {
       this.excluindo = false;
     }
   }
+
+  public goBack(): void {
+    window.history.back();
+  }
 }

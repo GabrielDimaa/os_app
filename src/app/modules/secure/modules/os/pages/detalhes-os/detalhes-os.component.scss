@@ -18,6 +18,11 @@ app-detalhes-os {
     padding: 50px;
   }
 
+  mat-card-title {
+    display: flex;
+    align-items: center;
+  }
+
   .flex-space-between {
     display: flex;
     justify-content: space-between;

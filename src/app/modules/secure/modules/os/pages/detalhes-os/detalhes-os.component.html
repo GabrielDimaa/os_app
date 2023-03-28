@@ -1,11 +1,16 @@
 <section class="detalhes-os">
   <mat-card *ngIf="loading || osEntity != null">
     <mat-card-content *ngIf="!loading && osEntity != null">
-      <ng-container *ngIf="osEntity.codigo != null">
+      <ng-container>
         <div class="flex-space-between">
-          <mat-card-title>OS {{ osEntity.codigo }}</mat-card-title>
+          <mat-card-title>
+            <button (click)="goBack()" mat-icon-button style="margin-right: 10px;">
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <ng-container *ngIf="osEntity.codigo != null">OS {{ osEntity.codigo }}</ng-container>
+          </mat-card-title>
 
-          <ng-container>
+          <ng-container *ngIf="osEntity.codigo != null">
             <button mat-icon-button [matMenuTriggerFor]="menu">
               <mat-icon>more_vert</mat-icon>
             </button>
@@ -20,7 +25,7 @@
             </mat-menu>
           </ng-container>
         </div>
-        <app-spacer [size]="2"></app-spacer>
+        <app-spacer [size]="1"></app-spacer>
       </ng-container>
 
       <div class="columns">
@@ -200,7 +205,7 @@
     <mat-card-content *ngIf="loading">
       <app-shimmer>
         <div class="title-shimmer"></div>
-        <app-spacer></app-spacer>
+        <app-spacer [size]="2"></app-spacer>
 
         <div class="columns">
           <div class="column-left">
