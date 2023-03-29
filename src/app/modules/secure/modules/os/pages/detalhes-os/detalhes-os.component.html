@@ -4,7 +4,7 @@
       <ng-container>
         <div class="flex-space-between">
           <mat-card-title>
-            <button (click)="goBack()" mat-icon-button style="margin-right: 10px;">
+            <button (click)="goBack()" mat-icon-button style="margin-right: 10px;" [matTooltip]="'Voltar para página anterior'">
               <mat-icon>arrow_back</mat-icon>
             </button>
             <ng-container *ngIf="osEntity.codigo != null">OS {{ osEntity.codigo }}</ng-container>
