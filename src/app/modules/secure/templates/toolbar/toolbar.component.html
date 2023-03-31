@@ -3,8 +3,22 @@
 
   <div class="spacer"></div>
 
-  <button mat-button (click)="logout()">
-    <mat-icon style="padding-right: 8px">logout</mat-icon>
-    Sair
+  <button mat-button [matMenuTriggerFor]="userInfo">
+    {{ usuario?.primeiroNome ?? "" }}
+    <mat-icon style="padding-left: 8px">expand_more</mat-icon>
   </button>
+
+  <mat-menu (click)="$event.stopPropagation();" #userInfo="matMenu">
+    <div (click)="$event.stopPropagation();" mat-menu-item disableRipple class="disable-hover">
+      <mat-icon>account_circle</mat-icon>
+      <span>{{ usuario?.nome ?? "" }}</span>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <button (click)="logout()" mat-menu-item>
+      <mat-icon>logout</mat-icon>
+      <span>Sair</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>

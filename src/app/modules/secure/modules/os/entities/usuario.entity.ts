@@ -10,6 +10,10 @@ export default class UsuarioEntity {
   ) {
   }
 
+  public get primeiroNome(): string {
+    return this.nome.split(" ")[0];
+  }
+
   public toModel(): UsuarioModel {
     return {
       id_usuario: this.id,

@@ -11,3 +11,9 @@ mat-toolbar {
 .spacer {
   flex: 1 1 auto;
 }
+
+.disable-hover:hover {
+  background-color: unset !important;
+  color: inherit !important;
+  cursor: default !important;
+}
