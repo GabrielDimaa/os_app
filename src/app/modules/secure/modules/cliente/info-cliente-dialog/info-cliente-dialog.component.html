@@ -43,8 +43,8 @@
     <p>{{ cliente.email ?? NAO_INFORMADO }}</p>
 
     <span>Fone</span>
-    <div class="fones">
-      <p *ngIf="(cliente.fone?.length ?? 0) == 0">{{ NAO_INFORMADO }}</p>
+    <div *ngIf="(cliente.fone?.length ?? 0) == 0">{{ NAO_INFORMADO }}</div>
+    <div *ngIf="(cliente.fone?.length ?? 0) > 0" class="fones">
       <div *ngFor="let fone of cliente.fone">
         {{ fone }}
       </div>
