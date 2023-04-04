@@ -1,6 +1,6 @@
 import OsSimpleModel from "../models/os-simple.model";
 import OsSituacaoEntity from "./os-situacao.entity";
-import ClienteEntity from "./cliente.entity";
+import ClienteEntity from "../../cliente/entities/cliente.entity";
 import OsEquipamentoItemEntity from "./os-equipamento-item.entity";
 
 export default class OsSimpleEntity {

@@ -1,0 +1,33 @@
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .group {
+    display: flex;
+    flex-direction: column;
+
+    padding: 8px 14px;
+    flex-grow: 1;
+
+    background-color: #eeeeee;
+    border-radius: 4px;
+
+    h3 {
+      font-weight: 600;
+    }
+
+    span {
+      font-weight: 500;
+      color: grey;
+    }
+
+    .fones {
+      padding: 4px 8px;
+
+      border-width: 2px;
+      border-color: grey;
+      border-left-style: solid
+    }
+  }
+}

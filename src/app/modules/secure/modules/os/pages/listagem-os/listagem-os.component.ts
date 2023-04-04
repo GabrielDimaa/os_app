@@ -13,7 +13,7 @@ import { EquipamentoService } from "../../../equipamento/services/equipamento.se
 import { FormControl } from "@angular/forms";
 import { getMessageError } from "../../../../../../shared/validators/validators";
 import { MatOptionSelectionChange } from "@angular/material/core";
-import ClienteEntity from "../../entities/cliente.entity";
+import ClienteEntity from "../../../cliente/entities/cliente.entity";
 import OsSituacaoEntity from "../../entities/os-situacao.entity";
 import OsSimpleEntity from "../../entities/os-simple.entity";
 import EquipamentoItemEntity from "../../entities/equipamento-item.entity";

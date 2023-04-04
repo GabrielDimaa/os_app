@@ -2,7 +2,7 @@ import OsTipoAtendimentoModel from "./os-tipo-atendimento.model";
 import OsSituacaoModel from "./os-situacao.model";
 import UsuarioModel from "./usuario.model";
 import OsEquipamentoItemModel from "./os-equipamento-item.model";
-import ClienteModel from "./cliente.model";
+import ClienteModel from "../../cliente/models/cliente.model";
 
 export default interface OsModel {
   id_os: number | null;

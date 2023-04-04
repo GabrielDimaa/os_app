@@ -1,5 +1,5 @@
 import OsSituacaoModel from "./os-situacao.model";
-import ClienteModel from "./cliente.model";
+import ClienteModel from "../../cliente/models/cliente.model";
 import OsEquipamentoItemModel from "./os-equipamento-item.model";
 
 export default interface OsSimpleModel {

@@ -7,6 +7,7 @@ import { ListagemOsComponent } from './pages/listagem-os/listagem-os.component';
 import { DetalhesOsComponent } from './pages/detalhes-os/detalhes-os.component';
 import { EquipamentoModule } from "../equipamento/equipamento.module";
 import { ServicoModule } from "../servico/servico.module";
+import { ClienteModule } from "../cliente/cliente.module";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ServicoModule } from "../servico/servico.module";
     OsRoutingModule,
     SharedModule,
     EquipamentoModule,
-    ServicoModule
+    ServicoModule,
+    ClienteModule
   ]
 })
 export class OsModule {

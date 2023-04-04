@@ -1,6 +1,6 @@
 import OsTipoAtendimentoEntity from "./os-tipo-atendimento.entity";
 import OsSituacaoEntity from "./os-situacao.entity";
-import ClienteEntity from "./cliente.entity";
+import ClienteEntity from "../../cliente/entities/cliente.entity";
 import OsEquipamentoItemEntity from "./os-equipamento-item.entity";
 import UsuarioEntity from "./usuario.entity";
 import OsModel from "../models/os.model";

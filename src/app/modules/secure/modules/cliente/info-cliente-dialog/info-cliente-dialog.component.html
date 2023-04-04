@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>{{ cliente.nome }}</h2>
+
+<mat-dialog-content class="content">
+  <div class="group">
+    <h3>Geral</h3>
+
+    <ng-container *ngIf="!cliente.pessoaFisica">
+      <span>Razão social</span>
+      <p>{{ cliente.razaoSocial ?? NAO_INFORMADO }}</p>
+    </ng-container>
+
+    <ng-container *ngIf="cliente.pessoaFisica">
+      <span>CPF</span>
+      <p>{{ cliente.cpf ?? NAO_INFORMADO }}</p>
+    </ng-container>
+
+    <ng-container *ngIf="!cliente.pessoaFisica">
+      <span>CNPJ</span>
+      <p>{{ cliente.cnpj ?? NAO_INFORMADO }}</p>
+
+      <span>Inscrição Estadual</span>
+      <p>{{ cliente.inscricaoEstadual ?? NAO_INFORMADO }}</p>
+    </ng-container>
+  </div>
+
+  <div class="group">
+    <h3>Endereço</h3>
+
+    <span>CEP</span>
+    <p>{{ cliente.cep ?? NAO_INFORMADO }}</p>
+
+    <span>Cidade</span>
+    <p>{{ cliente.cidade.descricao }}</p>
+
+    <span>Endereço completo</span>
+    <p>{{ cliente.temEndereco ? cliente.enderecoCompleto : NAO_INFORMADO }}</p>
+  </div>
+
+  <div class="group">
+    <h3>Contato</h3>
+
+    <span>E-mail</span>
+    <p>{{ cliente.email ?? NAO_INFORMADO }}</p>
+
+    <span>Fone</span>
+    <div class="fones">
+      <p *ngIf="(cliente.fone?.length ?? 0) == 0">{{ NAO_INFORMADO }}</p>
+      <div *ngFor="let fone of cliente.fone">
+        {{ fone }}
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="true">Voltar</button>
+</mat-dialog-actions>

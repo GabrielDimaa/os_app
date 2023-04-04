@@ -41,6 +41,14 @@ app-detalhes-os {
       flex-basis: 20%;
       flex-grow: 1;
 
+      .cliente-sufix-icon {
+        color: grey;
+      }
+
+      .cliente-sufix-icon-focused {
+        color: styles.$primary;
+      }
+
       .contato {
         display: flex;
         flex-wrap: wrap;

@@ -16,11 +16,13 @@ import OsEntity from "../../entities/os.entity";
 import OsSituacaoEntity from "../../entities/os-situacao.entity";
 import OsTipoAtendimentoEntity from "../../entities/os-tipo-atendimento.entity";
 import UsuarioEntity from "../../entities/usuario.entity";
-import ClienteEntity from "../../entities/cliente.entity";
+import ClienteEntity from "../../../cliente/entities/cliente.entity";
 import ServicoEntity from "../../../servico/entities/servico.entity";
 import EquipamentoEntity from "../../../equipamento/entities/equipamento.entity";
 import OsEquipamentoItemEntity from "../../entities/os-equipamento-item.entity";
 import OsServicoEntity from "../../entities/os-servico.entity";
+import { InfoClienteDialogComponent } from "../../../cliente/info-cliente-dialog/info-cliente-dialog.component";
+import { MatAutocomplete } from "@angular/material/autocomplete";
 
 @Component({
   selector: 'app-detalhes-os',
@@ -30,11 +32,13 @@ import OsServicoEntity from "../../entities/os-servico.entity";
 })
 export class DetalhesOsComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
+  @ViewChild('autocompleteCliente') autocompleteCliente!: MatAutocomplete;
 
   public loading: boolean = false;
   public encerrandoOs: boolean = false;
   public excluindo: boolean = false;
   public salvando: boolean = false;
+
   public get acoesDesabilitadas(): boolean {
     return this.loading || this.encerrandoOs || this.excluindo || this.salvando;
   }
@@ -161,7 +165,7 @@ export class DetalhesOsComponent implements OnInit {
       //Seta o primeiro já que as OS internas só terão um equipamento.
       this.onChipEquipamento(this.osEntity.equipamentosItens[0]);
 
-      this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} salva com sucesso!`);
+      this.snackbarService.showSuccess(`OS ${ this.osEntity!.codigo } salva com sucesso!`);
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
@@ -189,11 +193,11 @@ export class DetalhesOsComponent implements OnInit {
         filter(value => typeof value !== 'object'),
         switchMap(value => this.osService.getClientesContainsName(value).pipe(
           map(clientes => {
-            if (clientes.length === 0) this.formGroup.controls['cliente'].setErrors({notFound: true});
+            if (clientes.length === 0) this.formGroup.controls['cliente'].setErrors({ notFound: true });
             return clientes;
           }),
           catchError(_ => {
-            this.formGroup.controls['cliente'].setErrors({notFound: true})
+            this.formGroup.controls['cliente'].setErrors({ notFound: true })
             return [];
           })
         ))
@@ -248,7 +252,7 @@ export class DetalhesOsComponent implements OnInit {
   public async excluirEquipamento(equipamento: OsEquipamentoItemEntity): Promise<void> {
     if (this.osEntity) {
       const dialog = this.dialog.open<ConfirmacaoDialogComponent, ConfirmacaoDialogData, boolean | undefined | null>(ConfirmacaoDialogComponent, {
-        data: {titulo: "Excluir equipamento", mensagem: "Deseja realmente excluir este equipamento?"},
+        data: { titulo: "Excluir equipamento", mensagem: "Deseja realmente excluir este equipamento?" },
       });
 
       const confirmacao = await firstValueFrom(dialog.afterClosed());
@@ -315,7 +319,7 @@ export class DetalhesOsComponent implements OnInit {
   public async excluir(): Promise<void> {
     try {
       const dialog = this.dialog.open<ConfirmacaoDialogComponent, ConfirmacaoDialogData, boolean | undefined | null>(ConfirmacaoDialogComponent, {
-        data: {titulo: "Excluir OS", mensagem: "Deseja realmente excluir esta OS?"},
+        data: { titulo: "Excluir OS", mensagem: "Deseja realmente excluir esta OS?" },
       });
 
       const confirmacao = await firstValueFrom(dialog.afterClosed());
@@ -324,7 +328,7 @@ export class DetalhesOsComponent implements OnInit {
         this.excluindo = true;
 
         await firstValueFrom(this.osService.excluir(this.osEntity!));
-        this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} excluída!`);
+        this.snackbarService.showSuccess(`OS ${ this.osEntity!.codigo } excluída!`);
         await this.router.navigate(['os']);
       }
     } catch (e) {
@@ -332,6 +336,16 @@ export class DetalhesOsComponent implements OnInit {
     } finally {
       this.excluindo = false;
     }
+  }
+
+
+  public get clienteSelecionado() {
+    const cliente = this.formGroup.controls['cliente'].value;
+    return typeof cliente !== 'object' ? null : cliente;
+  }
+
+  public async visualizarCliente(): Promise<void> {
+    this.dialog.open(InfoClienteDialogComponent, { data: this.clienteSelecionado, width: '1200px' });
   }
 
   public goBack(): void {

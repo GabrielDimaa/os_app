@@ -1,4 +1,4 @@
-import ClienteEntity from "../entities/cliente.entity";
+import ClienteEntity from "../../cliente/entities/cliente.entity";
 import OsSituacaoEntity from "../entities/os-situacao.entity";
 import EquipamentoItemEntity from "../entities/equipamento-item.entity";
 import EquipamentoEntity from "../../equipamento/entities/equipamento.entity";
