@@ -12,8 +12,8 @@ import { SnackbarService } from "./components/snackbar/snackbar.service";
 import { LoadingComponent } from './components/loading/spinner/loading.component';
 import { LoadingService } from "./components/loading/spinner/loading.service";
 import { ShimmerComponent } from './components/loading/shimmer/shimmer.component';
-import { DataMaskDirective } from './components/form-field/data-mask.directive';
-import { PhoneMaskDirective } from './components/form-field/phone-mask.directive';
+import { DataMaskDirective } from './directives/data-mask.directive';
+import { PhoneMaskDirective } from './directives/phone-mask.directive';
 import { ConfirmacaoDialogComponent } from './components/dialogs/confirmacao-dialog/confirmacao-dialog.component';
 
 @NgModule({
@@ -27,7 +27,7 @@ import { ConfirmacaoDialogComponent } from './components/dialogs/confirmacao-dia
     DataMaskDirective,
     PhoneMaskDirective,
     ConfirmacaoDialogComponent,
-    OutlinedButtonComponent,
+    OutlinedButtonComponent
   ],
   imports: [
     CommonModule,
