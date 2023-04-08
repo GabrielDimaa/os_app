@@ -19,6 +19,7 @@ export default class ClienteEntity {
     public fone: string[],
     public email: string | null,
     public apelido: string | null,
+    public obs: string | null,
     public inativo: boolean
   ) {
   }
@@ -56,6 +57,7 @@ export default class ClienteEntity {
       fone: JSON.stringify(this.fone).replace("[", "{").replace("]", "}"),
       email: this.email,
       apelido: this.apelido,
+      obs: this.obs,
       inativo: this.inativo
     };
   }
@@ -78,6 +80,7 @@ export default class ClienteEntity {
       model.fone?.slice(1, -1).replace(new RegExp('\\\"', 'g'), "").split(",") ?? [],
       model.email,
       model.apelido,
+      model.obs,
       model.inativo
     );
   }

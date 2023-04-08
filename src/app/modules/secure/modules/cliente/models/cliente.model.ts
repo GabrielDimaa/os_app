@@ -17,5 +17,6 @@ export default interface ClienteModel {
   fone: string | null;
   email: string | null;
   apelido: string | null;
+  obs: string | null;
   inativo: boolean;
 }

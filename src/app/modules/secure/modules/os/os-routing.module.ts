@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        component: ListagemOsComponent,
+        component: ListagemOsComponent
       },
       {
         path: ":codigo",
