@@ -118,6 +118,7 @@ export class DetalhesOsComponent implements OnInit {
       if (this.osEntity.equipamentosItens.length > 0)
         this.equipamentoSelecionado = this.osEntity.equipamentosItens[0];
 
+      setTimeout(() => this.stepper.selectedIndex = this.stepper.steps.length - 1);
       this.createForm();
     } catch (e) {
       this.snackbarService.showError(e);
