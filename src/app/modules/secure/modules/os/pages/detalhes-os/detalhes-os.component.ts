@@ -275,7 +275,7 @@ export class DetalhesOsComponent implements OnInit {
           null,
           equipamento.id,
           "1",
-          null,
+          0,
           null,
           new Date(),
           servico,
