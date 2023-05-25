@@ -9,7 +9,7 @@ RUN npm ci
 
 COPY . .
 
-RUN npm install -g @angular/cli && npm install && npm run build
+RUN npm install -g @angular/cli && yarn && npm install && npm run build
 
 # Estágio de produção
 FROM nginx:1.25.0-alpine

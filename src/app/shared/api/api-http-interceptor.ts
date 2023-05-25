@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { catchError, Observable, switchMap, throwError } from "rxjs";
-import { KEY_TOKEN } from "../storage/keys/keys";
-import { AuthService } from "../../modules/auth/services/auth.service";
-import { Router } from "@angular/router";
+import {Injectable} from '@angular/core';
+import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
+import {catchError, Observable, switchMap, throwError} from "rxjs";
+import {KEY_TOKEN} from "../storage/keys/keys";
+import {AuthService} from "../../modules/auth/services/auth.service";
+import {Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Injectable()
 export class ApiHttpInterceptor implements HttpInterceptor {
@@ -13,7 +14,6 @@ export class ApiHttpInterceptor implements HttpInterceptor {
   ) {
   }
 
-  private BASE_URL: string = "http://localhost:8000/api";
   private NUMERO_TENTATIVAS_REFRESH_TOKEN: number = 0;
   private MAX_TENTATIVAS_REFRESH_TOKEN: number = 2;
 
@@ -21,7 +21,7 @@ export class ApiHttpInterceptor implements HttpInterceptor {
     let token = this.getToken();
 
     let reqClone = req.clone({
-      url: `${ this.BASE_URL }/${ req.url }`,
+      url: `${environment.apiUrl}/${req.url}`,
       setHeaders: this.setHeaders()
     });
 
@@ -61,7 +61,7 @@ export class ApiHttpInterceptor implements HttpInterceptor {
 
     return {
       secret: "eThWmZq4t7w!z%C*F-JaNcRfUjXn2r5u8x/A?D(G+KbPeSgVkYp3s6v9y$B&E)H@",
-      Authorization: token ? `Bearer ${ token }` : ""
+      Authorization: token ? `Bearer ${token}` : ""
     };
   }
 }
