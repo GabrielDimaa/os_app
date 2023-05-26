@@ -15,6 +15,8 @@ RUN npm install -g @angular/cli && yarn && npm install && npm run build
 FROM nginx:1.25.0-alpine
 
 RUN rm /usr/share/nginx/html/index.html
+
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist/link_os /usr/share/nginx/html
 
 EXPOSE 80
