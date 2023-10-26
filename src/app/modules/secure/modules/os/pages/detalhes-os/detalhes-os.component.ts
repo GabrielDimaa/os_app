@@ -82,27 +82,21 @@ export class DetalhesOsComponent implements OnInit {
       this.loading = true;
 
       this.codigoOs = +this.route.snapshot.params['codigo'];
-      if (!isNaN(this.codigoOs)) {
-        this.osEntity = await firstValueFrom(this.osService.getByCodigo(this.codigoOs));
-      } else {
-        if (this.route.snapshot.params['codigo'] != "novo") return;
-      }
+      if (isNaN(this.codigoOs) && this.route.snapshot.params['codigo'] != "novo") return;
 
       const promiseAll = await Promise.all([
-        firstValueFrom(this.osService.getOsSituacoes()),
-        firstValueFrom(this.osService.getOsTiposAtendimento()),
+        firstValueFrom(this.osService.getByCodigo(this.codigoOs)),
         firstValueFrom(this.osService.getOsSituacoes()),
         firstValueFrom(this.osService.getOsTiposAtendimento()),
         firstValueFrom(this.servicoService.getServicos()),
         firstValueFrom(this.osService.getUsuarios())
       ]);
 
-      this.osSituacoes = promiseAll[0];
-      this.osTiposAtendimento = promiseAll[1];
-      this.osSituacoes = promiseAll[2];
-      this.osTiposAtendimento = promiseAll[3];
-      this.servicos = promiseAll[4];
-      this.usuarios = promiseAll[5];
+      this.osEntity = promiseAll[0];
+      this.osSituacoes = promiseAll[1];
+      this.osTiposAtendimento = promiseAll[2];
+      this.servicos = promiseAll[3];
+      this.usuarios = promiseAll[4];
 
       const usuarioLogado: UsuarioEntity | null = this.authService.getUsuarioLogado();
       const usuarioCarregado = this.usuarios.find(u => u.id === usuarioLogado?.id);
