@@ -1,17 +1,35 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
-import { catchError, debounceTime, distinctUntilChanged, filter, firstValueFrom, map, Observable, startWith, switchMap } from "rxjs";
-import { SnackbarService } from "../../../../../../shared/components/snackbar/snackbar.service";
-import { OsService } from "../../services/os.service";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { getMessageError } from "../../../../../../shared/validators/validators";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { MatStepper } from "@angular/material/stepper";
-import { AuthService } from "../../../../../auth/services/auth.service";
-import { ListagemServicosDialogComponent } from "../../../servico/components/listagem-servicos-dialog/listagem-servicos-dialog.component";
-import { ListagemEquipamentosDialogComponent, ListagemEquipamentosParams } from "../../../equipamento/components/listagem-equipamentos-dialog/listagem-equipamentos-dialog.component";
-import { ServicoService } from "../../../servico/services/servico.service";
-import { ConfirmacaoDialogComponent, ConfirmacaoDialogData } from "../../../../../../shared/components/dialogs/confirmacao-dialog/confirmacao-dialog.component";
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  firstValueFrom,
+  map,
+  Observable,
+  startWith,
+  switchMap
+} from "rxjs";
+import {SnackbarService} from "../../../../../../shared/components/snackbar/snackbar.service";
+import {OsService} from "../../services/os.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {getMessageError} from "../../../../../../shared/validators/validators";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {MatStepper} from "@angular/material/stepper";
+import {AuthService} from "../../../../../auth/services/auth.service";
+import {
+  ListagemServicosDialogComponent
+} from "../../../servico/components/listagem-servicos-dialog/listagem-servicos-dialog.component";
+import {
+  ListagemEquipamentosDialogComponent,
+  ListagemEquipamentosParams
+} from "../../../equipamento/components/listagem-equipamentos-dialog/listagem-equipamentos-dialog.component";
+import {ServicoService} from "../../../servico/services/servico.service";
+import {
+  ConfirmacaoDialogComponent,
+  ConfirmacaoDialogData
+} from "../../../../../../shared/components/dialogs/confirmacao-dialog/confirmacao-dialog.component";
 import OsEntity from "../../entities/os.entity";
 import OsSituacaoEntity from "../../entities/os-situacao.entity";
 import OsTipoAtendimentoEntity from "../../entities/os-tipo-atendimento.entity";
@@ -21,8 +39,8 @@ import ServicoEntity from "../../../servico/entities/servico.entity";
 import EquipamentoEntity from "../../../equipamento/entities/equipamento.entity";
 import OsEquipamentoItemEntity from "../../entities/os-equipamento-item.entity";
 import OsServicoEntity from "../../entities/os-servico.entity";
-import { InfoClienteDialogComponent } from "../../../cliente/info-cliente-dialog/info-cliente-dialog.component";
-import { MatAutocomplete } from "@angular/material/autocomplete";
+import {InfoClienteDialogComponent} from "../../../cliente/info-cliente-dialog/info-cliente-dialog.component";
+import {MatAutocomplete} from "@angular/material/autocomplete";
 
 @Component({
   selector: 'app-detalhes-os',
@@ -84,19 +102,33 @@ export class DetalhesOsComponent implements OnInit {
       this.codigoOs = +this.route.snapshot.params['codigo'];
       if (isNaN(this.codigoOs) && this.route.snapshot.params['codigo'] != "novo") return;
 
-      const promiseAll = await Promise.all([
-        firstValueFrom(this.osService.getByCodigo(this.codigoOs)),
-        firstValueFrom(this.osService.getOsSituacoes()),
-        firstValueFrom(this.osService.getOsTiposAtendimento()),
-        firstValueFrom(this.servicoService.getServicos()),
-        firstValueFrom(this.osService.getUsuarios())
-      ]);
+      const promises = new Map<String, Promise<Awaited<any>>>()
 
-      this.osEntity = promiseAll[0];
-      this.osSituacoes = promiseAll[1];
-      this.osTiposAtendimento = promiseAll[2];
-      this.servicos = promiseAll[3];
-      this.usuarios = promiseAll[4];
+      if (!isNaN(this.codigoOs))
+        promises.set('osEntity', firstValueFrom(this.osService.getByCodigo(this.codigoOs)))
+
+      promises.set('osSituacoes', firstValueFrom(this.osService.getOsSituacoes()))
+      promises.set('osTiposAtendimento', firstValueFrom(this.osService.getOsTiposAtendimento()))
+      promises.set('servicos', firstValueFrom(this.servicoService.getServicos()))
+      promises.set('usuarios', firstValueFrom(this.osService.getUsuarios()))
+
+      const indexedPromises = Array.from(promises.keys())
+      const promiseAll = await Promise.all(promises.values());
+
+      if (promises.has('osEntity'))
+        this.osEntity = promiseAll[indexedPromises.indexOf('osEntity')]
+
+      if (promises.has('osSituacoes'))
+        this.osSituacoes = promiseAll[indexedPromises.indexOf('osSituacoes')]
+
+      if (promises.has('osTiposAtendimento'))
+        this.osTiposAtendimento = promiseAll[indexedPromises.indexOf('osTiposAtendimento')]
+
+      if (promises.has('servicos'))
+        this.servicos = promiseAll[indexedPromises.indexOf('servicos')]
+
+      if (promises.has('usuarios'))
+        this.usuarios = promiseAll[indexedPromises.indexOf('usuarios')]
 
       const usuarioLogado: UsuarioEntity | null = this.authService.getUsuarioLogado();
       const usuarioCarregado = this.usuarios.find(u => u.id === usuarioLogado?.id);
@@ -160,7 +192,7 @@ export class DetalhesOsComponent implements OnInit {
       //Seta o primeiro já que as OS internas só terão um equipamento.
       this.onChipEquipamento(this.osEntity.equipamentosItens[0]);
 
-      this.snackbarService.showSuccess(`OS ${ this.osEntity!.codigo } salva com sucesso!`);
+      this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} salva com sucesso!`);
     } catch (e) {
       this.snackbarService.showError(e);
     } finally {
@@ -188,11 +220,11 @@ export class DetalhesOsComponent implements OnInit {
         filter(value => typeof value !== 'object'),
         switchMap(value => this.osService.getClientesContainsName(value).pipe(
           map(clientes => {
-            if (clientes.length === 0) this.formGroup.controls['cliente'].setErrors({ notFound: true });
+            if (clientes.length === 0) this.formGroup.controls['cliente'].setErrors({notFound: true});
             return clientes;
           }),
           catchError(_ => {
-            this.formGroup.controls['cliente'].setErrors({ notFound: true })
+            this.formGroup.controls['cliente'].setErrors({notFound: true})
             return [];
           })
         ))
@@ -247,7 +279,7 @@ export class DetalhesOsComponent implements OnInit {
   public async excluirEquipamento(equipamento: OsEquipamentoItemEntity): Promise<void> {
     if (this.osEntity) {
       const dialog = this.dialog.open<ConfirmacaoDialogComponent, ConfirmacaoDialogData, boolean | undefined | null>(ConfirmacaoDialogComponent, {
-        data: { titulo: "Excluir equipamento", mensagem: "Deseja realmente excluir este equipamento?" },
+        data: {titulo: "Excluir equipamento", mensagem: "Deseja realmente excluir este equipamento?"},
       });
 
       const confirmacao = await firstValueFrom(dialog.afterClosed());
@@ -314,7 +346,7 @@ export class DetalhesOsComponent implements OnInit {
   public async excluir(): Promise<void> {
     try {
       const dialog = this.dialog.open<ConfirmacaoDialogComponent, ConfirmacaoDialogData, boolean | undefined | null>(ConfirmacaoDialogComponent, {
-        data: { titulo: "Excluir OS", mensagem: "Deseja realmente excluir esta OS?" },
+        data: {titulo: "Excluir OS", mensagem: "Deseja realmente excluir esta OS?"},
       });
 
       const confirmacao = await firstValueFrom(dialog.afterClosed());
@@ -323,7 +355,7 @@ export class DetalhesOsComponent implements OnInit {
         this.excluindo = true;
 
         await firstValueFrom(this.osService.excluir(this.osEntity!));
-        this.snackbarService.showSuccess(`OS ${ this.osEntity!.codigo } excluída!`);
+        this.snackbarService.showSuccess(`OS ${this.osEntity!.codigo} excluída!`);
         await this.router.navigate(['os']);
       }
     } catch (e) {
@@ -340,7 +372,7 @@ export class DetalhesOsComponent implements OnInit {
   }
 
   public async visualizarCliente(): Promise<void> {
-    this.dialog.open(InfoClienteDialogComponent, { data: this.clienteSelecionado, width: '1200px' });
+    this.dialog.open(InfoClienteDialogComponent, {data: this.clienteSelecionado, width: '1200px'});
   }
 
   public goBack(): void {
