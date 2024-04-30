@@ -1,0 +1,22 @@
+@use "./src/assets/scss/mixins";
+
+button {
+  padding: 4px 8px;
+  font-size: 15px !important;
+  border-width: 2px;
+
+  .button-content {
+    @include mixins.display-center;
+    gap: 12px;
+  }
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dialog-content {
+  width: 60vw;
+  max-width: 700px;
+}

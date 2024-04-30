@@ -15,7 +15,7 @@ import { ApiHttpInterceptor } from "./shared/api/api-http-interceptor";
 @NgModule({
   declarations: [
     AppComponent,
-    NotFoundComponent
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

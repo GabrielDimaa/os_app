@@ -11,16 +11,23 @@
           </mat-card-title>
 
           <ng-container *ngIf="osEntity.codigo != null">
-            <button mat-icon-button [matMenuTriggerFor]="menu">
+            <button mat-icon-button [matMenuTriggerFor]="menu" [matTooltip]="'Opções'">
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button (click)="excluir()" [disabled]="acoesDesabilitadas" mat-menu-item style="display: flex; justify-content: space-between; align-items: center;">
+              <button (click)="excluir()" [disabled]="acoesDesabilitadas" mat-menu-item style="display: flex; align-items: center; justify-content: start;">
                 <div>
                   <mat-spinner *ngIf="excluindo" [diameter]="22" [color]="'primary'" style="margin-right: 14px;"></mat-spinner>
                   <mat-icon *ngIf="!excluindo">delete</mat-icon>
                 </div>
                 <span>Excluir OS</span>
+              </button>
+              <button (click)="criarTarefaEiti()" [disabled]="acoesDesabilitadas" mat-menu-item style="display: flex; align-items: center; justify-content: start;">
+                <div style="display: flex; align-items: center; margin-right: 14px;">
+                  <mat-spinner *ngIf="criandoTarefaEiti" [diameter]="22" [color]="'primary'"></mat-spinner>
+                  <img *ngIf="!criandoTarefaEiti" src="/assets/img/eiti_logo.png" width="22" height="22" alt="image">
+                </div>
+                <span>Criar tarefa</span>
               </button>
             </mat-menu>
           </ng-container>

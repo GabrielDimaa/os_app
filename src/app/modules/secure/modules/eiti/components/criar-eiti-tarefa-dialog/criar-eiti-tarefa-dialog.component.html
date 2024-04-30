@@ -1,0 +1,35 @@
+<div class="flex-space-between">
+  <h1 mat-dialog-title>Criar tarefa</h1>
+  <img src="/assets/img/eiti_logo.png" width="22" height="22" alt="image">
+</div>
+
+<mat-dialog-content class="dialog-content">
+  <form appFullWidth class="flex-column" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <mat-form-field appFullWidth appearance="fill">
+      <mat-label>Título</mat-label>
+      <input [formControlName]="'titulo'" matInput #input maxlength="80">
+      <mat-hint align="end">{{input.value.length}}/80</mat-hint>
+      <mat-error>{{ getError(formGroup.get('titulo')) }}</mat-error>
+    </mat-form-field>
+
+    <app-spacer></app-spacer>
+
+    <mat-form-field appFullWidth appearance="fill">
+      <mat-label>Descrição</mat-label>
+      <textarea [formControlName]="'descricao'" rows="10" matInput></textarea>
+      <mat-error>{{ getError(formGroup.get('descricao')) }}</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [disabled]="criandoTarefa" [mat-dialog-close]="null">Cancelar</button>
+
+  <button mat-button (click)="onSubmit()" [disabled]="criandoTarefa">
+    <div class="button-content">
+      <mat-spinner *ngIf="criandoTarefa" [diameter]="20" [color]="'primary'"></mat-spinner>
+      {{criandoTarefa ? "Salvando..." : "Salvar"}}
+    </div>
+  </button>
+</mat-dialog-actions>
+

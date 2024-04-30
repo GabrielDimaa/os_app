@@ -8,6 +8,7 @@ import { DetalhesOsComponent } from './pages/detalhes-os/detalhes-os.component';
 import { EquipamentoModule } from "../equipamento/equipamento.module";
 import { ServicoModule } from "../servico/servico.module";
 import { ClienteModule } from "../cliente/cliente.module";
+import { EitiModule } from "../eiti/eiti_module";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ClienteModule } from "../cliente/cliente.module";
     SharedModule,
     EquipamentoModule,
     ServicoModule,
-    ClienteModule
+    ClienteModule,
+    EitiModule
   ]
 })
 export class OsModule {
