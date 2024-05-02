@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
-import {catchError, Observable, switchMap, throwError} from "rxjs";
-import {KEY_TOKEN} from "../storage/keys/keys";
-import {AuthService} from "../../modules/auth/services/auth.service";
-import {Router} from "@angular/router";
-import {environment} from "../../../environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
+import { catchError, Observable, switchMap, throwError } from "rxjs";
+import { KEY_TOKEN } from "../storage/keys/keys";
+import { AuthService } from "../../modules/auth/services/auth.service";
+import { Router } from "@angular/router";
+import { environment } from "../../../environments/environment";
 
 @Injectable()
 export class ApiHttpInterceptor implements HttpInterceptor {
@@ -13,9 +13,6 @@ export class ApiHttpInterceptor implements HttpInterceptor {
     private router: Router
   ) {
   }
-
-  private NUMERO_TENTATIVAS_REFRESH_TOKEN: number = 0;
-  private MAX_TENTATIVAS_REFRESH_TOKEN: number = 2;
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let token = this.getToken();
@@ -28,9 +25,7 @@ export class ApiHttpInterceptor implements HttpInterceptor {
     return next.handle(reqClone)
       .pipe(catchError(err => {
         if (err.status === 401) {
-          if (token && this.NUMERO_TENTATIVAS_REFRESH_TOKEN < this.MAX_TENTATIVAS_REFRESH_TOKEN) {
-            this.NUMERO_TENTATIVAS_REFRESH_TOKEN++;
-
+          if (token) {
             return this.refreshToken().pipe(
               switchMap(() => {
                 reqClone = reqClone.clone({
