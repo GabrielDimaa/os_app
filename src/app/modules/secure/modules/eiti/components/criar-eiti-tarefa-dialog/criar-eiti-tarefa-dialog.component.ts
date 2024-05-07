@@ -60,8 +60,8 @@ export class CriarEitiTarefaDialogComponent implements OnInit {
       const tarefaEiti = new TarefaEitiEntity(
         this.os!.codigo!,
         this.equipamentoSelecionado.equipamentoItem.equipamento!.descricao,
-        formData.titulo,
-        formData.descricao,
+        formData.titulo.charAt(0).toUpperCase() + formData.titulo.slice(1).toLowerCase(),
+        formData.descricao.charAt(0).toUpperCase() + formData.descricao.slice(1).toLowerCase()
       );
 
       await firstValueFrom(this.service.save(tarefaEiti));
