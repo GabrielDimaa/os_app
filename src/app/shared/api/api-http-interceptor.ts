@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { catchError, Observable, switchMap, throwError } from "rxjs";
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, catchError, filter, finalize, map, Observable, switchMap, take, throwError } from "rxjs";
 import { KEY_TOKEN } from "../storage/keys/keys";
 import { AuthService } from "../../modules/auth/services/auth.service";
 import { Router } from "@angular/router";
@@ -14,6 +14,8 @@ export class ApiHttpInterceptor implements HttpInterceptor {
   ) {
   }
 
+  private _refreshingToken: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false);
+
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let token = this.getToken();
 
@@ -23,28 +25,47 @@ export class ApiHttpInterceptor implements HttpInterceptor {
     });
 
     return next.handle(reqClone)
-      .pipe(catchError(err => {
-        if (err.status === 401) {
-          if (token) {
-            return this.refreshToken().pipe(
-              switchMap(() => {
-                reqClone = reqClone.clone({
-                  setHeaders: this.setHeaders()
-                });
+      .pipe(
+        catchError(err => {
+          if (err.status === 401) {
+            if (token) {
+              return this.refreshToken()
+                .pipe(
+                  switchMap(() => {
+                    reqClone = reqClone.clone({
+                      setHeaders: this.setHeaders()
+                    });
 
-                return next.handle(reqClone);
-              })
-            );
-          } else {
-            this.router.navigate(['auth/login']).then();
+                    return next.handle(reqClone);
+                  })
+              );
+            } else {
+              this.router.navigate(['auth/login']).then();
+            }
           }
-        }
-        return throwError(err);
-      }));
+
+          return throwError(err);
+        })
+      );
   }
 
   public refreshToken(): Observable<void> {
-    return this.authService.refreshToken();
+    if (!this._refreshingToken.value) {
+      this._refreshingToken.next(true);
+
+      return this.authService.refreshToken()
+        .pipe(
+          catchError((err) => throwError(err)),
+          finalize(() => this._refreshingToken.next(false))
+        );
+    } else {
+      return this._refreshingToken
+        .pipe(
+          filter(v => !v.valueOf()),
+          map(_ => {}),
+          take(1)
+        );
+    }
   }
 
   private getToken(): string | null {
