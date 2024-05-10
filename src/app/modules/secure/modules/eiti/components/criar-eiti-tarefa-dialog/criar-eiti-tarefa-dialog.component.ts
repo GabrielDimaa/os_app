@@ -1,13 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { EitiService } from "../../services/eiti_service";
-import { getMessageError } from "../../../../../../shared/validators/validators";
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {EitiService} from "../../services/eiti_service";
+import {getMessageError} from "../../../../../../shared/validators/validators";
 import OsEntity from "../../../os/entities/os.entity";
 import TarefaEitiEntity from "../../entities/eiti_tarefa.entity";
-import { firstValueFrom } from "rxjs";
+import {firstValueFrom} from "rxjs";
 import OsEquipamentoItemEntity from "../../../os/entities/os-equipamento-item.entity";
-import { SnackbarService } from "../../../../../../shared/components/snackbar/snackbar.service";
+import {SnackbarService} from "../../../../../../shared/components/snackbar/snackbar.service";
 
 @Component({
   selector: 'app-criar-eiti-tarefa-dialog',
@@ -57,11 +57,14 @@ export class CriarEitiTarefaDialogComponent implements OnInit {
       if (!this.equipamentoSelecionado.equipamentoItem.equipamento)
         throw Error("Informe um equipamento para a OS.");
 
+      //Remove quebra de linhas multiplas e coloca somente 1 quebra de linha
+      const descricaoSemQuebra = formData.descricao.replace(/\n\s*\n/g, '\n');
+
       const tarefaEiti = new TarefaEitiEntity(
         this.os!.codigo!,
         this.equipamentoSelecionado.equipamentoItem.equipamento!.descricao,
         formData.titulo.charAt(0).toUpperCase() + formData.titulo.slice(1).toLowerCase(),
-        formData.descricao.charAt(0).toUpperCase() + formData.descricao.slice(1).toLowerCase()
+        descricaoSemQuebra.charAt(0).toUpperCase() + descricaoSemQuebra.slice(1).toLowerCase()
       );
 
       await firstValueFrom(this.service.save(tarefaEiti));
