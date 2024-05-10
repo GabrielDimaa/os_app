@@ -89,7 +89,7 @@ export default class OsEntity {
     return {
       id_os: this.id,
       os_codigo: this.codigo,
-      obs: this.obs?.replaceAll("\n", "\r\n") ?? "",
+      obs: this.obs?.handleLineBreak() ?? "",
       inativo: this.inativo,
       id_os_tipo_atendimento: this.tipoAtendimento!.id,
       tipo_atendimento: this.tipoAtendimento!.toModel(),

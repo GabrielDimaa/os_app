@@ -22,7 +22,7 @@ export default class OsServicoEntity {
       id_os_equipamento_item: this.idOsEquipamentoItem,
       qtd: this.qtd,
       valor_total: this.valorTotal,
-      descricao_informada: this.descricaoInformada?.replaceAll("\n", "\r\n") ?? "",
+      descricao_informada: this.descricaoInformada?.handleLineBreak() ?? "",
       data_hora: this.dataHora?.toJSONLocal() ?? null,
       id_servico: this.servico.id,
       servico: this.servico.toModel(),
